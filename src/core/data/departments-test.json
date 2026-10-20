@@ -1,0 +1,478 @@
+[
+  {
+    "id": "SV01",
+    "level": 1,
+    "level_name": {
+      "local": "Departamento",
+      "en": "Department"
+    },
+    "name": {
+      "local": "Ahuachapán",
+      "en": "Ahuachapan",
+      "slug": "ahuachapan-sv01"
+    },
+    "code": {
+      "id": "SV01",
+      "iso": null
+    },
+    "parent": null,
+    "ancestors": [],
+    "children_count": {
+      "district": 3,
+      "municipality": 12
+    },
+    "zip_codes": [],
+    "geo": {
+      "lat": "13.863",
+      "lon": "-89.93"
+    },
+    "metadata": {},
+    "source": {
+      "name": "Open Admin Data",
+      "url": "https://openadmindata.org/sv/departments/ahuachapan-sv01/",
+      "api": "https://openadmindata.org/api/sv/"
+    }
+  },
+  {
+    "id": "SV02",
+    "level": 1,
+    "level_name": {
+      "local": "Departamento",
+      "en": "Department"
+    },
+    "name": {
+      "local": "Cabañas",
+      "en": "Cabanas",
+      "slug": "cabanas-sv02"
+    },
+    "code": {
+      "id": "SV02",
+      "iso": null
+    },
+    "parent": null,
+    "ancestors": [],
+    "children_count": {
+      "district": 2,
+      "municipality": 9
+    },
+    "zip_codes": [],
+    "geo": {
+      "lat": "13.879",
+      "lon": "-88.742"
+    },
+    "metadata": {},
+    "source": {
+      "name": "Open Admin Data",
+      "url": "https://openadmindata.org/sv/departments/cabanas-sv02/",
+      "api": "https://openadmindata.org/api/sv/"
+    }
+  },
+  {
+    "id": "SV03",
+    "level": 1,
+    "level_name": {
+      "local": "Departamento",
+      "en": "Department"
+    },
+    "name": {
+      "local": "Chalatenango",
+      "en": "Chalatenango",
+      "slug": "chalatenango-sv03"
+    },
+    "code": {
+      "id": "SV03",
+      "iso": null
+    },
+    "parent": null,
+    "ancestors": [],
+    "children_count": {
+      "district": 4,
+      "municipality": 34
+    },
+    "zip_codes": [],
+    "geo": {
+      "lat": "14.163",
+      "lon": "-89.111"
+    },
+    "metadata": {},
+    "source": {
+      "name": "Open Admin Data",
+      "url": "https://openadmindata.org/sv/departments/chalatenango-sv03/",
+      "api": "https://openadmindata.org/api/sv/"
+    }
+  },
+  {
+    "id": "SV04",
+    "level": 1,
+    "level_name": {
+      "local": "Departamento",
+      "en": "Department"
+    },
+    "name": {
+      "local": "Cuscatlán",
+      "en": "Cuscatlan",
+      "slug": "cuscatlan-sv04"
+    },
+    "code": {
+      "id": "SV04",
+      "iso": null
+    },
+    "parent": null,
+    "ancestors": [],
+    "children_count": {
+      "district": 2,
+      "municipality": 16
+    },
+    "zip_codes": [],
+    "geo": {
+      "lat": "13.845",
+      "lon": "-89.052"
+    },
+    "metadata": {},
+    "source": {
+      "name": "Open Admin Data",
+      "url": "https://openadmindata.org/sv/departments/cuscatlan-sv04/",
+      "api": "https://openadmindata.org/api/sv/"
+    }
+  },
+  {
+    "id": "SV05",
+    "level": 1,
+    "level_name": {
+      "local": "Departamento",
+      "en": "Department"
+    },
+    "name": {
+      "local": "La Libertad",
+      "en": "La Libertad",
+      "slug": "la-libertad-sv05"
+    },
+    "code": {
+      "id": "SV05",
+      "iso": null
+    },
+    "parent": null,
+    "ancestors": [],
+    "children_count": {
+      "district": 6,
+      "municipality": 22
+    },
+    "zip_codes": [],
+    "geo": {
+      "lat": "13.74",
+      "lon": "-89.362"
+    },
+    "metadata": {},
+    "source": {
+      "name": "Open Admin Data",
+      "url": "https://openadmindata.org/sv/departments/la-libertad-sv05/",
+      "api": "https://openadmindata.org/api/sv/"
+    }
+  },
+  {
+    "id": "SV06",
+    "level": 1,
+    "level_name": {
+      "local": "Departamento",
+      "en": "Department"
+    },
+    "name": {
+      "local": "La Paz",
+      "en": "La Paz",
+      "slug": "la-paz-sv06"
+    },
+    "code": {
+      "id": "SV06",
+      "iso": null
+    },
+    "parent": null,
+    "ancestors": [],
+    "children_count": {
+      "district": 3,
+      "municipality": 22
+    },
+    "zip_codes": [],
+    "geo": {
+      "lat": "13.462",
+      "lon": "-88.977"
+    },
+    "metadata": {},
+    "source": {
+      "name": "Open Admin Data",
+      "url": "https://openadmindata.org/sv/departments/la-paz-sv06/",
+      "api": "https://openadmindata.org/api/sv/"
+    }
+  },
+  {
+    "id": "SV07",
+    "level": 1,
+    "level_name": {
+      "local": "Departamento",
+      "en": "Department"
+    },
+    "name": {
+      "local": "La Unión",
+      "en": "La Union",
+      "slug": "la-union-sv07"
+    },
+    "code": {
+      "id": "SV07",
+      "iso": null
+    },
+    "parent": null,
+    "ancestors": [],
+    "children_count": {
+      "district": 2,
+      "municipality": 18
+    },
+    "zip_codes": [],
+    "geo": {
+      "lat": "13.525",
+      "lon": "-87.906"
+    },
+    "metadata": {},
+    "source": {
+      "name": "Open Admin Data",
+      "url": "https://openadmindata.org/sv/departments/la-union-sv07/",
+      "api": "https://openadmindata.org/api/sv/"
+    }
+  },
+  {
+    "id": "SV08",
+    "level": 1,
+    "level_name": {
+      "local": "Departamento",
+      "en": "Department"
+    },
+    "name": {
+      "local": "Morazán",
+      "en": "Morazan",
+      "slug": "morazan-sv08"
+    },
+    "code": {
+      "id": "SV08",
+      "iso": null
+    },
+    "parent": null,
+    "ancestors": [],
+    "children_count": {
+      "district": 2,
+      "municipality": 26
+    },
+    "zip_codes": [],
+    "geo": {
+      "lat": "13.763",
+      "lon": "-88.093"
+    },
+    "metadata": {},
+    "source": {
+      "name": "Open Admin Data",
+      "url": "https://openadmindata.org/sv/departments/morazan-sv08/",
+      "api": "https://openadmindata.org/api/sv/"
+    }
+  },
+  {
+    "id": "SV09",
+    "level": 1,
+    "level_name": {
+      "local": "Departamento",
+      "en": "Department"
+    },
+    "name": {
+      "local": "San Miguel",
+      "en": "San Miguel",
+      "slug": "san-miguel-sv09"
+    },
+    "code": {
+      "id": "SV09",
+      "iso": null
+    },
+    "parent": null,
+    "ancestors": [],
+    "children_count": {
+      "district": 3,
+      "municipality": 20
+    },
+    "zip_codes": [],
+    "geo": {
+      "lat": "13.529",
+      "lon": "-88.198"
+    },
+    "metadata": {},
+    "source": {
+      "name": "Open Admin Data",
+      "url": "https://openadmindata.org/sv/departments/san-miguel-sv09/",
+      "api": "https://openadmindata.org/api/sv/"
+    }
+  },
+  {
+    "id": "SV10",
+    "level": 1,
+    "level_name": {
+      "local": "Departamento",
+      "en": "Department"
+    },
+    "name": {
+      "local": "San Salvador",
+      "en": "San Salvador",
+      "slug": "san-salvador-sv10"
+    },
+    "code": {
+      "id": "SV10",
+      "iso": null
+    },
+    "parent": null,
+    "ancestors": [],
+    "children_count": {
+      "district": 6,
+      "municipality": 20
+    },
+    "zip_codes": [],
+    "geo": {
+      "lat": "13.763",
+      "lon": "-89.157"
+    },
+    "metadata": {},
+    "source": {
+      "name": "Open Admin Data",
+      "url": "https://openadmindata.org/sv/departments/san-salvador-sv10/",
+      "api": "https://openadmindata.org/api/sv/"
+    }
+  },
+  {
+    "id": "SV11",
+    "level": 1,
+    "level_name": {
+      "local": "Departamento",
+      "en": "Department"
+    },
+    "name": {
+      "local": "San Vicente",
+      "en": "San Vicente",
+      "slug": "san-vicente-sv11"
+    },
+    "code": {
+      "id": "SV11",
+      "iso": null
+    },
+    "parent": null,
+    "ancestors": [],
+    "children_count": {
+      "district": 2,
+      "municipality": 13
+    },
+    "zip_codes": [],
+    "geo": {
+      "lat": "13.515",
+      "lon": "-88.739"
+    },
+    "metadata": {},
+    "source": {
+      "name": "Open Admin Data",
+      "url": "https://openadmindata.org/sv/departments/san-vicente-sv11/",
+      "api": "https://openadmindata.org/api/sv/"
+    }
+  },
+  {
+    "id": "SV12",
+    "level": 1,
+    "level_name": {
+      "local": "Departamento",
+      "en": "Department"
+    },
+    "name": {
+      "local": "Santa Ana",
+      "en": "Santa Ana",
+      "slug": "santa-ana-sv12"
+    },
+    "code": {
+      "id": "SV12",
+      "iso": null
+    },
+    "parent": null,
+    "ancestors": [],
+    "children_count": {
+      "district": 6,
+      "municipality": 15
+    },
+    "zip_codes": [],
+    "geo": {
+      "lat": "14.111",
+      "lon": "-89.564"
+    },
+    "metadata": {},
+    "source": {
+      "name": "Open Admin Data",
+      "url": "https://openadmindata.org/sv/departments/santa-ana-sv12/",
+      "api": "https://openadmindata.org/api/sv/"
+    }
+  },
+  {
+    "id": "SV13",
+    "level": 1,
+    "level_name": {
+      "local": "Departamento",
+      "en": "Department"
+    },
+    "name": {
+      "local": "Sonsonate",
+      "en": "Sonsonate",
+      "slug": "sonsonate-sv13"
+    },
+    "code": {
+      "id": "SV13",
+      "iso": null
+    },
+    "parent": null,
+    "ancestors": [],
+    "children_count": {
+      "district": 4,
+      "municipality": 16
+    },
+    "zip_codes": [],
+    "geo": {
+      "lat": "13.712",
+      "lon": "-89.647"
+    },
+    "metadata": {},
+    "source": {
+      "name": "Open Admin Data",
+      "url": "https://openadmindata.org/sv/departments/sonsonate-sv13/",
+      "api": "https://openadmindata.org/api/sv/"
+    }
+  },
+  {
+    "id": "SV14",
+    "level": 1,
+    "level_name": {
+      "local": "Departamento",
+      "en": "Department"
+    },
+    "name": {
+      "local": "Usulután",
+      "en": "Usulutan",
+      "slug": "usulutan-sv14"
+    },
+    "code": {
+      "id": "SV14",
+      "iso": null
+    },
+    "parent": null,
+    "ancestors": [],
+    "children_count": {
+      "district": 3,
+      "municipality": 23
+    },
+    "zip_codes": [],
+    "geo": {
+      "lat": "13.426",
+      "lon": "-88.534"
+    },
+    "metadata": {},
+    "source": {
+      "name": "Open Admin Data",
+      "url": "https://openadmindata.org/sv/departments/usulutan-sv14/",
+      "api": "https://openadmindata.org/api/sv/"
+    }
+  }
+]
