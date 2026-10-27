@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { SESSION_COOKIE_NAME } from './core/server/auth/session-config';
 
 const AUTH_SIGNIN_ROUTE = "/auth/iniciar-sesion";
-const PROTECTED_ROUTES = ["/altar", "/admin"];
+const PROTECTED_ROUTES = ["/dashboard"];
 const PUBLIC_AUTH_ROUTES = ["/", "/auth", "/auth/iniciar-sesion"];
 
 const isProtectedPath = (pathname: string): boolean =>
@@ -15,36 +16,33 @@ const isKnownPath = (pathname: string): boolean =>
 
 export function proxy(request: NextRequest): NextResponse {
   const pathname = request.nextUrl.pathname;
-  const sessionToken = request.cookies.get("session_token")?.value;
+  const sessionToken = request.cookies.get(SESSION_COOKIE_NAME)?.value;
 
   if (pathname === "/") {
-    return NextResponse.redirect(new URL(sessionToken ? "/altar" : AUTH_SIGNIN_ROUTE, request.url));
+    return NextResponse.redirect(new URL(sessionToken ? "/dashboard" : AUTH_SIGNIN_ROUTE, request.url));
   }
 
-  // Authenticated user trying to access auth routes -> redirect to the dashboard
+  // A cookie only signals a possible session; server pages and backend APIs
+  // must still verify the session and authorization before returning data.
   if (isPublicAuthPath(pathname) && sessionToken) {
-    return NextResponse.redirect(new URL("/altar", request.url));
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  // Unknown route or route without permission -> redirect to sign in
   if (!isKnownPath(pathname)) {
-    return NextResponse.redirect(new URL(sessionToken ? "/altar" : AUTH_SIGNIN_ROUTE, request.url));
+    return NextResponse.redirect(new URL(sessionToken ? "/dashboard" : AUTH_SIGNIN_ROUTE, request.url));
   }
 
-  // Unprotected route -> allow access
   if (!isProtectedPath(pathname)) {
     return NextResponse.next();
   }
 
-  // Protected route with a valid session -> allow access
   if (sessionToken) {
     return NextResponse.next();
   }
 
-  // Protected route without a session -> redirect to sign in
   return NextResponse.redirect(new URL(AUTH_SIGNIN_ROUTE, request.url));
 }
 
 export const config = {
-  matcher: ["/", "/auth/:path*", "/altar/:path*", "/admin/:path*"]
+  matcher: ["/", "/auth/:path*", "/dashboard/:path*", "/admin/:path*"]
 };
