@@ -49,15 +49,6 @@ const nextConfig: NextConfig = {
         pathname: "/**"
       }
     ]
-  },
-  turbopack: {
-    root: __dirname,
-    rules: {
-      "*.css": {
-        loaders: ["@tailwindcss/turbopack"],
-        as: "*.css"
-      }
-    }
   }
 };
 
