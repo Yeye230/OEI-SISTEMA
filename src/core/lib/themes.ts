@@ -27,11 +27,12 @@ export type ThemeId = (typeof THEME_IDS)[number];
  * usuario, así que no se usa ninguno de los 10. No es un ThemeId.
  */
 export const PUBLIC_THEME = "public";
-export const PUBLIC_PATH_PREFIXES = ["/auth"] as const;
+export const PUBLIC_PATH_PREFIXES = ["/auth", "/login"] as const;
 
 export function isPublicPath(pathname: string): boolean {
   return (
-    pathname === "/" || PUBLIC_PATH_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))
+    pathname === "/" ||
+    PUBLIC_PATH_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))
   );
 }
 
