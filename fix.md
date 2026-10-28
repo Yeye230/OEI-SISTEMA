@@ -64,3 +64,15 @@
 - **Solución aplicada:** Se retiró la regla personalizada de CSS de Turbopack y se conservó la configuración PostCSS existente. No se añadió una dependencia nueva.
 - **Alternativa:** Instalar y mantener un cargador personalizado solo si existe una necesidad técnica demostrada; no se recomienda para esta configuración.
 - **Verificación:** Actualizar la rama local, reiniciar `npm run dev` y abrir `/login`; después ejecutar `npm run build`. Mantener este issue hasta observar resultados reales.
+
+## OEI-UI-002 — El navegador muestra un segundo icono para revelar la contraseña
+
+- **Categoría:** Diseño / Compatibilidad de navegador
+- **Severidad:** Baja
+- **Estado:** Corrección aplicada; pendiente de verificación visual
+- **Evidencia:** En la captura de la prueba manual del login en Microsoft Edge aparecen dos iconos de ojo dentro del campo de contraseña. En `src/app/login/page.tsx` el formulario solo declara un botón de visibilidad con los iconos de `lucide-react`; el control adicional es consistente con el indicador nativo de revelar contraseña del navegador.
+- **Problema / causa raíz:** El control nativo de Edge se presenta junto al botón de visibilidad propio del formulario, duplicando la affordance.
+- **Impacto:** Confusión visual y funcional sobre qué control usar.
+- **Solución aplicada:** Se añadió CSS para ocultar los pseudo-elementos `::-ms-reveal` y `::-ms-clear` dentro del control de contraseña, manteniendo el botón accesible propio del formulario.
+- **Alternativa:** Retirar el botón propio y depender del control del navegador; no se recomienda porque su presentación y accesibilidad son menos consistentes entre navegadores.
+- **Verificación:** Actualizar la rama local, recargar en Edge y confirmar que queda un solo ojo y que el botón sigue mostrando/ocultando la contraseña.
