@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import {
   ArrowRight,
   Eye,
@@ -15,6 +15,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [year, setYear] = useState<number | null>(null);
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -131,7 +136,7 @@ export default function LoginPage() {
                 <ShieldCheck size={15} aria-hidden="true" />
                 Acceso reservado a personal autorizado
               </p>
-              <p className="mt-2">© {new Date().getFullYear()} OEI · Organización de Estados Iberoamericanos</p>
+              <p className="mt-2">© {year ?? ""} OEI · Organización de Estados Iberoamericanos</p>
             </div>
           </div>
         </div>
