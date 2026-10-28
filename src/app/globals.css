@@ -226,6 +226,12 @@ button {
   opacity: 1;
 }
 
+/* Evita duplicar el control de revelar contraseña nativo de Edge/IE. */
+.auth-control input::-ms-reveal,
+.auth-control input::-ms-clear {
+  display: none;
+}
+
 .auth-icon-button {
   display: inline-grid;
   width: 2.2rem;
