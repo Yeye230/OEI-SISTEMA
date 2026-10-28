@@ -4,8 +4,8 @@ import { FieldError, Input, Label, TextField } from "@heroui/react";
 import { type ReactNode, useState } from "react";
 import { type ControllerRenderProps, type FieldPath, type FieldValues } from "react-hook-form";
 
-import { inputClassName } from "@/utils/const";
-import { cn } from "@/utils/function";
+import { inputClassName } from "@/core/utils/const";
+import { cn } from "@/core/utils/function";
 
 type FieldProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>> = {
   label: string;
