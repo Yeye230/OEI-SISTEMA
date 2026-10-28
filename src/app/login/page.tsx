@@ -8,7 +8,6 @@ import {
   LockKeyhole,
   Mail,
   ShieldCheck,
-  Sparkles,
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -137,26 +136,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <aside className="auth-brand-panel" aria-label="Información institucional">
-          <div className="auth-brand-panel-content">
-            <p className="auth-panel-kicker">Gestión institucional</p>
-            <h2 className="auth-panel-title">
-              Todo en orden.
-              <br />
-              <em>Un sistema.</em>
-            </h2>
-            <p className="auth-panel-description">
-              Una experiencia clara y confiable para administrar actas,
-              organizar recursos y mantener la información institucional en un
-              solo lugar.
-            </p>
-            <div className="auth-panel-divider" />
-            <p className="auth-panel-footnote">
-              <Sparkles size={14} className="mr-2 inline-block" aria-hidden="true" />
-              Educación · Cooperación · Desarrollo
-            </p>
-          </div>
-        </aside>
+
       </section>
     </main>
   );
