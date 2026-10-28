@@ -81,11 +81,11 @@
 
 - **Categoría:** Calidad / Compatibilidad con Next.js
 - **Severidad:** Media
-- **Estado:** Pendiente de corrección y verificación
+- **Estado:** Corrección aplicada; pendiente de verificación local
 - **Evidencia:** La salida local de `npm run dev` reporta `Route "/login": Next.js encountered the unstable value 'new Date()' in a Client Component` y señala `src/app/login/page.tsx:134`, en la expresión `new Date().getFullYear()`.
 - **Problema / causa raíz:** El año se calcula directamente durante el renderizado de un Client Component con Cache Components habilitado.
 - **Impacto:** Next.js reporta un error de prerenderizado/valor inestable en la ruta de login.
-- **Solución recomendada:** Evitar evaluar `new Date()` durante el renderizado; para este texto de pie, inicializar el año tras el montaje con un efecto y mantener una salida inicial estable, o usar una constante estable si el requisito funcional lo permite.
+- **Solución aplicada:** El año ahora se inicializa en un `useEffect`, y el renderizado inicial usa una cadena vacía estable; así se evita evaluar `new Date()` durante el renderizado.
 - **Alternativa:** Retirar Cache Components solo si una revisión de arquitectura demuestra que no corresponde al diseño del proyecto; no se recomienda cambiarlo para ocultar este error puntual.
 - **Verificación:** Reiniciar el servidor, abrir `/login`, comprobar que el error no vuelve a aparecer y ejecutar `npm run build`.
 
