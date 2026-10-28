@@ -81,7 +81,7 @@ export default function LoginPage() {
                     aria-describedby={error ? "login-message" : "email-hint"}
                   />
                 </div>
-                <p id="email-hint" className="mt-2 text-xs leading-5" style={{ color: "var(--muted)" }}>
+                <p id="email-hint" className="auth-hint">
                   Utiliza el correo asociado a tu cuenta institucional.
                 </p>
               </div>
