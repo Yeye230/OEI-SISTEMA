@@ -53,8 +53,6 @@
 - **Alternativa:** Mantenerlo si es una maqueta intencional, documentando su propósito y evitando que se confunda con la pantalla funcional.
 - **Verificación:** Revisar referencias/importaciones y ejecutar build/rutas una vez decidido el tratamiento.
 
-## OEI-ENV-001 — Configuración de Turbopack referencia un cargador CSS inexistente
-
 - **Categoría:** Configuración / Dependencias
 - **Severidad:** Alta para desarrollo local
 - **Estado:** Corrección aplicada; pendiente de verificación local
@@ -65,8 +63,6 @@
 - **Alternativa:** Instalar y mantener un cargador personalizado solo si existe una necesidad técnica demostrada; no se recomienda para esta configuración.
 - **Verificación:** Actualizar la rama local, reiniciar `npm run dev` y abrir `/login`; después ejecutar `npm run build`. Mantener este issue hasta observar resultados reales.
 
-## OEI-UI-002 — El navegador muestra un segundo icono para revelar la contraseña
-
 - **Categoría:** Diseño / Compatibilidad de navegador
 - **Severidad:** Baja
 - **Estado:** Corrección aplicada; pendiente de verificación visual
@@ -76,8 +72,6 @@
 - **Solución aplicada:** Se añadió CSS para ocultar los pseudo-elementos `::-ms-reveal` y `::-ms-clear` dentro del control de contraseña, manteniendo el botón accesible propio del formulario.
 - **Alternativa:** Retirar el botón propio y depender del control del navegador; no se recomienda porque su presentación y accesibilidad son menos consistentes entre navegadores.
 - **Verificación:** Actualizar la rama local, recargar en Edge y confirmar que queda un solo ojo y que el botón sigue mostrando/ocultando la contraseña.
-
-## OEI-ENV-002 — El año dinámico del pie de login bloquea el prerenderizado
 
 - **Categoría:** Calidad / Compatibilidad con Next.js
 - **Severidad:** Media
@@ -100,9 +94,6 @@
 - **Solución recomendada:** Revisar la intención de usar Cache Components y configurar explícitamente `partialPrefetching` según las necesidades y compatibilidad del proyecto.
 - **Alternativa:** Mantener la configuración temporalmente mientras se valida el comportamiento, aceptando la advertencia.
 - **Verificación:** Ejecutar el servidor y build después de una decisión autorizada y comprobar que la advertencia desaparece.
-
-
-## OEI-BUILD-001 — TypeScript no encuentra módulos compartidos de formularios
 
 - **Categoría:** Calidad / Build
 - **Severidad:** Alta
