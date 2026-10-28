@@ -82,8 +82,9 @@ button {
 
 .auth-card {
   display: grid;
-  width: min(100%, 68rem);
-  min-height: 40rem;
+  width: min(100%, 36rem);
+  min-height: auto;
+  grid-template-columns: minmax(0, 1fr);
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
@@ -301,109 +302,6 @@ button {
   text-align: center;
 }
 
-.auth-brand-panel {
-  position: relative;
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  overflow: hidden;
-  padding: clamp(2.25rem, 4vw, 4rem);
-  background:
-    radial-gradient(ellipse at 85% 18%, color-mix(in srgb, var(--accent) 25%, transparent), transparent 55%),
-    linear-gradient(145deg, color-mix(in srgb, var(--primary) 9%, var(--surface)), color-mix(in srgb, var(--accent) 12%, var(--surface-muted)));
-}
-
-.auth-brand-panel::before,
-.auth-brand-panel::after {
-  position: absolute;
-  width: 27rem;
-  aspect-ratio: 1;
-  border: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
-  border-radius: 50%;
-  content: "";
-  pointer-events: none;
-}
-
-.auth-brand-panel::before {
-  top: -13rem;
-  right: -12rem;
-}
-
-.auth-brand-panel::after {
-  right: -6rem;
-  bottom: -19rem;
-  width: 34rem;
-}
-
-.auth-brand-panel-content {
-  position: relative;
-  z-index: 1;
-  max-width: 27rem;
-}
-
-.auth-panel-kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  color: var(--primary);
-  font-size: 0.72rem;
-  font-weight: 750;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.auth-panel-kicker::before {
-  width: 1.65rem;
-  height: 2px;
-  background: var(--accent);
-  content: "";
-}
-
-.auth-panel-title {
-  margin: 1.5rem 0 0;
-  color: var(--foreground);
-  font-family: var(--font-playfair), Georgia, serif;
-  font-size: clamp(2.65rem, 4vw, 3.75rem);
-  font-weight: 600;
-  letter-spacing: -0.055em;
-  line-height: 1.04;
-}
-
-.auth-panel-title em {
-  color: var(--primary);
-  font-weight: 500;
-}
-
-.auth-panel-description {
-  margin: 1.4rem 0 0;
-  color: var(--muted);
-  font-size: 0.95rem;
-  line-height: 1.8;
-}
-
-.auth-panel-divider {
-  width: 3.5rem;
-  height: 1px;
-  margin-top: 2.25rem;
-  background: color-mix(in srgb, var(--primary) 50%, transparent);
-}
-
-.auth-panel-footnote {
-  margin-top: 1.25rem;
-  color: var(--muted);
-  font-size: 0.73rem;
-  font-weight: 650;
-  letter-spacing: 0.11em;
-  line-height: 1.8;
-  text-transform: uppercase;
-}
-
-@media (min-width: 54rem) {
-  .auth-card {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
-  }
-}
-
 @media (max-width: 53.99rem) {
   .auth-shell {
     padding: 1rem;
@@ -421,10 +319,6 @@ button {
 
   .auth-eyebrow {
     margin-top: 2.2rem;
-  }
-
-  .auth-brand-panel {
-    display: none;
   }
 
   .auth-footer {
