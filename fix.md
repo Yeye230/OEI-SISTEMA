@@ -76,3 +76,27 @@
 - **Solución aplicada:** Se añadió CSS para ocultar los pseudo-elementos `::-ms-reveal` y `::-ms-clear` dentro del control de contraseña, manteniendo el botón accesible propio del formulario.
 - **Alternativa:** Retirar el botón propio y depender del control del navegador; no se recomienda porque su presentación y accesibilidad son menos consistentes entre navegadores.
 - **Verificación:** Actualizar la rama local, recargar en Edge y confirmar que queda un solo ojo y que el botón sigue mostrando/ocultando la contraseña.
+
+## OEI-ENV-002 — El año dinámico del pie de login bloquea el prerenderizado
+
+- **Categoría:** Calidad / Compatibilidad con Next.js
+- **Severidad:** Media
+- **Estado:** Pendiente de corrección y verificación
+- **Evidencia:** La salida local de `npm run dev` reporta `Route "/login": Next.js encountered the unstable value 'new Date()' in a Client Component` y señala `src/app/login/page.tsx:134`, en la expresión `new Date().getFullYear()`.
+- **Problema / causa raíz:** El año se calcula directamente durante el renderizado de un Client Component con Cache Components habilitado.
+- **Impacto:** Next.js reporta un error de prerenderizado/valor inestable en la ruta de login.
+- **Solución recomendada:** Evitar evaluar `new Date()` durante el renderizado; para este texto de pie, inicializar el año tras el montaje con un efecto y mantener una salida inicial estable, o usar una constante estable si el requisito funcional lo permite.
+- **Alternativa:** Retirar Cache Components solo si una revisión de arquitectura demuestra que no corresponde al diseño del proyecto; no se recomienda cambiarlo para ocultar este error puntual.
+- **Verificación:** Reiniciar el servidor, abrir `/login`, comprobar que el error no vuelve a aparecer y ejecutar `npm run build`.
+
+## OEI-CONFIG-001 — Cache Components está habilitado sin configurar Partial Prefetching
+
+- **Categoría:** Configuración / Mantenibilidad
+- **Severidad:** Baja
+- **Estado:** Pendiente de decisión
+- **Evidencia:** La salida local de Next.js muestra la advertencia `cacheComponents is enabled without a corresponding partialPrefetching option`.
+- **Problema / causa raíz:** `next.config.ts` activa `cacheComponents: true` sin declarar `partialPrefetching`.
+- **Impacto:** Advertencia de configuración y posible cambio de comportamiento por defecto en una versión futura de Next.js.
+- **Solución recomendada:** Revisar la intención de usar Cache Components y configurar explícitamente `partialPrefetching` según las necesidades y compatibilidad del proyecto.
+- **Alternativa:** Mantener la configuración temporalmente mientras se valida el comportamiento, aceptando la advertencia.
+- **Verificación:** Ejecutar el servidor y build después de una decisión autorizada y comprobar que la advertencia desaparece.
