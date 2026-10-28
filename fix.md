@@ -40,3 +40,15 @@
 - **Alternativa:** Si la autenticación ya se implementa en otra ruta, conectar el formulario al contrato real de esa ruta.
 - **Verificación:** Pruebas de éxito, credenciales incorrectas, fallo de red, cookie segura, redirección y acceso denegado a recursos privados.
 - **Alcance:** Se mantiene pendiente; esta tarea mejora interfaz y sistema de diseño, no cambia la autenticación backend.
+
+## OEI-ARCH-001 — Archivo de página con nombre temporal y responsabilidad dudosa
+
+- **Categoría:** Mantenibilidad / Arquitectura
+- **Severidad:** Baja
+- **Estado:** Pendiente de inspección
+- **Evidencia:** Existe `src/app/aspageasdasdasd.tsx` con un componente exportado como `DashboardPage` y datos de demostración.
+- **Problema / causa raíz:** El nombre del archivo no expresa su responsabilidad y el contenido parece ser una pantalla de demostración; aún debe comprobarse si está referenciado o forma parte de una ruta deliberada.
+- **Impacto:** Dificulta la navegación del código y puede generar confusión sobre cuál es el dashboard real.
+- **Solución recomendada:** Confirmar referencias, revisar el árbol de rutas y decidir si se mueve a una ruta con nombre explícito o se elimina mediante un cambio autorizado separado.
+- **Alternativa:** Mantenerlo si es una maqueta intencional, documentando su propósito y evitando que se confunda con la pantalla funcional.
+- **Verificación:** Revisar referencias/importaciones y ejecutar build/rutas una vez decidido el tratamiento.
