@@ -106,10 +106,10 @@
 
 - **Categoría:** Calidad / Build
 - **Severidad:** Alta
-- **Estado:** Pendiente de diagnóstico y corrección
+- **Estado:** Corrección aplicada; pendiente de verificación local
 - **Evidencia:** La salida local de `npm run build` compila el bundle, pero falla durante TypeScript con TS2307: `src/core/components/form/input-field.tsx` no encuentra `@/utils/const` (línea 7) ni `@/utils/function` (línea 8); `src/core/components/form/submit-button.tsx` tampoco encuentra `@/utils/const` (línea 3). `tsconfig.json` define el alias `@/*` como `./src/*`.
 - **Problema / causa raíz:** Los imports apuntan a módulos que TypeScript no logra resolver con la configuración actual. Aún debe verificarse si faltan los archivos bajo `src/utils/`, si sus nombres/capitalización difieren o si hay otra discrepancia de rutas.
 - **Impacto:** `npm run build` falla; el estado actual no puede considerarse listo para producción.
-- **Solución recomendada:** Inspeccionar el árbol real de `src/utils` y las referencias a `inputClassName`, `btnPrimaryClassName` y `cn`; después corregir las rutas o recuperar los módulos compartidos correctos sin inventar implementaciones.
+- **Solución aplicada:** Se actualizaron los imports de `input-field.tsx` y `submit-button.tsx` a `@/core/utils/const` y `@/core/utils/function`, donde existen las definiciones correspondientes.
 - **Alternativa:** Si los utilitarios se movieron intencionalmente, actualizar los imports a sus ubicaciones canónicas y comprobar que no se duplique lógica.
 - **Verificación:** Ejecutar `npm run build` y confirmar que TypeScript termina sin TS2307; luego ejecutar las pruebas pertinentes.
