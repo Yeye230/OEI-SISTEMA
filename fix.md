@@ -52,3 +52,15 @@
 - **Solución recomendada:** Confirmar referencias, revisar el árbol de rutas y decidir si se mueve a una ruta con nombre explícito o se elimina mediante un cambio autorizado separado.
 - **Alternativa:** Mantenerlo si es una maqueta intencional, documentando su propósito y evitando que se confunda con la pantalla funcional.
 - **Verificación:** Revisar referencias/importaciones y ejecutar build/rutas una vez decidido el tratamiento.
+
+## OEI-ENV-001 — Configuración de Turbopack referencia un cargador CSS inexistente
+
+- **Categoría:** Configuración / Dependencias
+- **Severidad:** Alta para desarrollo local
+- **Estado:** Corrección aplicada; pendiente de verificación local
+- **Evidencia:** En `next.config.ts`, la configuración de `turbopack.rules` declaraba `loaders: ["@tailwindcss/turbopack"]`, pero el paquete no aparece instalado en `npm ls`. El proyecto ya configura `@tailwindcss/postcss` en `postcss.config.mjs`.
+- **Problema / causa raíz:** Next.js falla al compilar `src/app/globals.css` porque intenta resolver el cargador inexistente.
+- **Impacto:** La aplicación no puede iniciar la compilación de la página de login en el entorno local.
+- **Solución aplicada:** Se retiró la regla personalizada de CSS de Turbopack y se conservó la configuración PostCSS existente. No se añadió una dependencia nueva.
+- **Alternativa:** Instalar y mantener un cargador personalizado solo si existe una necesidad técnica demostrada; no se recomienda para esta configuración.
+- **Verificación:** Actualizar la rama local, reiniciar `npm run dev` y abrir `/login`; después ejecutar `npm run build`. Mantener este issue hasta observar resultados reales.
