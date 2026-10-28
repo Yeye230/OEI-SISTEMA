@@ -159,6 +159,13 @@ button {
   line-height: 1.12;
 }
 
+.auth-hint {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.65;
+}
+
 .auth-description {
   max-width: 27rem;
   margin: 0.9rem 0 0;
