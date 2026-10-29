@@ -35,8 +35,8 @@ export function isThemeId(value: unknown): value is ThemeId {
 export function normalizeThemeId(value: unknown): ThemeId | null {
   if (isThemeId(value)) return value;
   if (typeof value !== "string") return null;
-  if (value.startsWith("gothic-")) return "oscuro";
-  if (value.startsWith("lumina-")) return "claro";
+  if (["gothic-1", "gothic-2", "gothic-3", "gothic-4", "gothic-5"].includes(value)) return "oscuro";
+  if (["lumina-1", "lumina-2", "lumina-3", "lumina-4", "lumina-5"].includes(value)) return "claro";
   return null;
 }
 
