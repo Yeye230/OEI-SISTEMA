@@ -36,10 +36,10 @@ src/
 
 ## Sistema de diseño (fuente única de verdad)
 
-- `src/app/themes.css` define los 10 temas (gothic-1..5, lumina-1..5) con 11 variables cada uno: `--bg --surface --raised --border --text --muted --primary --primary-dark --accent --glow --on-primary`.
+- `src/app/themes.css` define dos temas seleccionables: `oscuro` y `claro`, con tokens semánticos compartidos: `--bg --surface --raised --border --text --muted --primary --primary-dark --accent --glow --on-primary`.
 - `src/app/globals.css` expone esas variables como utilidades vía `@theme inline`. No se crean tokens en otro archivo.
-- Un tema nuevo o un color nuevo se añade a los 10 temas o no se añade.
-- Excepción: `[data-theme="public"]` (grises + dorado) es el tema neutro de `/` y `/auth/*` (sin sesión); no pertenece a los 10, no es un `ThemeId` y lo aplican `ThemeInitScript` y `ThemeProvider` según la ruta (`isPublicPath` en `lib/themes.ts`).
+- Solo existen los temas `oscuro` y `claro`; ambos comparten los mismos nombres de tokens y cada uno define sus valores.
+- Las rutas públicas y privadas respetan el tema seleccionado. Las preferencias antiguas `gothic-*` y `lumina-*` se migran a `oscuro` y `claro` respectivamente.
 
 ### Colores permitidos
 
@@ -73,7 +73,7 @@ Prohibido: hex en `.tsx/.ts` (salvo shaders/escenas 3D), `style={{ color/backgro
 
 ### Accesibilidad
 
-- Contraste mínimo WCAG AA (4.5:1 texto, 3:1 UI) en los 10 temas; comprobar al tocar un token.
+- Contraste mínimo WCAG AA (4.5:1 texto, 3:1 UI) en los dos temas; comprobar al tocar un token.
 - Todo control interactivo es `<button>`/`<a>` con `type` explícito y nombre accesible. Iconos decorativos con `aria-hidden`.
 - Animaciones respetan `prefers-reduced-motion`.
 - El copy no afirma garantías que el sistema no cumple (cifrado, certificaciones).
