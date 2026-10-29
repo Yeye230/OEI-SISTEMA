@@ -2,7 +2,6 @@ import {
   DEFAULT_LIGHT_THEME,
   DEFAULT_THEME,
   LEGACY_THEME_STORAGE_KEY,
-  normalizeThemeId,
   THEME_STORAGE_KEY
 } from "@/core/lib/themes";
 
