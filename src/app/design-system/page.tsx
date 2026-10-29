@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { CheckCircle2, CircleAlert, Command, Eye, Info, Palette, Search, ShieldCheck, Type } from "lucide-react";
+import { CheckCircle2, CircleAlert, Command, Eye, Info, Palette, ShieldCheck, Type } from "lucide-react";
 import { THEMES, type ThemeId } from "@/core/lib/themes";
+import { useTheme } from "@/core/components/theme/theme-provider";
 
 const colorTokens = [
   ["Fondo", "--background"], ["Texto principal", "--foreground"], ["Superficie", "--surface"],
@@ -12,24 +12,12 @@ const colorTokens = [
 ] as const;
 
 export default function DesignSystemPage() {
-  const [activeTheme, setActiveTheme] = useState<ThemeId>("gothic-1");
-  const [search, setSearch] = useState("");
-
-  useEffect(() => {
-    const current = document.documentElement.dataset.theme;
-    if (current && THEMES.some((theme) => theme.id === current)) setActiveTheme(current as ThemeId);
-    else document.documentElement.dataset.theme = "gothic-1";
-  }, []);
+  const { theme: activeTheme, setTheme } = useTheme();
 
   function selectTheme(theme: ThemeId) {
-    setActiveTheme(theme);
-    document.documentElement.dataset.theme = theme;
-    document.documentElement.dataset.mode = theme.startsWith("gothic") ? "dark" : "light";
+    setTheme(theme);
   }
 
-  const filteredThemes = THEMES.filter((theme) =>
-    `${theme.name} ${theme.family} ${theme.id}`.toLowerCase().includes(search.toLowerCase())
-  );
 
   return (
     <main className="ds-page">
@@ -58,11 +46,10 @@ export default function DesignSystemPage() {
         </section>
 
         <section id="colors" className="ds-section">
-          <div className="ds-section-heading"><div><p className="ds-eyebrow">01 / FUNDAMENTOS</p><h2>Colores y temas</h2><p className="ds-section-desc">Diez variantes visuales comparten los mismos significados semánticos.</p></div>
-            <label className="ds-search"><Search size={16} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar tema..." aria-label="Buscar tema" /></label>
+          <div className="ds-section-heading"><div><p className="ds-eyebrow">01 / FUNDAMENTOS</p><h2>Colores y temas</h2><p className="ds-section-desc">Dos temas comparten los mismos tokens y significados semánticos.</p></div>
           </div>
-          <div className="ds-theme-grid">{filteredThemes.map((theme) => <button key={theme.id} type="button" className={`ds-theme-option ${activeTheme === theme.id ? "selected" : ""}`} onClick={() => selectTheme(theme.id)} aria-pressed={activeTheme === theme.id}>
-            <span className={`ds-theme-preview ${theme.mode}`} data-preview={theme.id}><i /><i /><i /><b /></span><span className="ds-theme-copy"><strong>{theme.name}</strong><small>{theme.family} · Cirio {theme.cirio}</small></span>{activeTheme === theme.id && <CheckCircle2 size={17} className="ds-theme-check" />}
+          <div className="ds-theme-grid">{THEMES.map((theme) => <button key={theme.id} type="button" className={`ds-theme-option ${activeTheme === theme.id ? "selected" : ""}`} onClick={() => selectTheme(theme.id)} aria-pressed={activeTheme === theme.id}>
+            <span className={`ds-theme-preview ${theme.mode}`} data-preview={theme.id}><i /><i /><i /><b /></span><span className="ds-theme-copy"><strong>{theme.name}</strong><small>{theme.mode === "dark" ? "Tema oscuro" : "Tema claro"}</small></span>{activeTheme === theme.id && <CheckCircle2 size={17} className="ds-theme-check" />}
           </button>)}</div>
           <div className="ds-token-grid">{colorTokens.map(([label, token]) => <div className="ds-token-card" key={token}><span className="ds-swatch" style={{ background: `var(${token})` }} /><span><strong>{label}</strong><code>{token}</code></span></div>)}</div>
         </section>

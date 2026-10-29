@@ -111,9 +111,23 @@
 - **Categoría:** Diseño / Accesibilidad
 - **Severidad:** Media
 - **Estado:** Implementación aplicada en rama; pendiente de prueba visual y de compilación
-- **Evidencia:** Se creó la ruta `src/app/design-system/page.tsx` para mostrar temas, tokens semánticos, tipografía, botones, campos y estados; los estilos se aislaron bajo el prefijo `.ds-` en `src/app/globals.css`.
+- **Evidencia:** Se creó la ruta `src/app/design-system/page.tsx` para mostrar temas, tokens semánticos, tipografía, botones, campos y estados; los estilos se aislaron bajo el prefijo `.ds-` en `src/app/globals.css`. En esta tarea el selector se redujo a `oscuro` y `claro`, y las paletas numeradas se retiraron.
 - **Problema / causa raíz:** El repositorio tenía tokens y estilos base, pero no una página central para inspeccionar visualmente la biblioteca.
 - **Impacto:** El equipo no disponía de una vista única para revisar y presentar los fundamentos visuales.
-- **Solución aplicada:** Se agregó una página de catálogo con búsqueda de temas, selector de 10 variantes, muestras de tokens, tipografía, componentes y estados semánticos. No modifica autenticación ni lógica de negocio.
+- **Solución aplicada:** Se agregó una página de catálogo con selector de dos temas (Oscuro y Claro), muestras de tokens, tipografía, componentes y estados semánticos. No modifica autenticación ni lógica de negocio.
 - **Alternativa:** Usar una herramienta de documentación de componentes externa; por rapidez y menor dependencia, se implementó una ruta interna.
-- **Verificación:** Actualizar la rama, ejecutar `npm run build`, abrir `/design-system`, probar selector/búsqueda y revisar responsive y navegación por teclado.
+- **Verificación:** Actualizar la rama, ejecutar `npm run build`, abrir `/design-system`, probar selector Oscuro/Claro, comprobar migración de preferencias antiguas y revisar responsive y navegación por teclado.
+
+
+## OEI-DOC-001 — Falta el historial permanente de cambios `LOG.md`
+
+- **Categoría:** Documentación / Continuidad
+- **Severidad:** Baja
+- **Estado:** Pendiente de autorización
+- **Evidencia:** No se encontró `LOG.md` en la raíz de la rama revisada; la consulta al repositorio devolvió `NOT_FOUND`.
+- **Problema / causa raíz:** No hay un historial permanente centralizado que registre cambios, decisiones técnicas y verificaciones realmente ejecutadas.
+- **Impacto:** Se dificulta reconstruir qué cambió, por qué, qué archivos se tocaron y qué validaciones están pendientes entre tareas.
+- **Solución recomendada:** Crear `LOG.md` con entradas cronológicas, zona horaria, archivos afectados, decisiones y pruebas verificadas.
+- **Alternativa:** Si el proyecto utiliza otro archivo equivalente como historial, documentarlo y mantener una sola fuente de verdad.
+- **Verificación:** Confirmar la ubicación del historial y registrar cada cambio autorizado sin afirmar pruebas que no se hayan ejecutado.
+- **Nota:** No se creó `LOG.md` en esta tarea; queda pendiente de autorización explícita.
