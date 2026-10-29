@@ -1,6 +1,6 @@
 import { Button } from "@heroui/react";
 import { Sparkles } from "lucide-react";
-import { btnPrimaryClassName } from "@/utils/const";
+import { btnPrimaryClassName } from "@/core/utils/const";
 
 interface SubmitButtonProps {
   buttonName: string;

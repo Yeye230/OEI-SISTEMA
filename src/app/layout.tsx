@@ -20,8 +20,13 @@ const sans = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Lumen Codex · Sistema visual",
-  description: "Guía interactiva de temas, color y componentes de Lumen Codex."
+  title: {
+    default: "OEI · Sistema administrativo",
+    template: "%s · OEI Sistema"
+  },
+  description:
+    "Sistema administrativo institucional para la gestión de actas y recursos de la Organización de Estados Iberoamericanos.",
+  applicationName: "OEI Sistema"
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">): ReactElement {
@@ -37,7 +42,6 @@ export default function RootLayout({ children }: LayoutProps<"/">): ReactElement
         <ThemeInitScript />
       </head>
       <body>
-        {/* Pasa `allowed` con los UserTema desbloqueados del usuario cuando lo conectes al backend. */}
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
