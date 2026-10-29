@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { CheckCircle2, CircleAlert, Command, Eye, Info, Palette, ShieldCheck, Type } from "lucide-react";
 import { THEMES, type ThemeId } from "@/core/lib/themes";
+import { useTheme } from "@/core/components/theme/theme-provider";
 
 const colorTokens = [
   ["Fondo", "--background"], ["Texto principal", "--foreground"], ["Superficie", "--surface"],
@@ -12,18 +12,10 @@ const colorTokens = [
 ] as const;
 
 export default function DesignSystemPage() {
-  const [activeTheme, setActiveTheme] = useState<ThemeId>("oscuro");
-
-  useEffect(() => {
-    const current = document.documentElement.dataset.theme;
-    if (current && THEMES.some((theme) => theme.id === current)) setActiveTheme(current as ThemeId);
-    else document.documentElement.dataset.theme = "oscuro";
-  }, []);
+  const { theme: activeTheme, setTheme } = useTheme();
 
   function selectTheme(theme: ThemeId) {
-    setActiveTheme(theme);
-    document.documentElement.dataset.theme = theme;
-    document.documentElement.dataset.mode = theme === "oscuro" ? "dark" : "light";
+    setTheme(theme);
   }
 
 
