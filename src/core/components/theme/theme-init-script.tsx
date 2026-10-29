@@ -15,8 +15,8 @@ var legacyKey=${JSON.stringify(LEGACY_THEME_STORAGE_KEY)};
 var saved=localStorage.getItem(key)||localStorage.getItem(legacyKey);
 var t=null;
 if(saved==="oscuro"||saved==="claro"){t=saved;}
-else if(typeof saved==="string"&&saved.indexOf("gothic-")===0){t="oscuro";}
-else if(typeof saved==="string"&&saved.indexOf("lumina-")===0){t="claro";}
+else if(["gothic-1","gothic-2","gothic-3","gothic-4","gothic-5"].indexOf(saved)>=0){t="oscuro";}
+else if(["lumina-1","lumina-2","lumina-3","lumina-4","lumina-5"].indexOf(saved)>=0){t="claro";}
 if(!t){t=window.matchMedia("(prefers-color-scheme: light)").matches?${JSON.stringify(DEFAULT_LIGHT_THEME)}:${JSON.stringify(DEFAULT_THEME)};}
 localStorage.setItem(key,t);
 localStorage.removeItem(legacyKey);
