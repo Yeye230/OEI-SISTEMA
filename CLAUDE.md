@@ -36,7 +36,7 @@ src/
 
 ## Sistema de diseño (fuente única de verdad)
 
-- `src/app/themes.css` define dos temas seleccionables: `oscuro` y `claro`, con tokens semánticos compartidos: `--bg --surface --raised --border --text --muted --primary --primary-dark --accent --glow --on-primary`.
+- `src/app/themes.css` define dos temas seleccionables: `oscuro` y `claro`, con tokens semánticos compartidos: `--background`, `--foreground`, `--surface`, `--surface-muted`, `--surface-elevated`, `--border`, `--primary`, `--primary-hover`, `--primary-foreground`, `--accent` y tokens de estado.
 - `src/app/globals.css` expone esas variables como utilidades vía `@theme inline`. No se crean tokens en otro archivo.
 - Solo existen los temas `oscuro` y `claro`; ambos comparten los mismos nombres de tokens y cada uno define sus valores.
 - Las rutas públicas y privadas respetan el tema seleccionado. Las preferencias antiguas `gothic-*` y `lumina-*` se migran a `oscuro` y `claro` respectivamente.
