@@ -117,3 +117,17 @@
 - **Solución aplicada:** Se agregó una página de catálogo con selector de dos temas (Oscuro y Claro), muestras de tokens, tipografía, componentes y estados semánticos. No modifica autenticación ni lógica de negocio.
 - **Alternativa:** Usar una herramienta de documentación de componentes externa; por rapidez y menor dependencia, se implementó una ruta interna.
 - **Verificación:** Actualizar la rama, ejecutar `npm run build`, abrir `/design-system`, probar selector Oscuro/Claro, comprobar migración de preferencias antiguas y revisar responsive y navegación por teclado.
+
+
+## OEI-DOC-001 — Falta el historial permanente de cambios `LOG.md`
+
+- **Categoría:** Documentación / Continuidad
+- **Severidad:** Baja
+- **Estado:** Pendiente de autorización
+- **Evidencia:** No se encontró `LOG.md` en la raíz de la rama revisada; la consulta al repositorio devolvió `NOT_FOUND`.
+- **Problema / causa raíz:** No hay un historial permanente centralizado que registre cambios, decisiones técnicas y verificaciones realmente ejecutadas.
+- **Impacto:** Se dificulta reconstruir qué cambió, por qué, qué archivos se tocaron y qué validaciones están pendientes entre tareas.
+- **Solución recomendada:** Crear `LOG.md` con entradas cronológicas, zona horaria, archivos afectados, decisiones y pruebas verificadas.
+- **Alternativa:** Si el proyecto utiliza otro archivo equivalente como historial, documentarlo y mantener una sola fuente de verdad.
+- **Verificación:** Confirmar la ubicación del historial y registrar cada cambio autorizado sin afirmar pruebas que no se hayan ejecutado.
+- **Nota:** No se creó `LOG.md` en esta tarea; queda pendiente de autorización explícita.
