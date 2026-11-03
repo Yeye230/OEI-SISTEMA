@@ -134,13 +134,13 @@
 
 - **Categoría:** Calidad / Build
 - **Severidad:** Alta
-- **Estado:** Pendiente de corrección y verificación
+- **Estado:** Corrección aplicada en main; pendiente de verificación local
 - **Fecha de detección:** 2026-11-03 (America/El_Salvador)
 - **Evidencia:** En `src/app/design-system/page.tsx`, el JSX utiliza `<Search size={17} />` en el campo de correo, pero la lista de importaciones desde `lucide-react` no incluye `Search`.
 - **Problema / causa conocida:** El identificador `Search` se referencia sin estar declarado ni importado en el módulo.
 - **Impacto:** TypeScript puede detener la compilación con un error de identificador no encontrado; por tanto, el build no debe considerarse validado.
-- **Solución recomendada:** Importar `Search` desde `lucide-react` o sustituirlo por un icono ya importado si esa es la intención visual.
-- **Verificación:** La captura aportada el 2026-11-03 desde `http://localhost:3000/design-system` confirma el error de runtime `ReferenceError: Search is not defined` en la línea 64. La corrección todavía no está aplicada; ejecutar `npm run lint` y `npm run build` después de corregirla.
+- **Solución aplicada:** Se añadió `Search` a la importación desde `lucide-react` en `src/app/design-system/page.tsx`.
+- **Verificación:** La captura aportada el 2026-11-03 confirma el error de runtime `ReferenceError: Search is not defined` en la línea 64. La importación ya está aplicada en `main`; pendiente volver a abrir `/design-system` y ejecutar `npm run lint` y `npm run build`.
 
 ## OEI-DOC-001 — Falta el historial permanente LOG.md
 
@@ -170,12 +170,12 @@
 
 - **Categoría:** Compatibilidad React / Next.js
 - **Severidad:** Alta
-- **Estado:** Pendiente de corrección y verificación
+- **Estado:** Corrección aplicada en main; pendiente de verificación local
 - **Fecha de detección:** 2026-11-03 (America/El_Salvador)
 - **Evidencia:** La captura aportada desde `http://localhost:3000/design-system` muestra `Encountered a script tag while rendering React component`, con referencia a `src/core/components/theme/theme-init-script.tsx:28`. El archivo devuelve `<script dangerouslySetInnerHTML={{ __html: code }} />`, y `src/app/layout.tsx` monta `<ThemeInitScript />` dentro de `<head>`.
 - **Problema / causa conocida:** El componente React renderiza un elemento `script` crudo. React indica que los scripts dentro de componentes React no se ejecutan durante el renderizado cliente y reporta el uso de este elemento como error.
 - **Impacto:** La ruta `/design-system` no renderiza correctamente. Además, el script destinado a establecer el tema antes del primer pintado no tiene una integración compatible confirmada.
-- **Solución recomendada:** Integrar el inicializador usando el mecanismo de scripts documentado y compatible con la versión de Next.js del proyecto, manteniendo su ejecución temprana para evitar un destello del tema incorrecto. Revisar las guías de Next.js 16 instaladas en el proyecto antes de modificar el patrón.
-- **Alternativa:** Usar un mecanismo de inicialización soportado por el layout raíz que no renderice un elemento script crudo desde un componente React, siempre que preserve el comportamiento previo al primer pintado.
-- **Verificación pendiente:** Reiniciar el servidor, abrir `/design-system`, comprobar que desaparece el error de script, confirmar que el tema guardado se aplica antes del primer pintado y probar migración de preferencias heredadas. Ejecutar además `npm run lint` y `npm run build`.
+- **Solución aplicada:** `ThemeInitScript` ahora utiliza `Script` de `next/script` con `strategy="beforeInteractive"` e identificador estable. Se monta desde el layout raíz dentro de `<body>`; Next.js documenta que esta estrategia se inyecta en `<head>` y se ejecuta antes de la hidratación.
+- **Alternativa considerada:** Mantener un `<script>` HTML crudo; descartada porque React reportó el error mostrado en la captura.
+- **Verificación pendiente:** Reiniciar el servidor, abrir `/design-system`, comprobar que desaparece el error de script, confirmar que el tema guardado se aplica antes de la hidratación y probar migración de preferencias heredadas. Ejecutar además `npm run lint` y `npm run build`. La documentación oficial de Next.js describe `beforeInteractive` para scripts globales en el layout raíz.
 
