@@ -129,3 +129,39 @@
 - **Solución aplicada:** Se añadieron reglas específicas para tablets y móviles, ajustes para anchos de hasta 360px, controles táctiles más cómodos, fuente de 16px en campos móviles, manejo de ventanas de poca altura y respeto a la preferencia de movimiento reducido. No se alteró la lógica de validación ni el diseño de escritorio.
 - **Verificación pendiente:** Revisar la ruta de login en anchos aproximados de 360px, 390px, 768px, 1024px y 1440px; comprobar que no exista desplazamiento horizontal, que los campos y el botón sean utilizables, que los mensajes de error no rompan el diseño y que el teclado móvil no tape los controles.
 - **Alcance:** Cambios de CSS únicamente. No se conectó backend ni se modificó la autenticación.
+
+## OEI-DS-002 — Icono Search utilizado sin importación en la página del Design System
+
+- **Categoría:** Calidad / Build
+- **Severidad:** Alta
+- **Estado:** Pendiente de corrección y verificación
+- **Fecha de detección:** 2026-11-03 (America/El_Salvador)
+- **Evidencia:** En `src/app/design-system/page.tsx`, el JSX utiliza `<Search size={17} />` en el campo de correo, pero la lista de importaciones desde `lucide-react` no incluye `Search`.
+- **Problema / causa conocida:** El identificador `Search` se referencia sin estar declarado ni importado en el módulo.
+- **Impacto:** TypeScript puede detener la compilación con un error de identificador no encontrado; por tanto, el build no debe considerarse validado.
+- **Solución recomendada:** Importar `Search` desde `lucide-react` o sustituirlo por un icono ya importado si esa es la intención visual.
+- **Verificación pendiente:** Ejecutar `npm run lint` y `npm run build` en un checkout actualizado de `main`; confirmar que desaparece el error y revisar cualquier otro error reportado. No se ejecutaron estos comandos desde esta sesión porque no hay terminal/checkout local disponible.
+
+## OEI-DOC-001 — Falta el historial permanente LOG.md
+
+- **Categoría:** Documentación / Trazabilidad
+- **Severidad:** Baja
+- **Estado:** Pendiente de creación
+- **Fecha de detección:** 2026-11-03 (America/El_Salvador)
+- **Evidencia:** La consulta de `LOG.md` en la rama `main` devolvió HTTP 404 (NOT_FOUND); `CLAUDE.md` y `AGENTS.md` sí existen.
+- **Problema / causa conocida:** El repositorio no contiene el archivo de historial permanente solicitado por las reglas del proyecto.
+- **Impacto:** Se pierde un registro acumulativo y verificable de cambios, decisiones y pruebas realizadas.
+- **Solución recomendada:** Crear `LOG.md` con una entrada inicial que registre cambios históricos solo cuando estén respaldados por commits/PR y diferencie claramente las verificaciones pendientes.
+- **Verificación:** Confirmar que el archivo exista en `main` y que las entradas incluyan fecha/hora con zona horaria, motivo, rutas, decisión y pruebas realmente ejecutadas. No se creó en esta tarea porque la autorización recibida cubre la actualización de `fix.md`, no la creación de un archivo adicional.
+
+## OEI-VERIFY-001 — Lint y build de main pendientes de ejecución
+
+- **Categoría:** Calidad / Integración
+- **Severidad:** Media
+- **Estado:** Pendiente de ejecución
+- **Fecha de detección:** 2026-11-03 (America/El_Salvador)
+- **Evidencia:** `package.json` define `lint` como `eslint` y `build` como `next build`. Esta sesión permite inspeccionar y actualizar archivos mediante GitHub, pero no dispone de un checkout local ni terminal para ejecutar scripts npm. No se encontró evidencia de una ejecución CI asociada a los archivos inspeccionados.
+- **Problema / causa conocida:** No hay resultados actuales verificables de `npm run lint` ni `npm run build` para la punta de `main`.
+- **Impacto:** No puede afirmarse que el estado actual de la rama pase lint o compile correctamente.
+- **Solución recomendada:** En un checkout actualizado de `main`, ejecutar ambos comandos y registrar la salida íntegra; corregir los errores resultantes mediante una autorización de cambio de código.
+- **Verificación:** Issue cerrable únicamente cuando existan logs de ambos comandos ejecutados sobre el commit correspondiente y ambos finalicen correctamente.
