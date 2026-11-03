@@ -32,14 +32,14 @@
 
 - **Categoría:** Funcionalidad / Seguridad
 - **Severidad:** Alta para puesta en producción
-- **Estado:** Pendiente de integración
-- **Evidencia:** `src/app/login/page.tsx`: `handleSubmit` valida el correo y la contraseña en cliente y muestra un mensaje; no realiza una solicitud al endpoint de autenticación.
+- **Estado:** Validación de interfaz implementada en modo demostración; autenticación real pendiente
+- **Evidencia:** La rama `feat/login-validations` implementa React Hook Form y Zod en el formulario. Al enviar datos válidos muestra una alerta de demostración; no realiza solicitudes de red ni crea una sesión.
 - **Problema / causa raíz:** La pantalla es un prototipo visual, no un flujo de autenticación funcional.
-- **Impacto:** Ningún usuario puede iniciar sesión desde este formulario; el diseño por sí solo no protege recursos.
-- **Solución recomendada:** Integrar el endpoint de autenticación existente, manejar estados de carga/error y validar en servidor; nunca tratar la validación del navegador como autenticación.
+- **Impacto:** El formulario permite comprobar que las validaciones funcionan, pero ningún usuario puede autenticarse todavía. La alerta no representa una sesión iniciada ni protege recursos.
+- **Solución recomendada:** En una tarea posterior, integrar el contrato real del backend, manejar respuestas y errores del servidor y validar credenciales en servidor. No tratar esta alerta ni la validación del navegador como autenticación.
 - **Alternativa:** Si la autenticación ya se implementa en otra ruta, conectar el formulario al contrato real de esa ruta.
-- **Verificación:** Pruebas de éxito, credenciales incorrectas, fallo de red, cookie segura, redirección y acceso denegado a recursos privados.
-- **Alcance:** Se mantiene pendiente; esta tarea mejora interfaz y sistema de diseño, no cambia la autenticación backend.
+- **Verificación pendiente:** Probar correo vacío, formato inválido, contraseña vacía y datos válidos; confirmar que la alerta indica claramente que es una simulación. Las pruebas de credenciales, red, cookie y redirección quedan pendientes hasta integrar backend.
+- **Alcance:** Se implementa únicamente la validación cliente y una alerta de demostración. No se conecta backend, no se envían credenciales y no se modifica el flujo de sesión.
 
 ## OEI-ARCH-001 — Archivo de página con nombre temporal y responsabilidad dudosa
 
