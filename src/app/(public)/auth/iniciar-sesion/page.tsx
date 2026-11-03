@@ -1,44 +1,31 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
+import { Controller } from "react-hook-form";
 import {
   ArrowRight,
   Eye,
   EyeOff,
   LockKeyhole,
   Mail,
-  ShieldCheck,
+  ShieldCheck
 } from "lucide-react";
 
-export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+import { useLogin } from "@/core/hooks/use-login";
+
+export default function LoginPage(): React.JSX.Element {
+  const { form, onSubmit } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
   const [year, setYear] = useState<number | null>(null);
 
   useEffect(() => {
     setYear(new Date().getFullYear());
   }, []);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setError("");
-
-    if (!email.trim() || !password) {
-      setError("Ingresa tu correo electrónico y contraseña.");
-      return;
-    }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setError("Ingresa un correo electrónico válido.");
-      return;
-    }
-
-    setError(
-      "La autenticación aún no está conectada. Tus credenciales no se han enviado."
-    );
-  }
+  const {
+    control,
+    formState: { errors, isSubmitting }
+  } = form;
 
   return (
     <main className="auth-shell">
@@ -63,31 +50,41 @@ export default function LoginPage() {
               gestión de actas y recursos.
             </p>
 
-            <form onSubmit={handleSubmit} className="auth-form" noValidate>
+            <form onSubmit={onSubmit} className="auth-form" noValidate>
               <div>
                 <label htmlFor="email" className="auth-field-label">
                   Correo electrónico
                 </label>
                 <div className="auth-control">
                   <Mail size={19} strokeWidth={1.8} aria-hidden="true" />
-                  <input
-                    id="email"
+                  <Controller
                     name="email"
-                    type="email"
-                    autoComplete="username"
-                    inputMode="email"
-                    autoCapitalize="none"
-                    spellCheck={false}
-                    placeholder="nombre@institucion.org"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    aria-invalid={Boolean(error)}
-                    aria-describedby={error ? "login-message" : "email-hint"}
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        {...field}
+                        id="email"
+                        type="email"
+                        autoComplete="username"
+                        inputMode="email"
+                        autoCapitalize="none"
+                        spellCheck={false}
+                        placeholder="nombre@institucion.org"
+                        aria-invalid={Boolean(errors.email)}
+                        aria-describedby={errors.email ? "email-error" : "email-hint"}
+                      />
+                    )}
                   />
                 </div>
-                <p id="email-hint" className="auth-hint">
-                  Utiliza el correo asociado a tu cuenta institucional.
-                </p>
+                {errors.email?.message ? (
+                  <p id="email-error" className="auth-message" role="alert">
+                    {errors.email.message}
+                  </p>
+                ) : (
+                  <p id="email-hint" className="auth-hint">
+                    Utiliza el correo asociado a tu cuenta institucional.
+                  </p>
+                )}
               </div>
 
               <div>
@@ -96,16 +93,20 @@ export default function LoginPage() {
                 </label>
                 <div className="auth-control">
                   <LockKeyhole size={19} strokeWidth={1.8} aria-hidden="true" />
-                  <input
-                    id="password"
+                  <Controller
                     name="password"
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="current-password"
-                    placeholder="Ingresa tu contraseña"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    aria-invalid={Boolean(error)}
-                    aria-describedby={error ? "login-message" : undefined}
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        {...field}
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        autoComplete="current-password"
+                        placeholder="Ingresa tu contraseña"
+                        aria-invalid={Boolean(errors.password)}
+                        aria-describedby={errors.password ? "password-error" : undefined}
+                      />
+                    )}
                   />
                   <button
                     type="button"
@@ -114,19 +115,26 @@ export default function LoginPage() {
                     aria-pressed={showPassword}
                     className="auth-icon-button"
                   >
-                    {showPassword ? <EyeOff size={19} aria-hidden="true" /> : <Eye size={19} aria-hidden="true" />}
+                    {showPassword ? (
+                      <EyeOff size={19} aria-hidden="true" />
+                    ) : (
+                      <Eye size={19} aria-hidden="true" />
+                    )}
                   </button>
                 </div>
+                {errors.password?.message ? (
+                  <p id="password-error" className="auth-message" role="alert">
+                    {errors.password.message}
+                  </p>
+                ) : null}
               </div>
 
-              {error && (
-                <p id="login-message" className="auth-message" role="alert" aria-live="polite">
-                  {error}
-                </p>
-              )}
-
-              <button type="submit" className="auth-submit">
-                Iniciar sesión
+              <button
+                type="submit"
+                className="auth-submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Validando..." : "Iniciar sesión"}
                 <ArrowRight size={18} aria-hidden="true" />
               </button>
             </form>
@@ -136,12 +144,12 @@ export default function LoginPage() {
                 <ShieldCheck size={15} aria-hidden="true" />
                 Acceso reservado a personal autorizado
               </p>
-              <p className="mt-2">© {year ?? ""} OEI · Organización de Estados Iberoamericanos</p>
+              <p className="mt-2">
+                © {year ?? ""} OEI · Organización de Estados Iberoamericanos
+              </p>
             </div>
           </div>
         </div>
-
-
       </section>
     </main>
   );
