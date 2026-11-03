@@ -1,10 +1,10 @@
 /*
- * Design tokens for OEI Sistema.
- * Theme values are semantic: components consume tokens instead of hard-coded colors.
+ * Tokens semánticos de OEI Sistema.
+ * Solo hay dos temas seleccionables: oscuro y claro.
  */
 
 :root,
-:root[data-theme="public"] {
+:root[data-theme="claro"] {
   color-scheme: light;
   --background: #f3f6fa;
   --foreground: #172b3a;
@@ -32,7 +32,7 @@
   --shadow-color: 19 43 64;
 }
 
-:root[data-theme^="gothic-"] {
+:root[data-theme="oscuro"] {
   color-scheme: dark;
   --background: #11151d;
   --foreground: #edf2f8;
@@ -59,44 +59,6 @@
   --info-soft: #1d3150;
   --shadow-color: 0 0 0;
 }
-
-:root[data-theme="gothic-2"] { --background:#191612; --surface:#242019; --surface-muted:#2d281f; --surface-elevated:#383126; --border:#514536; --primary:#dfb77a; --primary-hover:#efd0a0; --accent:#a9c49a; --accent-soft:#2c3829; --focus-ring:#dfb77a; }
-:root[data-theme="gothic-3"] { --background:#1b151d; --surface:#271e2a; --surface-muted:#322638; --surface-elevated:#3c2d43; --border:#55425d; --primary:#e0a9c9; --primary-hover:#f0c4dc; --accent:#c3b0ee; --accent-soft:#36294b; --focus-ring:#e0a9c9; }
-:root[data-theme="gothic-4"] { --background:#111b19; --surface:#192824; --surface-muted:#20352f; --surface-elevated:#294139; --border:#3c5a4e; --primary:#8ed1a9; --primary-hover:#b2e7c5; --accent:#d5c37a; --accent-soft:#3c3822; --focus-ring:#8ed1a9; }
-:root[data-theme="gothic-5"] { --background:#171421; --surface:#211c30; --surface-muted:#2b2540; --surface-elevated:#373050; --border:#4c426a; --primary:#b8a4ff; --primary-hover:#d0c4ff; --accent:#e1bd82; --accent-soft:#403323; --focus-ring:#b8a4ff; }
-
-:root[data-theme^="lumina-"] {
-  color-scheme: light;
-  --background: #f5f7fb;
-  --foreground: #172b3a;
-  --surface: #ffffff;
-  --surface-muted: #f8fafc;
-  --surface-elevated: #ffffff;
-  --border: #dce5ee;
-  --border-strong: #b8c8d8;
-  --muted: #607286;
-  --subtle: #8a9aab;
-  --primary: #075477;
-  --primary-hover: #064765;
-  --primary-foreground: #ffffff;
-  --accent: #20a39e;
-  --accent-soft: #e0f4f1;
-  --focus-ring: #3b9db3;
-  --success: #16794b;
-  --success-soft: #e8f7ef;
-  --warning: #946200;
-  --warning-soft: #fff5d6;
-  --danger: #b42318;
-  --danger-soft: #fff0ee;
-  --info: #175cd3;
-  --info-soft: #eff6ff;
-  --shadow-color: 19 43 64;
-}
-
-:root[data-theme="lumina-2"] { --background:#faf7f1; --surface:#fffdf8; --surface-muted:#f6f0e5; --border:#e4d8c5; --primary:#76552c; --primary-hover:#5e4220; --accent:#718b68; --accent-soft:#eaf0e5; --focus-ring:#9a7747; }
-:root[data-theme="lumina-3"] { --background:#fbf5f8; --surface:#fffafd; --surface-muted:#f8edf3; --border:#ead5e1; --primary:#9d4e78; --primary-hover:#7f3c60; --accent:#7967b5; --accent-soft:#f0ebfb; --focus-ring:#bd76a0; }
-:root[data-theme="lumina-4"] { --background:#f3f8f4; --surface:#fcfffc; --surface-muted:#eaf3ec; --border:#d3e4d8; --primary:#28694b; --primary-hover:#1e5139; --accent:#9b7b29; --accent-soft:#f6f0dc; --focus-ring:#4f9872; }
-:root[data-theme="lumina-5"] { --background:#f7f5ff; --surface:#fefcff; --surface-muted:#f0edfc; --border:#ded8f4; --primary:#5945a2; --primary-hover:#43327f; --accent:#9a6c32; --accent-soft:#f8eedf; --focus-ring:#8773cb; }
 
 :root {
   --radius-sm: 0.5rem;

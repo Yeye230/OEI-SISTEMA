@@ -33,7 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">): ReactElement
   return (
     <html
       lang="es"
-      data-theme="gothic-1"
+      data-theme="oscuro"
       data-mode="dark"
       suppressHydrationWarning
       className={`${display.variable} ${sans.variable}`}
