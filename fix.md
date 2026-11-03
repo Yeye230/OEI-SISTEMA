@@ -117,3 +117,15 @@
 - **Solución aplicada:** Se agregó una página de catálogo con búsqueda de temas, selector de 10 variantes, muestras de tokens, tipografía, componentes y estados semánticos. No modifica autenticación ni lógica de negocio.
 - **Alternativa:** Usar una herramienta de documentación de componentes externa; por rapidez y menor dependencia, se implementó una ruta interna.
 - **Verificación:** Actualizar la rama, ejecutar `npm run build`, abrir `/design-system`, probar selector/búsqueda y revisar responsive y navegación por teclado.
+
+## OEI-AUTH-RESP-001 — Diseño responsive del formulario de inicio de sesión
+
+- **Categoría:** Diseño / Experiencia de usuario / Compatibilidad
+- **Severidad:** Media
+- **Estado:** Ajustes responsive aplicados en rama; pendiente de comprobación visual en dispositivos y anchos reales
+- **Evidencia:** La pantalla de login utiliza una sola columna y contaba con reglas generales para pantallas menores de 54rem, pero no diferenciaba suficientemente móviles pequeños, tablets y ventanas de poca altura.
+- **Problema / causa raíz:** El formulario podía conservar espacios y tamaños propios de escritorio en móviles estrechos, y los campos no declaraban un tamaño de fuente mínimo para evitar el zoom automático de Safari en iOS.
+- **Impacto:** Posible exceso de desplazamiento, textos ajustados, controles estrechos y una experiencia desigual según el tamaño de pantalla.
+- **Solución aplicada:** Se añadieron reglas específicas para tablets y móviles, ajustes para anchos de hasta 360px, controles táctiles más cómodos, fuente de 16px en campos móviles, manejo de ventanas de poca altura y respeto a la preferencia de movimiento reducido. No se alteró la lógica de validación ni el diseño de escritorio.
+- **Verificación pendiente:** Revisar la ruta de login en anchos aproximados de 360px, 390px, 768px, 1024px y 1440px; comprobar que no exista desplazamiento horizontal, que los campos y el botón sean utilizables, que los mensajes de error no rompan el diseño y que el teclado móvil no tape los controles.
+- **Alcance:** Cambios de CSS únicamente. No se conectó backend ni se modificó la autenticación.
