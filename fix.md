@@ -136,7 +136,7 @@
 - **Severidad:** Alta
 - **Estado:** Corrección aplicada en main; pendiente de verificación local
 - **Fecha de detección:** 2026-11-03 (America/El_Salvador)
-- **Evidencia:** En `src/app/design-system/page.tsx`, el JSX utiliza `<Search size={17} />` en el campo de correo, pero la lista de importaciones desde `lucide-react` no incluye `Search`.
+- **Evidencia de detección:** La captura inicial del 2026-11-03 mostraba `ReferenceError: Search is not defined` en `src/app/design-system/page.tsx:64`; la inspección de esa versión confirmó que `Search` se usaba sin importarse. El archivo actual en `main` ya incluye la importación.
 - **Problema / causa conocida:** El identificador `Search` se referencia sin estar declarado ni importado en el módulo.
 - **Impacto:** TypeScript puede detener la compilación con un error de identificador no encontrado; por tanto, el build no debe considerarse validado.
 - **Solución aplicada:** Se añadió `Search` a la importación desde `lucide-react` en `src/app/design-system/page.tsx`.
@@ -172,7 +172,7 @@
 - **Severidad:** Alta
 - **Estado:** Corrección aplicada en main; pendiente de verificación local
 - **Fecha de detección:** 2026-11-03 (America/El_Salvador)
-- **Evidencia:** La captura aportada desde `http://localhost:3000/design-system` muestra `Encountered a script tag while rendering React component`, con referencia a `src/core/components/theme/theme-init-script.tsx:28`. El archivo devuelve `<script dangerouslySetInnerHTML={{ __html: code }} />`, y `src/app/layout.tsx` monta `<ThemeInitScript />` dentro de `<head>`.
+- **Evidencia de detección:** La captura aportada desde `http://localhost:3000/design-system` muestra `Encountered a script tag while rendering React component`, con referencia a `src/core/components/theme/theme-init-script.tsx:28`. La versión inspeccionada entonces devolvía un `<script>` HTML crudo; el código actual reemplaza ese patrón por `next/script`.
 - **Problema / causa conocida:** El componente React renderiza un elemento `script` crudo. React indica que los scripts dentro de componentes React no se ejecutan durante el renderizado cliente y reporta el uso de este elemento como error.
 - **Impacto:** La ruta `/design-system` no renderiza correctamente. Además, el script destinado a establecer el tema antes del primer pintado no tiene una integración compatible confirmada.
 - **Solución aplicada:** `ThemeInitScript` ahora utiliza `Script` de `next/script` con `strategy="beforeInteractive"` e identificador estable. Se monta desde el layout raíz dentro de `<body>`; Next.js documenta que esta estrategia se inyecta en `<head>` y se ejecuta antes de la hidratación.
