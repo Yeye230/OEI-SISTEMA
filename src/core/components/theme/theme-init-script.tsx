@@ -1,3 +1,5 @@
+import Script from "next/script";
+import type { ReactElement } from "react";
 import {
   DEFAULT_LIGHT_THEME,
   DEFAULT_THEME,
@@ -6,9 +8,9 @@ import {
 } from "@/core/lib/themes";
 
 /**
- * Aplica el tema antes del primer pintado y migra preferencias antiguas.
+ * Aplica el tema antes de la hidratación y migra preferencias antiguas.
  */
-export function ThemeInitScript() {
+export function ThemeInitScript(): ReactElement {
   const code = `(function(){try{
 var key=${JSON.stringify(THEME_STORAGE_KEY)};
 var legacyKey=${JSON.stringify(LEGACY_THEME_STORAGE_KEY)};
@@ -25,5 +27,9 @@ r.setAttribute("data-theme",t);
 r.setAttribute("data-mode",t==="claro"?"light":"dark");
 }catch(e){}})();`;
 
-  return <script dangerouslySetInnerHTML={{ __html: code }} />;
+  return (
+    <Script id="oei-theme-init" strategy="beforeInteractive">
+      {code}
+    </Script>
+  );
 }
