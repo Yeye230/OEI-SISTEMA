@@ -333,6 +333,158 @@ button {
 }
 
 
+/* Login responsive refinements: mobile, tablet and short viewports. */
+@media (max-width: 53.99rem) {
+  .auth-shell {
+    min-height: 100svh;
+    align-items: center;
+    padding: 1.25rem;
+  }
+
+  .auth-card {
+    width: min(100%, 34rem);
+  }
+
+  .auth-form-panel {
+    width: 100%;
+    padding: clamp(1.5rem, 5vw, 2.75rem);
+  }
+
+  .auth-form-content {
+    max-width: 28rem;
+  }
+}
+
+@media (max-width: 40rem) {
+  .auth-shell {
+    align-items: flex-start;
+    padding: 1rem 0.75rem;
+  }
+
+  .auth-card {
+    width: 100%;
+    border-radius: var(--radius-lg);
+  }
+
+  .auth-form-panel {
+    padding: clamp(1.25rem, 5.5vw, 2rem);
+  }
+
+  .auth-brand {
+    gap: 0.7rem;
+  }
+
+  .auth-brand-mark {
+    width: 2.9rem;
+    height: 2.9rem;
+    border-radius: 0.9rem;
+    font-size: 1rem;
+  }
+
+  .auth-brand-caption {
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+  }
+
+  .auth-eyebrow {
+    margin-top: 1.9rem;
+    font-size: 0.68rem;
+  }
+
+  .auth-title {
+    font-size: clamp(1.85rem, 7.5vw, 2.35rem);
+    line-height: 1.12;
+  }
+
+  .auth-description {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  .auth-form {
+    gap: 1.1rem;
+    margin-top: 1.6rem;
+  }
+
+  .auth-control {
+    min-height: 3.25rem;
+    gap: 0.65rem;
+    padding-inline: 0.8rem;
+  }
+
+  .auth-control input {
+    height: 3.1rem;
+    min-width: 0;
+    font-size: 16px;
+  }
+
+  .auth-icon-button {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+
+  .auth-submit {
+    min-height: 3.35rem;
+    margin-top: 0.15rem;
+  }
+
+  .auth-footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    font-size: 0.68rem;
+  }
+}
+
+@media (max-width: 22.5rem) {
+  .auth-shell {
+    padding: 0.65rem 0.5rem;
+  }
+
+  .auth-form-panel {
+    padding: 1.15rem 1rem;
+  }
+
+  .auth-brand-caption {
+    max-width: 12rem;
+    font-size: 0.6rem;
+  }
+
+  .auth-title {
+    font-size: 1.8rem;
+  }
+
+  .auth-control {
+    gap: 0.5rem;
+    padding-inline: 0.65rem;
+  }
+
+  .auth-description {
+    font-size: 0.86rem;
+  }
+
+  .auth-footer {
+    font-size: 0.64rem;
+  }
+}
+
+@media (max-height: 42rem) and (min-width: 40.01rem) {
+  .auth-shell {
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-shell *,
+  .auth-shell *::before,
+  .auth-shell *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 /* Design system documentation page */
 .ds-page{min-height:100vh;display:grid;grid-template-columns:250px minmax(0,1fr);background:var(--background);color:var(--foreground)}
 .ds-sidebar{position:sticky;top:0;display:flex;height:100vh;flex-direction:column;border-right:1px solid var(--border);background:var(--surface);padding:1.5rem 1rem}
