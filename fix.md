@@ -140,7 +140,7 @@
 - **Problema / causa conocida:** El identificador `Search` se referencia sin estar declarado ni importado en el módulo.
 - **Impacto:** TypeScript puede detener la compilación con un error de identificador no encontrado; por tanto, el build no debe considerarse validado.
 - **Solución recomendada:** Importar `Search` desde `lucide-react` o sustituirlo por un icono ya importado si esa es la intención visual.
-- **Verificación pendiente:** Ejecutar `npm run lint` y `npm run build` en un checkout actualizado de `main`; confirmar que desaparece el error y revisar cualquier otro error reportado. No se ejecutaron estos comandos desde esta sesión porque no hay terminal/checkout local disponible.
+- **Verificación:** La captura aportada el 2026-11-03 desde `http://localhost:3000/design-system` confirma el error de runtime `ReferenceError: Search is not defined` en la línea 64. La corrección todavía no está aplicada; ejecutar `npm run lint` y `npm run build` después de corregirla.
 
 ## OEI-DOC-001 — Falta el historial permanente LOG.md
 
@@ -165,3 +165,17 @@
 - **Impacto:** No puede afirmarse que el estado actual de la rama pase lint o compile correctamente.
 - **Solución recomendada:** En un checkout actualizado de `main`, ejecutar ambos comandos y registrar la salida íntegra; corregir los errores resultantes mediante una autorización de cambio de código.
 - **Verificación:** Issue cerrable únicamente cuando existan logs de ambos comandos ejecutados sobre el commit correspondiente y ambos finalicen correctamente.
+
+## OEI-DS-003 — ThemeInitScript renderiza un elemento script directamente desde React
+
+- **Categoría:** Compatibilidad React / Next.js
+- **Severidad:** Alta
+- **Estado:** Pendiente de corrección y verificación
+- **Fecha de detección:** 2026-11-03 (America/El_Salvador)
+- **Evidencia:** La captura aportada desde `http://localhost:3000/design-system` muestra `Encountered a script tag while rendering React component`, con referencia a `src/core/components/theme/theme-init-script.tsx:28`. El archivo devuelve `<script dangerouslySetInnerHTML={{ __html: code }} />`, y `src/app/layout.tsx` monta `<ThemeInitScript />` dentro de `<head>`.
+- **Problema / causa conocida:** El componente React renderiza un elemento `script` crudo. React indica que los scripts dentro de componentes React no se ejecutan durante el renderizado cliente y reporta el uso de este elemento como error.
+- **Impacto:** La ruta `/design-system` no renderiza correctamente. Además, el script destinado a establecer el tema antes del primer pintado no tiene una integración compatible confirmada.
+- **Solución recomendada:** Integrar el inicializador usando el mecanismo de scripts documentado y compatible con la versión de Next.js del proyecto, manteniendo su ejecución temprana para evitar un destello del tema incorrecto. Revisar las guías de Next.js 16 instaladas en el proyecto antes de modificar el patrón.
+- **Alternativa:** Usar un mecanismo de inicialización soportado por el layout raíz que no renderice un elemento script crudo desde un componente React, siempre que preserve el comportamiento previo al primer pintado.
+- **Verificación pendiente:** Reiniciar el servidor, abrir `/design-system`, comprobar que desaparece el error de script, confirmar que el tema guardado se aplica antes del primer pintado y probar migración de preferencias heredadas. Ejecutar además `npm run lint` y `npm run build`.
+
