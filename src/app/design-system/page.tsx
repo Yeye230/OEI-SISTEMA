@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, CircleAlert, Command, Eye, Info, Palette, ShieldCheck, Type } from "lucide-react";
+import { CheckCircle2, CircleAlert, Command, Eye, Info, Palette, Search, ShieldCheck, Type } from "lucide-react";
 import { THEMES, type ThemeId } from "@/core/lib/themes";
 import { useTheme } from "@/core/components/theme/theme-provider";
 
