@@ -38,10 +38,8 @@ export default function RootLayout({ children }: LayoutProps<"/">): ReactElement
       suppressHydrationWarning
       className={`${display.variable} ${sans.variable}`}
     >
-      <head>
-        <ThemeInitScript />
-      </head>
       <body>
+        <ThemeInitScript />
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
