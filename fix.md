@@ -32,14 +32,14 @@
 
 - **Categoría:** Funcionalidad / Seguridad
 - **Severidad:** Alta para puesta en producción
-- **Estado:** Pendiente de integración
-- **Evidencia:** `src/app/login/page.tsx`: `handleSubmit` valida el correo y la contraseña en cliente y muestra un mensaje; no realiza una solicitud al endpoint de autenticación.
+- **Estado:** Validación de interfaz implementada en modo demostración; autenticación real pendiente
+- **Evidencia:** La rama `feat/login-validations` implementa React Hook Form y Zod en el formulario. Al enviar datos válidos muestra una alerta de demostración; no realiza solicitudes de red ni crea una sesión.
 - **Problema / causa raíz:** La pantalla es un prototipo visual, no un flujo de autenticación funcional.
-- **Impacto:** Ningún usuario puede iniciar sesión desde este formulario; el diseño por sí solo no protege recursos.
-- **Solución recomendada:** Integrar el endpoint de autenticación existente, manejar estados de carga/error y validar en servidor; nunca tratar la validación del navegador como autenticación.
+- **Impacto:** El formulario permite comprobar que las validaciones funcionan, pero ningún usuario puede autenticarse todavía. La alerta no representa una sesión iniciada ni protege recursos.
+- **Solución recomendada:** En una tarea posterior, integrar el contrato real del backend, manejar respuestas y errores del servidor y validar credenciales en servidor. No tratar esta alerta ni la validación del navegador como autenticación.
 - **Alternativa:** Si la autenticación ya se implementa en otra ruta, conectar el formulario al contrato real de esa ruta.
-- **Verificación:** Pruebas de éxito, credenciales incorrectas, fallo de red, cookie segura, redirección y acceso denegado a recursos privados.
-- **Alcance:** Se mantiene pendiente; esta tarea mejora interfaz y sistema de diseño, no cambia la autenticación backend.
+- **Verificación pendiente:** Probar correo vacío, formato inválido, contraseña vacía y datos válidos; confirmar que la alerta indica claramente que es una simulación. Las pruebas de credenciales, red, cookie y redirección quedan pendientes hasta integrar backend.
+- **Alcance:** Se implementa únicamente la validación cliente y una alerta de demostración. No se conecta backend, no se envían credenciales y no se modifica el flujo de sesión.
 
 ## OEI-ARCH-001 — Archivo de página con nombre temporal y responsabilidad dudosa
 
@@ -117,3 +117,15 @@
 - **Solución aplicada:** Se agregó una página de catálogo con búsqueda de temas, selector de 10 variantes, muestras de tokens, tipografía, componentes y estados semánticos. No modifica autenticación ni lógica de negocio.
 - **Alternativa:** Usar una herramienta de documentación de componentes externa; por rapidez y menor dependencia, se implementó una ruta interna.
 - **Verificación:** Actualizar la rama, ejecutar `npm run build`, abrir `/design-system`, probar selector/búsqueda y revisar responsive y navegación por teclado.
+
+## OEI-AUTH-RESP-001 — Diseño responsive del formulario de inicio de sesión
+
+- **Categoría:** Diseño / Experiencia de usuario / Compatibilidad
+- **Severidad:** Media
+- **Estado:** Ajustes responsive aplicados en rama; pendiente de comprobación visual en dispositivos y anchos reales
+- **Evidencia:** La pantalla de login utiliza una sola columna y contaba con reglas generales para pantallas menores de 54rem, pero no diferenciaba suficientemente móviles pequeños, tablets y ventanas de poca altura.
+- **Problema / causa raíz:** El formulario podía conservar espacios y tamaños propios de escritorio en móviles estrechos, y los campos no declaraban un tamaño de fuente mínimo para evitar el zoom automático de Safari en iOS.
+- **Impacto:** Posible exceso de desplazamiento, textos ajustados, controles estrechos y una experiencia desigual según el tamaño de pantalla.
+- **Solución aplicada:** Se añadieron reglas específicas para tablets y móviles, ajustes para anchos de hasta 360px, controles táctiles más cómodos, fuente de 16px en campos móviles, manejo de ventanas de poca altura y respeto a la preferencia de movimiento reducido. No se alteró la lógica de validación ni el diseño de escritorio.
+- **Verificación pendiente:** Revisar la ruta de login en anchos aproximados de 360px, 390px, 768px, 1024px y 1440px; comprobar que no exista desplazamiento horizontal, que los campos y el botón sean utilizables, que los mensajes de error no rompan el diseño y que el teclado móvil no tape los controles.
+- **Alcance:** Cambios de CSS únicamente. No se conectó backend ni se modificó la autenticación.

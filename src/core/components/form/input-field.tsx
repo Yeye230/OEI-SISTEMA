@@ -7,7 +7,7 @@ import { type ControllerRenderProps, type FieldPath, type FieldValues } from "re
 import { inputClassName } from "@/core/utils/const";
 import { cn } from "@/core/utils/function";
 
-type FieldProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>> = {
+interface FieldProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>> {
   label: string;
   field: ControllerRenderProps<TFieldValues, TName>;
   readOnly?: boolean;
@@ -18,7 +18,7 @@ type FieldProps<TFieldValues extends FieldValues, TName extends FieldPath<TField
   type?: "text" | "email" | "password" | "tel" | "date";
   startContent?: ReactNode;
   endContent?: ReactNode;
-};
+}
 
 const Field = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>({
   label,
