@@ -117,3 +117,16 @@
 - **Solución aplicada:** Se agregó una página de catálogo con búsqueda de temas, selector de 10 variantes, muestras de tokens, tipografía, componentes y estados semánticos. No modifica autenticación ni lógica de negocio.
 - **Alternativa:** Usar una herramienta de documentación de componentes externa; por rapidez y menor dependencia, se implementó una ruta interna.
 - **Verificación:** Actualizar la rama, ejecutar `npm run build`, abrir `/design-system`, probar selector/búsqueda y revisar responsive y navegación por teclado.
+
+
+## OEI-AUTH-002 — Validación local del formulario de login
+
+- **Categoría:** Funcionalidad / Validación
+- **Severidad:** Media
+- **Estado:** Implementado en `feat/user-module`; pendiente de pruebas locales
+- **Evidencia:** `src/app/login/page.tsx` ahora utiliza React Hook Form con `zodResolver`; las reglas se centralizan en `src/core/schemas/login.schema.ts`.
+- **Solución aplicada:** Validación de correo requerido y formato válido; contraseña de al menos 8 caracteres, con mayúscula, minúscula, número y carácter especial. Se agregaron mensajes por campo y una lista visual de requisitos que se actualiza al escribir.
+- **Experiencia de uso:** Se conserva el formulario de una sola ventana, el botón para mostrar/ocultar contraseña y se agrega un selector de tema con icono de nube/sol.
+- **Persistencia del tema:** La ruta `/login` deja de forzar el tema público neutro para que el `ThemeProvider` restaure y guarde la preferencia existente en `localStorage`.
+- **Límite conocido:** Esto valida fortaleza/formato en el cliente; no autentica usuarios ni demuestra que la contraseña corresponda a una cuenta. La integración backend sigue pendiente como indica OEI-AUTH-001.
+- **Verificación pendiente:** Ejecutar `npm run lint`, `npm run build` y probar `/login` en ambos temas, con campos vacíos, correo inválido y cada regla de contraseña.
