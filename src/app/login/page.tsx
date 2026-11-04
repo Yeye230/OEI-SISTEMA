@@ -5,25 +5,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
   ArrowRight,
-  Check,
   CloudSun,
   Eye,
   EyeOff,
   LockKeyhole,
   Mail,
-  ShieldCheck,
-  X
+  ShieldCheck
 } from "lucide-react";
 import { useTheme } from "@/core/components/theme/theme-provider";
 import { loginSchema, type LoginFormValues } from "@/core/schemas/login.schema";
-
-const passwordRules = [
-  { label: "Al menos 8 caracteres", test: (value: string) => value.length >= 8 },
-  { label: "Una letra mayúscula", test: (value: string) => /[A-Z]/.test(value) },
-  { label: "Una letra minúscula", test: (value: string) => /[a-z]/.test(value) },
-  { label: "Un número", test: (value: string) => /[0-9]/.test(value) },
-  { label: "Un carácter especial", test: (value: string) => /[^A-Za-z0-9]/.test(value) }
-];
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -35,7 +25,6 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isSubmitting }
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -43,8 +32,6 @@ export default function LoginPage() {
     reValidateMode: "onChange",
     defaultValues: { email: "", password: "" }
   });
-
-  const password = watch("password", "");
 
   useEffect(() => {
     setYear(new Date().getFullYear());
@@ -133,7 +120,7 @@ export default function LoginPage() {
                     autoComplete="current-password"
                     placeholder="Ingresa tu contraseña"
                     aria-invalid={Boolean(errors.password)}
-                    aria-describedby={errors.password ? "password-error" : "password-rules"}
+                    aria-describedby={errors.password ? "password-error" : undefined}
                     {...register("password")}
                   />
                   <button
@@ -149,21 +136,6 @@ export default function LoginPage() {
                 {errors.password && (
                   <p id="password-error" className="auth-field-error" role="alert">{errors.password.message}</p>
                 )}
-
-                <div id="password-rules" className="auth-password-rules" aria-live="polite">
-                  <p>Tu contraseña debe contener:</p>
-                  <ul>
-                    {passwordRules.map((rule) => {
-                      const passed = rule.test(password);
-                      return (
-                        <li key={rule.label} className={passed ? "is-valid" : ""}>
-                          {passed ? <Check size={14} /> : <X size={14} />}
-                          <span>{rule.label}</span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
               </div>
 
               {feedback && (
