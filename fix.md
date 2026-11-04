@@ -130,3 +130,14 @@
 - **Persistencia del tema:** La ruta `/login` deja de forzar el tema público neutro para que el `ThemeProvider` restaure y guarde la preferencia existente en `localStorage`.
 - **Límite conocido:** Esto valida fortaleza/formato en el cliente; no autentica usuarios ni demuestra que la contraseña corresponda a una cuenta. La integración backend sigue pendiente como indica OEI-AUTH-001.
 - **Verificación pendiente:** Ejecutar `npm run lint`, `npm run build` y probar `/login` en ambos temas, con campos vacíos, correo inválido y cada regla de contraseña.
+
+
+## OEI-AUTH-003 — La tarjeta del login se desborda en pantallas de escritorio con poca altura
+
+- **Categoría:** Diseño / Responsive
+- **Severidad:** Media
+- **Estado:** Ajuste aplicado en rama; pendiente de verificación visual local
+- **Evidencia:** La captura de la ruta `/login` muestra que la tarjeta supera la altura visible del navegador y requiere desplazamiento para consultar el contenido inferior.
+- **Problema / causa raíz:** Los espacios verticales originales del formulario, combinados con la lista de requisitos de contraseña, consumen más altura que algunas ventanas de escritorio.
+- **Solución aplicada:** Se añadió un ajuste compacto para pantallas de escritorio de hasta 850 px de alto, reduciendo espacios verticales y altura de controles sin eliminar contenido. También se habilitó desplazamiento vertical seguro en pantallas de poca altura para evitar que la tarjeta quede recortada.
+- **Verificación pendiente:** Actualizar la rama local, abrir `/login` en una ventana de escritorio de 768–850 px de alto y confirmar que la tarjeta cabe cuando sea posible y que, si no cabe, todo su contenido sigue siendo accesible mediante desplazamiento.
