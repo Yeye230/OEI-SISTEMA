@@ -1,42 +1,61 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import {
   ArrowRight,
+  Check,
+  CloudSun,
   Eye,
   EyeOff,
   LockKeyhole,
   Mail,
   ShieldCheck,
+  Sun,
+  Moon,
+  X
 } from "lucide-react";
+import { useTheme } from "@/core/components/theme/theme-provider";
+import { loginSchema, type LoginFormValues } from "@/core/schemas/login.schema";
+
+const passwordRules = [
+  { label: "Al menos 8 caracteres", test: (value: string) => value.length >= 8 },
+  { label: "Una letra mayúscula", test: (value: string) => /[A-Z]/.test(value) },
+  { label: "Una letra minúscula", test: (value: string) => /[a-z]/.test(value) },
+  { label: "Un número", test: (value: string) => /[0-9]/.test(value) },
+  { label: "Un carácter especial", test: (value: string) => /[^A-Za-z0-9]/.test(value) }
+];
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
   const [year, setYear] = useState<number | null>(null);
+  const [feedback, setFeedback] = useState("");
+  const [feedbackType, setFeedbackType] = useState<"success" | "error">("error");
+  const { mode, toggleMode, mounted } = useTheme();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting }
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    mode: "onTouched",
+    reValidateMode: "onChange",
+    defaultValues: { email: "", password: "" }
+  });
+
+  const password = watch("password", "");
 
   useEffect(() => {
     setYear(new Date().getFullYear());
   }, []);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setError("");
-
-    if (!email.trim() || !password) {
-      setError("Ingresa tu correo electrónico y contraseña.");
-      return;
-    }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setError("Ingresa un correo electrónico válido.");
-      return;
-    }
-
-    setError(
-      "La autenticación aún no está conectada. Tus credenciales no se han enviado."
+  function onSubmit(_values: LoginFormValues) {
+    setFeedbackType("success");
+    setFeedback(
+      "Los datos cumplen las validaciones. La autenticación todavía no está conectada y no se han enviado credenciales."
     );
   }
 
@@ -44,6 +63,18 @@ export default function LoginPage() {
     <main className="auth-shell">
       <div className="auth-orbit auth-orbit-one" aria-hidden="true" />
       <div className="auth-orbit auth-orbit-two" aria-hidden="true" />
+
+      <button
+        type="button"
+        className="auth-theme-toggle"
+        onClick={toggleMode}
+        disabled={!mounted}
+        aria-label={mode === "dark" ? "Cambiar al tema claro" : "Cambiar al tema oscuro"}
+        title={mode === "dark" ? "Cambiar al tema claro" : "Cambiar al tema oscuro"}
+      >
+        <CloudSun size={19} aria-hidden="true" />
+        <span>{mode === "dark" ? "Claro" : "Oscuro"}</span>
+      </button>
 
       <section className="auth-card" aria-labelledby="login-title">
         <div className="auth-form-panel">
@@ -63,49 +94,49 @@ export default function LoginPage() {
               gestión de actas y recursos.
             </p>
 
-            <form onSubmit={handleSubmit} className="auth-form" noValidate>
+            <form onSubmit={handleSubmit(onSubmit)} className="auth-form" noValidate>
               <div>
                 <label htmlFor="email" className="auth-field-label">
                   Correo electrónico
                 </label>
-                <div className="auth-control">
+                <div className={`auth-control ${errors.email ? "has-error" : ""}`}>
                   <Mail size={19} strokeWidth={1.8} aria-hidden="true" />
                   <input
                     id="email"
-                    name="email"
                     type="email"
                     autoComplete="username"
                     inputMode="email"
                     autoCapitalize="none"
                     spellCheck={false}
                     placeholder="nombre@institucion.org"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    aria-invalid={Boolean(error)}
-                    aria-describedby={error ? "login-message" : "email-hint"}
+                    aria-invalid={Boolean(errors.email)}
+                    aria-describedby={errors.email ? "email-error" : "email-hint"}
+                    {...register("email")}
                   />
                 </div>
-                <p id="email-hint" className="auth-hint">
-                  Utiliza el correo asociado a tu cuenta institucional.
-                </p>
+                {errors.email ? (
+                  <p id="email-error" className="auth-field-error" role="alert">{errors.email.message}</p>
+                ) : (
+                  <p id="email-hint" className="auth-hint">
+                    Utiliza el correo asociado a tu cuenta institucional.
+                  </p>
+                )}
               </div>
 
               <div>
                 <label htmlFor="password" className="auth-field-label">
                   Contraseña
                 </label>
-                <div className="auth-control">
+                <div className={`auth-control ${errors.password ? "has-error" : ""}`}>
                   <LockKeyhole size={19} strokeWidth={1.8} aria-hidden="true" />
                   <input
                     id="password"
-                    name="password"
                     type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
                     placeholder="Ingresa tu contraseña"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    aria-invalid={Boolean(error)}
-                    aria-describedby={error ? "login-message" : undefined}
+                    aria-invalid={Boolean(errors.password)}
+                    aria-describedby={errors.password ? "password-error" : "password-rules"}
+                    {...register("password")}
                   />
                   <button
                     type="button"
@@ -117,16 +148,34 @@ export default function LoginPage() {
                     {showPassword ? <EyeOff size={19} aria-hidden="true" /> : <Eye size={19} aria-hidden="true" />}
                   </button>
                 </div>
+                {errors.password && (
+                  <p id="password-error" className="auth-field-error" role="alert">{errors.password.message}</p>
+                )}
+
+                <div id="password-rules" className="auth-password-rules" aria-live="polite">
+                  <p>Tu contraseña debe contener:</p>
+                  <ul>
+                    {passwordRules.map((rule) => {
+                      const passed = rule.test(password);
+                      return (
+                        <li key={rule.label} className={passed ? "is-valid" : ""}>
+                          {passed ? <Check size={14} /> : <X size={14} />}
+                          <span>{rule.label}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               </div>
 
-              {error && (
-                <p id="login-message" className="auth-message" role="alert" aria-live="polite">
-                  {error}
+              {feedback && (
+                <p className={`auth-message ${feedbackType === "success" ? "is-success" : ""}`} role="status" aria-live="polite">
+                  {feedback}
                 </p>
               )}
 
-              <button type="submit" className="auth-submit">
-                Iniciar sesión
+              <button type="submit" className="auth-submit" disabled={isSubmitting}>
+                {isSubmitting ? "Validando..." : "Iniciar sesión"}
                 <ArrowRight size={18} aria-hidden="true" />
               </button>
             </form>
@@ -140,8 +189,6 @@ export default function LoginPage() {
             </div>
           </div>
         </div>
-
-
       </section>
     </main>
   );
