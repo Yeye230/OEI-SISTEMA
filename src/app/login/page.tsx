@@ -12,8 +12,6 @@ import {
   LockKeyhole,
   Mail,
   ShieldCheck,
-  Sun,
-  Moon,
   X
 } from "lucide-react";
 import { useTheme } from "@/core/components/theme/theme-provider";
