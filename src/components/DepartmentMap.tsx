@@ -1,44 +1,39 @@
+'use client';
 
-"use client";
+import 'leaflet/dist/leaflet.css';
 
-import "leaflet/dist/leaflet.css";
-
-import { useEffect, useRef, useState } from "react";
-import type {
-  GeoJSON as LeafletGeoJSON,
-  Map as LeafletMap,
-  Path,
-} from "leaflet";
-import { Map as MapIcon } from "lucide-react";
+import { useEffect, useRef, useState } from 'react';
+import type { GeoJSON as LeafletGeoJSON, Map as LeafletMap, Path } from 'leaflet';
+import { Map as MapIcon } from 'lucide-react';
 
 import {
-  actasColor,
-  actasLegend,
-  avanceColor,
-  avanceLegend,
-  normalizeName,
-  statsByKey,
-  type Metric,
-} from "@/lib/demo-data";
+	actasColor,
+	actasLegend,
+	avanceColor,
+	avanceLegend,
+	normalizeName,
+	statsByKey,
+	type Metric,
+} from '@/core/utils/demo-data';
 
 /** Activar solo si se desea mostrar un mapa base de calles. */
 const SHOW_BASEMAP = false;
 
 type DepartmentFeature = {
-  type?: "Feature";
-  properties: {
-    shapeName: string;
-    shapeID?: string;
-  };
-  geometry: {
-    type: "Polygon" | "MultiPolygon";
-    coordinates: unknown;
-  };
+	type?: 'Feature';
+	properties: {
+		shapeName: string;
+		shapeID?: string;
+	};
+	geometry: {
+		type: 'Polygon' | 'MultiPolygon';
+		coordinates: unknown;
+	};
 };
 
 type GeoJSONCollection = {
-  type: "FeatureCollection";
-  features: DepartmentFeature[];
+	type: 'FeatureCollection';
+	features: DepartmentFeature[];
 };
 
 const mapCss = `
@@ -138,352 +133,321 @@ const mapCss = `
 `;
 
 export default function DepartmentMap({
-  metric,
-  onMetricChange,
-  selected,
-  onSelect,
+	metric,
+	onMetricChange,
+	selected,
+	onSelect,
 }: {
-  metric: Metric;
-  onMetricChange: (metric: Metric) => void;
-  selected: string;
-  onSelect: (key: string) => void;
+	metric: Metric;
+	onMetricChange: (metric: Metric) => void;
+	selected: string;
+	onSelect: (key: string) => void;
 }) {
-  const [features, setFeatures] = useState<DepartmentFeature[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [mapError, setMapError] = useState(false);
-  const [mapReady, setMapReady] = useState(false);
+	const [features, setFeatures] = useState<DepartmentFeature[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [mapError, setMapError] = useState(false);
+	const [mapReady, setMapReady] = useState(false);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<LeafletMap | null>(null);
-  const layerRef = useRef<LeafletGeoJSON | null>(null);
-  const leafletRef = useRef<typeof import("leaflet") | null>(null);
-  const fittedRef = useRef(false);
-  const onSelectRef = useRef(onSelect);
+	const containerRef = useRef<HTMLDivElement>(null);
+	const mapRef = useRef<LeafletMap | null>(null);
+	const layerRef = useRef<LeafletGeoJSON | null>(null);
+	const leafletRef = useRef<typeof import('leaflet') | null>(null);
+	const fittedRef = useRef(false);
+	const onSelectRef = useRef(onSelect);
 
-  useEffect(() => {
-    onSelectRef.current = onSelect;
-  }, [onSelect]);
+	useEffect(() => {
+		onSelectRef.current = onSelect;
+	}, [onSelect]);
 
-  /* Cargar los departamentos desde el GeoJSON local. */
-  useEffect(() => {
-    let active = true;
+	/* Cargar los departamentos desde el GeoJSON local. */
+	useEffect(() => {
+		let active = true;
 
-    async function loadMap() {
-      try {
-        const response = await fetch(
-          "/data/el-salvador-departments.geojson"
-        );
+		async function loadMap() {
+			try {
+				const response = await fetch('/data/el-salvador-departments.geojson');
 
-        if (!response.ok) {
-          throw new Error(`Error al cargar el mapa (${response.status})`);
-        }
+				if (!response.ok) {
+					throw new Error(`Error al cargar el mapa (${response.status})`);
+				}
 
-        const data = (await response.json()) as GeoJSONCollection;
+				const data = (await response.json()) as GeoJSONCollection;
 
-        if (
-          data.type !== "FeatureCollection" ||
-          !Array.isArray(data.features)
-        ) {
-          throw new Error("El archivo GeoJSON no tiene el formato esperado");
-        }
+				if (data.type !== 'FeatureCollection' || !Array.isArray(data.features)) {
+					throw new Error('El archivo GeoJSON no tiene el formato esperado');
+				}
 
-        if (active) {
-          setFeatures(data.features);
-          setMapError(false);
-        }
-      } catch (error) {
-        console.error("Error cargando el mapa:", error);
+				if (active) {
+					setFeatures(data.features);
+					setMapError(false);
+				}
+			} catch (error) {
+				console.error('Error cargando el mapa:', error);
 
-        if (active) {
-          setMapError(true);
-        }
-      } finally {
-        if (active) {
-          setLoading(false);
-        }
-      }
-    }
+				if (active) {
+					setMapError(true);
+				}
+			} finally {
+				if (active) {
+					setLoading(false);
+				}
+			}
+		}
 
-    void loadMap();
+		void loadMap();
 
-    return () => {
-      active = false;
-    };
-  }, []);
+		return () => {
+			active = false;
+		};
+	}, []);
 
-  /* Inicializar Leaflet una sola vez. */
-  useEffect(() => {
-    let cancelled = false;
-    let resizeObserver: ResizeObserver | undefined;
+	/* Inicializar Leaflet una sola vez. */
+	useEffect(() => {
+		let cancelled = false;
+		let resizeObserver: ResizeObserver | undefined;
 
-    async function initMap() {
-      if (!containerRef.current || mapRef.current) return;
+		async function initMap() {
+			if (!containerRef.current || mapRef.current) return;
 
-      const L = (await import("leaflet")).default;
+			const L = (await import('leaflet')).default;
 
-      if (cancelled || !containerRef.current) return;
+			if (cancelled || !containerRef.current) return;
 
-      const map = L.map(containerRef.current, {
-        zoomControl: false,
-        scrollWheelZoom: false,
-        attributionControl: SHOW_BASEMAP,
-        minZoom: 7,
-        maxZoom: 12,
-        zoomSnap: 0.25,
-      }).setView([13.75, -88.9], 9);
+			const map = L.map(containerRef.current, {
+				zoomControl: false,
+				scrollWheelZoom: false,
+				attributionControl: SHOW_BASEMAP,
+				minZoom: 7,
+				maxZoom: 12,
+				zoomSnap: 0.25,
+			}).setView([13.75, -88.9], 9);
 
-      L.control.zoom({ position: "topright" }).addTo(map);
+			L.control.zoom({ position: 'topright' }).addTo(map);
 
-      if (SHOW_BASEMAP) {
-        L.tileLayer(
-          "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-          {
-            attribution: "&copy; OpenStreetMap &copy; CARTO",
-            subdomains: "abcd",
-          }
-        ).addTo(map);
-      }
+			if (SHOW_BASEMAP) {
+				L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+					attribution: '&copy; OpenStreetMap &copy; CARTO',
+					subdomains: 'abcd',
+				}).addTo(map);
+			}
 
-      leafletRef.current = L;
-      mapRef.current = map;
+			leafletRef.current = L;
+			mapRef.current = map;
 
-      const container = containerRef.current;
+			const container = containerRef.current;
 
-      if (typeof ResizeObserver !== "undefined") {
-        resizeObserver = new ResizeObserver(() => {
-          map.invalidateSize({ pan: false });
-        });
+			if (typeof ResizeObserver !== 'undefined') {
+				resizeObserver = new ResizeObserver(() => {
+					map.invalidateSize({ pan: false });
+				});
 
-        resizeObserver.observe(container);
-      }
+				resizeObserver.observe(container);
+			}
 
-      requestAnimationFrame(() => {
-        if (!cancelled) {
-          map.invalidateSize({ pan: false });
-        }
-      });
+			requestAnimationFrame(() => {
+				if (!cancelled) {
+					map.invalidateSize({ pan: false });
+				}
+			});
 
-      setMapReady(true);
-    }
+			setMapReady(true);
+		}
 
-    void initMap().catch((error) => {
-      console.error("Error inicializando Leaflet:", error);
+		void initMap().catch((error) => {
+			console.error('Error inicializando Leaflet:', error);
 
-      if (!cancelled) {
-        setMapError(true);
-        setLoading(false);
-      }
-    });
+			if (!cancelled) {
+				setMapError(true);
+				setLoading(false);
+			}
+		});
 
-    return () => {
-      cancelled = true;
-      resizeObserver?.disconnect();
-      mapRef.current?.remove();
-      mapRef.current = null;
-      layerRef.current = null;
-      leafletRef.current = null;
-      fittedRef.current = false;
-    };
-  }, []);
+		return () => {
+			cancelled = true;
+			resizeObserver?.disconnect();
+			mapRef.current?.remove();
+			mapRef.current = null;
+			layerRef.current = null;
+			leafletRef.current = null;
+			fittedRef.current = false;
+		};
+	}, []);
 
-  /* Dibujar los departamentos y actualizar sus colores. */
-  useEffect(() => {
-    const L = leafletRef.current;
-    const map = mapRef.current;
+	/* Dibujar los departamentos y actualizar sus colores. */
+	useEffect(() => {
+		const L = leafletRef.current;
+		const map = mapRef.current;
 
-    if (!mapReady || !L || !map || !features.length) return;
+		if (!mapReady || !L || !map || !features.length) return;
 
-    layerRef.current?.remove();
+		layerRef.current?.remove();
 
-    const paint = (key: string) => {
-      const stat = statsByKey[key];
+		const paint = (key: string) => {
+			const stat = statsByKey[key];
 
-      if (!stat) return "#cbd5e1";
+			if (!stat) return '#cbd5e1';
 
-      return metric === "avance"
-        ? avanceColor(stat.avance)
-        : actasColor(stat.actas);
-    };
+			return metric === 'avance' ? avanceColor(stat.avance) : actasColor(stat.actas);
+		};
 
-    const layer = L.geoJSON(
-      { type: "FeatureCollection", features } as never,
-      {
-        style: (feature) => {
-          const key = normalizeName(
-            feature?.properties?.shapeName ?? ""
-          );
+		const layer = L.geoJSON({ type: 'FeatureCollection', features } as never, {
+			style: (feature) => {
+				const key = normalizeName(feature?.properties?.shapeName ?? '');
 
-          const isSelected = key === selected;
+				const isSelected = key === selected;
 
-          return {
-            fillColor: paint(key),
-            fillOpacity: 0.95,
-            color: isSelected ? "#0b2945" : "#ffffff",
-            weight: isSelected ? 3 : 1.6,
-            lineJoin: "round",
-          };
-        },
+				return {
+					fillColor: paint(key),
+					fillOpacity: 0.95,
+					color: isSelected ? '#0b2945' : '#ffffff',
+					weight: isSelected ? 3 : 1.6,
+					lineJoin: 'round',
+				};
+			},
 
-        onEachFeature: (feature, featureLayer) => {
-          const key = normalizeName(
-            feature.properties?.shapeName ?? ""
-          );
+			onEachFeature: (feature, featureLayer) => {
+				const key = normalizeName(feature.properties?.shapeName ?? '');
 
-          const stat = statsByKey[key];
+				const stat = statsByKey[key];
 
-          const text = stat
-            ? metric === "avance"
-              ? `${stat.avance}%`
-              : String(stat.actas)
-            : "";
+				const text = stat ? (metric === 'avance' ? `${stat.avance}%` : String(stat.actas)) : '';
 
-          if (text) {
-            featureLayer.bindTooltip(text, {
-              permanent: true,
-              direction: "center",
-              className: "dept-label",
-            });
-          }
+				if (text) {
+					featureLayer.bindTooltip(text, {
+						permanent: true,
+						direction: 'center',
+						className: 'dept-label',
+					});
+				}
 
-          featureLayer.on({
-            click: () => onSelectRef.current(key),
+				featureLayer.on({
+					click: () => onSelectRef.current(key),
 
-            mouseover: () => {
-              (featureLayer as Path).setStyle({
-                fillOpacity: 1,
-                weight: 2.5,
-              });
-            },
+					mouseover: () => {
+						(featureLayer as Path).setStyle({
+							fillOpacity: 1,
+							weight: 2.5,
+						});
+					},
 
-            mouseout: () => {
-              layer.resetStyle(featureLayer);
-            },
-          });
-        },
-      }
-    ).addTo(map);
+					mouseout: () => {
+						layer.resetStyle(featureLayer);
+					},
+				});
+			},
+		}).addTo(map);
 
-    layerRef.current = layer;
+		layerRef.current = layer;
 
-    if (!fittedRef.current) {
-      map.fitBounds(layer.getBounds(), {
-        padding: [24, 24],
-        animate: false,
-      });
+		if (!fittedRef.current) {
+			map.fitBounds(layer.getBounds(), {
+				padding: [24, 24],
+				animate: false,
+			});
 
-      fittedRef.current = true;
-    }
-  }, [features, metric, selected, mapReady]);
+			fittedRef.current = true;
+		}
+	}, [features, metric, selected, mapReady]);
 
-  const legend = metric === "avance" ? avanceLegend : actasLegend;
+	const legend = metric === 'avance' ? avanceLegend : actasLegend;
 
-  return (
-    <div className="min-w-0 w-full">
-      <style>{mapCss}</style>
+	return (
+		<div className='min-w-0 w-full'>
+			<style>{mapCss}</style>
 
-      {/* Controles del mapa */}
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-2">
-          <MapIcon size={17} className="shrink-0 text-teal-600" />
+			{/* Controles del mapa */}
+			<div className='mb-3 flex flex-wrap items-center justify-between gap-3'>
+				<div className='flex min-w-0 items-center gap-2'>
+					<MapIcon size={17} className='shrink-0 text-teal-600' />
 
-          <span className="text-sm font-medium text-slate-600">
-            {metric === "avance"
-              ? "Avance por departamento"
-              : "Actas por departamento"}
-          </span>
-        </div>
+					<span className='text-sm font-medium text-slate-600'>
+						{metric === 'avance' ? 'Avance por departamento' : 'Actas por departamento'}
+					</span>
+				</div>
 
-        <div
-          role="tablist"
-          aria-label="Métrica del mapa"
-          className="inline-flex shrink-0 rounded-lg border border-slate-200 bg-slate-100 p-1"
-        >
-          {(
-            [
-              { id: "avance", label: "Avance" },
-              { id: "actas", label: "Actas" },
-            ] as const
-          ).map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              role="tab"
-              aria-selected={metric === tab.id}
-              onClick={() => onMetricChange(tab.id)}
-              className={`rounded-md px-3 py-2 text-xs font-semibold transition ${
-                metric === tab.id
-                  ? "bg-[#0b2945] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-white hover:text-slate-900"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </div>
+				<div
+					role='tablist'
+					aria-label='Métrica del mapa'
+					className='inline-flex shrink-0 rounded-lg border border-slate-200 bg-slate-100 p-1'
+				>
+					{(
+						[
+							{ id: 'avance', label: 'Avance' },
+							{ id: 'actas', label: 'Actas' },
+						] as const
+					).map((tab) => (
+						<button
+							key={tab.id}
+							type='button'
+							role='tab'
+							aria-selected={metric === tab.id}
+							onClick={() => onMetricChange(tab.id)}
+							className={`rounded-md px-3 py-2 text-xs font-semibold transition ${
+								metric === tab.id
+									? 'bg-[#0b2945] text-white shadow-sm'
+									: 'text-slate-600 hover:bg-white hover:text-slate-900'
+							}`}
+						>
+							{tab.label}
+						</button>
+					))}
+				</div>
+			</div>
 
-      {/* Mapa interactivo */}
-      {mapError ? (
-        <div className="flex min-h-[300px] flex-col items-center justify-center rounded-xl border border-rose-200 bg-rose-50 p-6 text-center">
-          <MapIcon size={30} className="mb-3 text-rose-500" />
+			{/* Mapa interactivo */}
+			{mapError ? (
+				<div className='flex min-h-[300px] flex-col items-center justify-center rounded-xl border border-rose-200 bg-rose-50 p-6 text-center'>
+					<MapIcon size={30} className='mb-3 text-rose-500' />
 
-          <h3 className="font-semibold text-slate-800">
-            No se pudo cargar el mapa
-          </h3>
+					<h3 className='font-semibold text-slate-800'>No se pudo cargar el mapa</h3>
 
-          <p className="mt-2 max-w-sm text-sm leading-6 text-slate-600">
-            Comprueba que exista el archivo{" "}
-            <code className="break-all text-xs">
-              public/data/el-salvador-departments.geojson
-            </code>
-            .
-          </p>
-        </div>
-      ) : (
-        <div className={SHOW_BASEMAP ? "dept-map basemap" : "dept-map"}>
-          <div ref={containerRef} className="dept-map-canvas" />
+					<p className='mt-2 max-w-sm text-sm leading-6 text-slate-600'>
+						Comprueba que exista el archivo{' '}
+						<code className='break-all text-xs'>public/data/el-salvador-departments.geojson</code>.
+					</p>
+				</div>
+			) : (
+				<div className={SHOW_BASEMAP ? 'dept-map basemap' : 'dept-map'}>
+					<div ref={containerRef} className='dept-map-canvas' />
 
-          {loading && (
-            <div
-              className="dept-overlay flex items-center justify-center bg-white/80 text-sm text-slate-500"
-              style={{ inset: 0 }}
-            >
-              Cargando mapa de El Salvador...
-            </div>
-          )}
+					{loading && (
+						<div
+							className='dept-overlay flex items-center justify-center bg-white/80 text-sm text-slate-500'
+							style={{ inset: 0 }}
+						>
+							Cargando mapa de El Salvador...
+						</div>
+					)}
 
-          {/* Leyenda */}
-          <div
-            className="dept-overlay max-w-[calc(100%-24px)] rounded-xl border border-slate-200/80 bg-white/95 px-3 py-3 shadow-md backdrop-blur-sm sm:px-4"
-            style={{ bottom: 12, left: 12 }}
-          >
-            <p className="mb-2 text-xs font-semibold text-slate-700">
-              {metric === "avance" ? "Rango de avance" : "Rango de actas"}
-            </p>
+					{/* Leyenda */}
+					<div
+						className='dept-overlay max-w-[calc(100%-24px)] rounded-xl border border-slate-200/80 bg-white/95 px-3 py-3 shadow-md backdrop-blur-sm sm:px-4'
+						style={{ bottom: 12, left: 12 }}
+					>
+						<p className='mb-2 text-xs font-semibold text-slate-700'>
+							{metric === 'avance' ? 'Rango de avance' : 'Rango de actas'}
+						</p>
 
-            <ul className="space-y-1.5">
-              {legend.map((item) => (
-                <li
-                  key={item.label}
-                  className="flex items-center gap-2 text-xs text-slate-600"
-                >
-                  <span
-                    className="h-2.5 w-2.5 shrink-0 rounded-full"
-                    style={{ backgroundColor: item.color }}
-                  />
+						<ul className='space-y-1.5'>
+							{legend.map((item) => (
+								<li key={item.label} className='flex items-center gap-2 text-xs text-slate-600'>
+									<span
+										className='h-2.5 w-2.5 shrink-0 rounded-full'
+										style={{ backgroundColor: item.color }}
+									/>
 
-                  <span>{item.label}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
+									<span>{item.label}</span>
+								</li>
+							))}
+						</ul>
+					</div>
+				</div>
+			)}
 
-      <p className="mt-3 text-[11px] leading-5 text-slate-400">
-        Selecciona un departamento para consultar su información. Las
-        estadísticas actuales proceden de los datos de demostración.
-      </p>
-    </div>
-  );
+			<p className='mt-3 text-[11px] leading-5 text-slate-400'>
+				Selecciona un departamento para consultar su información. Las estadísticas actuales proceden
+				de los datos de demostración.
+			</p>
+		</div>
+	);
 }

@@ -2,6 +2,7 @@
 
 import {
   DEFAULT_THEME,
+  counterpartTheme,
   getMode,
   isThemeId,
   LEGACY_THEME_STORAGE_KEY,
@@ -26,10 +27,14 @@ interface ThemeContextValue {
   theme: ThemeId;
   mode: ThemeMode;
   meta: ThemeMeta;
+  /** Todos los temas del sistema. */
   themes: readonly ThemeMeta[];
+  /** Temas habilitados según la lista blanca del cliente, si se usa. */
   isAllowed: (id: ThemeId) => boolean;
   setTheme: (id: ThemeId) => void;
+  /** Cambia al tema opuesto (oscuro ⇄ claro). */
   toggleMode: () => void;
+  /** false hasta que el cliente leyó el tema real; evita desajustes de hidratación. */
   mounted: boolean;
 }
 
@@ -132,7 +137,7 @@ export function ThemeProvider({
       themes: THEMES,
       isAllowed,
       setTheme,
-      toggleMode: () => setTheme(meta.mode === "dark" ? "claro" : "oscuro"),
+      toggleMode: () => setTheme(counterpartTheme(theme)),
       mounted
     };
   }, [theme, isAllowed, setTheme, mounted]);

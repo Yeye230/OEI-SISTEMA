@@ -1,4 +1,8 @@
-/** Registro único de los dos temas disponibles para OEI Sistema. */
+/**
+ * Registro de temas. Los colores viven en src/app/themes.css; aquí solo quedan
+ * los metadatos y la lógica mínima para resolver y alternar entre los dos
+ * temas disponibles del sistema.
+ */
 
 export type ThemeMode = "dark" | "light";
 
@@ -46,4 +50,8 @@ export function getTheme(id: ThemeId): ThemeMeta {
 
 export function getMode(id: ThemeId): ThemeMode {
   return id === "claro" ? "light" : "dark";
+}
+
+export function counterpartTheme(id: ThemeId): ThemeId {
+  return id === "oscuro" ? "claro" : "oscuro";
 }
