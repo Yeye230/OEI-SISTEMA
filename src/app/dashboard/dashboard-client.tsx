@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   Activity, Bell, CalendarDays, CheckCircle2, ChevronDown, Clock3,
@@ -79,7 +79,18 @@ export default function DashboardClient({ user }: { user: AppUser }): React.JSX.
   const [menuOpen, setMenuOpen] = useState(false);
   const userName = user.name?.trim() || "Usuario OEI";
   const roleLabel = user.roleName === "ADMIN" ? "Administrador" : "Usuario";
-  const dateLabel = new Intl.DateTimeFormat("es-SV", { day: "numeric", month: "long", year: "numeric", timeZone: "America/El_Salvador" }).format(new Date());
+  const [dateLabel, setDateLabel] = useState("");
+
+  useEffect(() => {
+    setDateLabel(
+      new Intl.DateTimeFormat("es-SV", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "America/El_Salvador"
+      }).format(new Date())
+    );
+  }, []);
   const visibleAssignments = useMemo(() => {
     const query = search.trim().toLocaleLowerCase("es");
     return assignments.filter((item) => {
