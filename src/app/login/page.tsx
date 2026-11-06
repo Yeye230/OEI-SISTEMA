@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -15,11 +16,11 @@ import {
 import { useTheme } from "@/core/components/theme/theme-provider";
 import { loginSchema, type LoginFormValues } from "@/core/schemas/login.schema";
 
-export default function LoginPage() {
+export default function LoginPage(): React.JSX.Element {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [year, setYear] = useState<number | null>(null);
   const [feedback, setFeedback] = useState("");
-  const [feedbackType, setFeedbackType] = useState<"success" | "error">("error");
   const { mode, toggleMode, mounted } = useTheme();
 
   const {
@@ -37,11 +38,30 @@ export default function LoginPage() {
     setYear(new Date().getFullYear());
   }, []);
 
-  function onSubmit(_values: LoginFormValues) {
-    setFeedbackType("success");
-    setFeedback(
-      "Los datos cumplen las validaciones. La autenticación todavía no está conectada y no se han enviado credenciales."
-    );
+  async function onSubmit(values: LoginFormValues): Promise<void> {
+    setFeedback("");
+
+    try {
+      const response = await fetch("/api/demo-auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values)
+      });
+
+      const payload = (await response.json().catch(() => null)) as
+        | { message?: string }
+        | null;
+
+      if (!response.ok) {
+        setFeedback(payload?.message ?? "No fue posible iniciar la sesión de demostración.");
+        return;
+      }
+
+      router.replace("/dashboard");
+      router.refresh();
+    } catch {
+      setFeedback("No se pudo iniciar la demostración. Intenta nuevamente.");
+    }
   }
 
   return (
@@ -103,7 +123,7 @@ export default function LoginPage() {
                   <p id="email-error" className="auth-field-error" role="alert">{errors.email.message}</p>
                 ) : (
                   <p id="email-hint" className="auth-hint">
-                    Utiliza el correo asociado a tu cuenta institucional.
+                    Utiliza cualquier correo válido para esta prueba.
                   </p>
                 )}
               </div>
@@ -118,7 +138,7 @@ export default function LoginPage() {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
-                    placeholder="Ingresa tu contraseña"
+                    placeholder="Ingresa una contraseña"
                     aria-invalid={Boolean(errors.password)}
                     aria-describedby={errors.password ? "password-error" : undefined}
                     {...register("password")}
@@ -139,15 +159,18 @@ export default function LoginPage() {
               </div>
 
               {feedback && (
-                <p className={`auth-message ${feedbackType === "success" ? "is-success" : ""}`} role="status" aria-live="polite">
+                <p className="auth-message" role="alert" aria-live="polite">
                   {feedback}
                 </p>
               )}
 
               <button type="submit" className="auth-submit" disabled={isSubmitting}>
-                {isSubmitting ? "Validando..." : "Iniciar sesión"}
+                {isSubmitting ? "Ingresando..." : "Iniciar sesión"}
                 <ArrowRight size={18} aria-hidden="true" />
               </button>
+              <p className="auth-hint">
+                Modo demostración: cualquier correo válido y contraseña no vacía.
+              </p>
             </form>
 
             <div className="auth-footer">
