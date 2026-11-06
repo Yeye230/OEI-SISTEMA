@@ -7,6 +7,20 @@ const DASHBOARD_ROUTE = "/dashboard";
 
 export function proxy(request: NextRequest): NextResponse {
   const { pathname } = request.nextUrl;
+
+  // Remove tracking parameters from the login URL so the app keeps a clean address.
+  if (pathname === LOGIN_ROUTE) {
+    const trackingParameters = [...request.nextUrl.searchParams.keys()].filter((key) =>
+      key.toLowerCase().startsWith("utm_")
+    );
+
+    if (trackingParameters.length > 0) {
+      const cleanUrl = request.nextUrl.clone();
+      trackingParameters.forEach((key) => cleanUrl.searchParams.delete(key));
+      return NextResponse.redirect(cleanUrl);
+    }
+  }
+
   const hasDemoSession =
     request.cookies.get(DEMO_SESSION_COOKIE_NAME)?.value === "active";
 
