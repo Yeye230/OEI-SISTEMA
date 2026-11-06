@@ -1,6 +1,5 @@
 import { cookies } from "next/headers";
-
-export const DEMO_SESSION_COOKIE_NAME = "oei_demo_session";
+import { DEMO_SESSION_COOKIE_NAME } from "./demo-session-config";
 const DEMO_SESSION_VALUE = "active";
 const DEMO_SESSION_MAX_AGE = 60 * 60 * 8;
 
