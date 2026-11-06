@@ -1,48 +1,42 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { SESSION_COOKIE_NAME } from './core/server/auth/session-config';
+import { DEMO_SESSION_COOKIE_NAME } from "@/core/server/auth/demo-session-config";
 
-const AUTH_SIGNIN_ROUTE = "/auth/iniciar-sesion";
-const PROTECTED_ROUTES = ["/dashboard"];
-const PUBLIC_AUTH_ROUTES = ["/", "/auth", "/auth/iniciar-sesion"];
-
-const isProtectedPath = (pathname: string): boolean =>
-  PROTECTED_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`));
-
-const isPublicAuthPath = (pathname: string): boolean => PUBLIC_AUTH_ROUTES.includes(pathname);
-
-const isKnownPath = (pathname: string): boolean =>
-  isProtectedPath(pathname) || isPublicAuthPath(pathname) || pathname === "/";
+const LOGIN_ROUTE = "/login";
+const DASHBOARD_ROUTE = "/dashboard";
 
 export function proxy(request: NextRequest): NextResponse {
-  const pathname = request.nextUrl.pathname;
-  const sessionToken = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+  const { pathname } = request.nextUrl;
+  const hasDemoSession =
+    request.cookies.get(DEMO_SESSION_COOKIE_NAME)?.value === "active";
 
   if (pathname === "/") {
-    return NextResponse.redirect(new URL(sessionToken ? "/dashboard" : AUTH_SIGNIN_ROUTE, request.url));
+    return NextResponse.redirect(
+      new URL(hasDemoSession ? DASHBOARD_ROUTE : LOGIN_ROUTE, request.url)
+    );
   }
 
-  // A cookie only signals a possible session; server pages and backend APIs
-  // must still verify the session and authorization before returning data.
-  if (isPublicAuthPath(pathname) && sessionToken) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+  if (pathname === LOGIN_ROUTE && hasDemoSession) {
+    return NextResponse.redirect(new URL(DASHBOARD_ROUTE, request.url));
   }
 
-  if (!isKnownPath(pathname)) {
-    return NextResponse.redirect(new URL(sessionToken ? "/dashboard" : AUTH_SIGNIN_ROUTE, request.url));
-  }
+  if (pathname === DASHBOARD_ROUTE || pathname.startsWith(`${DASHBOARD_ROUTE}/`)) {
+    if (!hasDemoSession) {
+      return NextResponse.redirect(new URL(LOGIN_ROUTE, request.url));
+    }
 
-  if (!isProtectedPath(pathname)) {
     return NextResponse.next();
   }
 
-  if (sessionToken) {
+  if (pathname.startsWith("/login")) {
     return NextResponse.next();
   }
 
-  return NextResponse.redirect(new URL(AUTH_SIGNIN_ROUTE, request.url));
+  return NextResponse.redirect(
+    new URL(hasDemoSession ? DASHBOARD_ROUTE : LOGIN_ROUTE, request.url)
+  );
 }
 
 export const config = {
-  matcher: ["/", "/auth/:path*", "/dashboard/:path*", "/admin/:path*"]
+  matcher: ["/", "/login/:path*", "/dashboard/:path*", "/admin/:path*"]
 };
