@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { hasDemoSession } from "@/core/server/auth/demo-session";
 import type { AppUser } from "@/core/server/types";
@@ -17,7 +18,7 @@ const demoUser: AppUser = {
   roleName: "ADMIN"
 };
 
-export default async function DashboardPage(): Promise<React.JSX.Element> {
+async function DashboardContent(): Promise<React.JSX.Element> {
   const hasSession = await hasDemoSession();
 
   if (!hasSession) {
@@ -25,4 +26,12 @@ export default async function DashboardPage(): Promise<React.JSX.Element> {
   }
 
   return <DashboardClient user={demoUser} />;
+}
+
+export default function DashboardPage(): React.JSX.Element {
+  return (
+    <Suspense fallback={<div className="eq-dashboard-loading">Cargando Equipment Hub...</div>}>
+      <DashboardContent />
+    </Suspense>
+  );
 }
