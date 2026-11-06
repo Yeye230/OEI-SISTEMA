@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Activity, Bell, CalendarDays, CheckCircle2, ChevronDown, Clock3,
   FileText, Filter, Laptop, LogOut, MapPin, Menu, Monitor, Plus,
@@ -84,18 +84,7 @@ export default function DashboardClient({ user }: { user: AppUser }): React.JSX.
   };
   const userName = user.name?.trim() || "Usuario OEI";
   const roleLabel = user.roleName === "ADMIN" ? "Administrador" : "Usuario";
-  const [dateLabel, setDateLabel] = useState("");
-
-  useEffect(() => {
-    setDateLabel(
-      new Intl.DateTimeFormat("es-SV", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-        timeZone: "America/El_Salvador"
-      }).format(new Date())
-    );
-  }, []);
+  const dateLabel = "hoy";
   const visibleAssignments = useMemo(() => {
     const query = search.trim().toLocaleLowerCase("es");
     return assignments.filter((item) => {
@@ -133,7 +122,7 @@ export default function DashboardClient({ user }: { user: AppUser }): React.JSX.
             <div>
               <div className="eq-breadcrumb"><span><Activity size={13} />OEI El Salvador</span><i>›</i><span>Recursos Humanos</span><i>›</i><strong>{activeSection === "Hub" ? "Equipment Hub" : activeSection}</strong></div>
               <h1>{activeSection === "Hub" ? "Universal Equipment Assignment Hub" : activeSection}</h1>
-              <p className="eq-subtitle">{activeSection === "Hub" ? `Jornada del ${dateLabel} · 4 actas en curso · modo demostración` : "Espacio de trabajo · modo demostración"}</p>
+              <p className="eq-subtitle">{activeSection === "Hub" ? `Jornada de ${dateLabel} · 4 actas en curso · modo demostración` : "Espacio de trabajo · modo demostración"}</p>
             </div>
             {activeSection === "Hub" && <div className="eq-filters" aria-label="Filtrar equipos">{filters.map((filter) => <button key={filter.value} type="button" className={activeFilter === filter.value ? "is-selected" : ""} onClick={() => setActiveFilter(filter.value)}>{filter.label}</button>)}</div>}
           </div>
