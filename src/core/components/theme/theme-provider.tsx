@@ -102,8 +102,11 @@ export function ThemeProvider({ children, defaultTheme = DEFAULT_THEME, allowed 
         /* almacenamiento no disponible (modo privado) */
       }
     }
-    setThemeState(next);
-    setMounted(true);
+    const updateTimer = window.setTimeout(() => {
+      setThemeState(next);
+      setMounted(true);
+    }, 0);
+    return () => window.clearTimeout(updateTimer);
   }, [allowed, defaultTheme, isAllowed]);
 
   // Pantallas sin sesión usan el tema neutro; al salir de ellas se restaura el del usuario.
