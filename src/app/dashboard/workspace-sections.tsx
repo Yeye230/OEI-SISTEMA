@@ -76,7 +76,9 @@ export default function WorkspaceSection({ section, searchTerm }: { section: Wor
   const [projects, setProjects] = useState(initialProjects);
   const [assets, setAssets] = useState(initialAssets);
   const [activity, setActivity] = useState(initialActivity);
-  const [filter, setFilter] = useState("Todos");
+  const [filters, setFilters] = useState<Partial<Record<WorkspaceSectionKey, string>>>({});
+  const filter = filters[section] ?? "Todos";
+  const setFilter = (value: string) => setFilters((current) => ({ ...current, [section]: value }));
   const [modal, setModal] = useState<"acta" | "person" | "project" | "asset" | null>(null);
   const [reportRange, setReportRange] = useState("Este mes");
   const [notice, setNotice] = useState("");
