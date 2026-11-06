@@ -1,92 +1,161 @@
 /*
  * Tokens semánticos de OEI Sistema.
+ * Identidad visual: Vibrant Serenity.
  * Solo hay dos temas seleccionables: oscuro y claro.
  */
 
 :root,
-:root[data-theme="claro"] {
-  color-scheme: light;
-  --background: #f3f6fa;
-  --foreground: #172b3a;
-  --surface: #ffffff;
-  --surface-muted: #f7f9fc;
-  --surface-elevated: #ffffff;
-  --border: #dce5ee;
-  --border-strong: #b8c8d8;
-  --muted: #607286;
-  --subtle: #8a9aab;
-  --primary: #075477;
-  --primary-hover: #064765;
-  --primary-foreground: #ffffff;
-  --accent: #20a39e;
-  --accent-soft: #e0f4f1;
-  --focus-ring: #3b9db3;
-  --success: #16794b;
-  --success-soft: #e8f7ef;
-  --warning: #946200;
-  --warning-soft: #fff5d6;
-  --danger: #b42318;
-  --danger-soft: #fff0ee;
-  --info: #175cd3;
-  --info-soft: #eff6ff;
-  --shadow-color: 19 43 64;
+:root[data-theme='claro'] {
+	color-scheme: light;
+
+	/* Superficies y texto */
+	--background: #f8fafc;
+	--background-gradient-end: #e6eff5;
+	--foreground: #1d3557;
+	--surface: #ffffff;
+	--surface-muted: #f3f7fa;
+	--surface-elevated: #ffffff;
+	--white: #ffffff;
+
+	/* Identidad principal */
+	--primary: #2a9d8f;
+	--primary-hover: #238579;
+	--primary-foreground: #ffffff;
+	--primary-soft: #e5f4f1;
+	--primary-highlight: #38b2a3;
+
+	--secondary: #457b9d;
+	--secondary-hover: #386985;
+	--secondary-foreground: #ffffff;
+	--secondary-soft: #eaf1f6;
+
+	--accent: #f4a261;
+	--accent-hover: #e88f49;
+	--accent-foreground: #1d3557;
+	--accent-soft: #fff1e4;
+	--accent-highlight: #f0b787;
+
+	/* Bordes y texto secundario */
+	--border: #d8e3eb;
+	--border-strong: #b8c9d6;
+	--muted: #557087;
+	--subtle: #8297a8;
+	--focus-ring: #38b2a3;
+
+	/* Estados semánticos */
+	--success: #2a9d8f;
+	--success-soft: #e5f4f1;
+	--warning: #b45309;
+	--warning-soft: #fff1e4;
+	--danger: #dc2626;
+	--danger-soft: #feecec;
+	--info: #457b9d;
+	--info-soft: #eaf1f6;
+
+	/* Colores de las miniaturas de tema */
+	--preview-light-background: #f8fafc;
+	--preview-light-surface: #ffffff;
+	--preview-light-border: #d8e3eb;
+	--preview-light-primary: #2a9d8f;
+	--preview-light-accent: #f4a261;
+	--preview-dark-background: #101c2b;
+	--preview-dark-surface: #17283a;
+	--preview-dark-border: #35516a;
+	--preview-dark-primary: #45b8a8;
+	--preview-dark-accent: #f6b477;
+
+	--shadow-color: 29 53 87;
 }
 
-:root[data-theme="oscuro"] {
-  color-scheme: dark;
-  --background: #11151d;
-  --foreground: #edf2f8;
-  --surface: #1a202b;
-  --surface-muted: #202836;
-  --surface-elevated: #252e3d;
-  --border: #354153;
-  --border-strong: #53647a;
-  --muted: #a6b3c4;
-  --subtle: #8493a7;
-  --primary: #79c5e8;
-  --primary-hover: #a0d8f1;
-  --primary-foreground: #10212b;
-  --accent: #6bd4c5;
-  --accent-soft: #173b3a;
-  --focus-ring: #79c5e8;
-  --success: #6dd6a1;
-  --success-soft: #173b2d;
-  --warning: #f4c66b;
-  --warning-soft: #40331a;
-  --danger: #ff8e86;
-  --danger-soft: #452321;
-  --info: #8db9ff;
-  --info-soft: #1d3150;
-  --shadow-color: 0 0 0;
+:root[data-theme='oscuro'] {
+	color-scheme: dark;
+
+	/* Superficies y texto */
+	--background: #101c2b;
+	--background-gradient-end: #172b40;
+	--foreground: #f1f6fa;
+	--surface: #17283a;
+	--surface-muted: #20364b;
+	--surface-elevated: #294158;
+	--white: #ffffff;
+
+	/* Identidad principal adaptada para fondos oscuros */
+	--primary: #45b8a8;
+	--primary-hover: #66ccbd;
+	--primary-foreground: #102a2b;
+	--primary-soft: #193f40;
+	--primary-highlight: #65cdbe;
+
+	--secondary: #78a9c7;
+	--secondary-hover: #9bc3d9;
+	--secondary-foreground: #102638;
+	--secondary-soft: #203d52;
+
+	--accent: #f6b477;
+	--accent-hover: #ffc895;
+	--accent-foreground: #352313;
+	--accent-soft: #493522;
+	--accent-highlight: #f8c494;
+
+	/* Bordes y texto secundario */
+	--border: #35516a;
+	--border-strong: #52718a;
+	--muted: #b1c3d1;
+	--subtle: #8fa6b8;
+	--focus-ring: #65cdbe;
+
+	/* Estados semánticos */
+	--success: #65cdbe;
+	--success-soft: #193f40;
+	--warning: #f6b477;
+	--warning-soft: #493522;
+	--danger: #ff817a;
+	--danger-soft: #49282d;
+	--info: #8db9d3;
+	--info-soft: #203d52;
+
+	/* Las miniaturas mantienen una representación estable de ambos temas */
+	--preview-light-background: #f8fafc;
+	--preview-light-surface: #ffffff;
+	--preview-light-border: #d8e3eb;
+	--preview-light-primary: #2a9d8f;
+	--preview-light-accent: #f4a261;
+	--preview-dark-background: #101c2b;
+	--preview-dark-surface: #17283a;
+	--preview-dark-border: #35516a;
+	--preview-dark-primary: #45b8a8;
+	--preview-dark-accent: #f6b477;
+
+	--shadow-color: 0 0 0;
 }
 
 :root {
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  --radius-pill: 999px;
-  --space-page: clamp(1rem, 4vw, 3rem);
-  --shadow-card: 0 24px 70px -34px rgb(var(--shadow-color) / 0.28);
-  --shadow-control: 0 1px 2px rgb(var(--shadow-color) / 0.06);
-  --motion-fast: 150ms;
-  --motion-base: 220ms;
+	--radius-sm: 0.5rem;
+	--radius-md: 0.75rem;
+	--radius-lg: 1rem;
+	--radius-xl: 1.5rem;
+	--radius-pill: 999px;
+	--space-page: clamp(1rem, 4vw, 3rem);
+	--shadow-card: 0 24px 70px -34px rgb(var(--shadow-color) / 0.28);
+	--shadow-control: 0 1px 2px rgb(var(--shadow-color) / 0.06);
+	--motion-fast: 150ms;
+	--motion-base: 220ms;
 }
 
 .theme-transition,
 .theme-transition * {
-  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
-  transition-duration: 350ms;
-  transition-timing-function: ease;
+	transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+	transition-duration: 350ms;
+	transition-timing-function: ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+	*,
+	*::before,
+	*::after {
+		scroll-behavior: auto !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
 }

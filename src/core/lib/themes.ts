@@ -4,54 +4,40 @@
  * temas disponibles del sistema.
  */
 
-export type ThemeMode = "dark" | "light";
+export type ThemeMode = 'dark' | 'light';
 
-export const THEME_IDS = ["oscuro", "claro"] as const;
+export const THEME_IDS = ['oscuro', 'claro'] as const;
 export type ThemeId = (typeof THEME_IDS)[number];
 
 export interface ThemeMeta {
-  id: ThemeId;
-  mode: ThemeMode;
-  family: "Oscuro" | "Claro";
-  name: string;
+	id: ThemeId;
+	mode: ThemeMode;
+	family: 'Oscuro' | 'Claro';
+	name: string;
 }
 
-export const DEFAULT_THEME: ThemeId = "oscuro";
-export const DEFAULT_LIGHT_THEME: ThemeId = "claro";
-export const THEME_STORAGE_KEY = "oei-theme";
-export const LEGACY_THEME_STORAGE_KEY = "cirio-theme";
+export const DEFAULT_THEME: ThemeId = 'oscuro';
+export const DEFAULT_LIGHT_THEME: ThemeId = 'claro';
+export const THEME_STORAGE_KEY = 'oei-theme';
+export const LEGACY_THEME_STORAGE_KEY = 'cirio-theme';
 
 export const THEMES: readonly ThemeMeta[] = [
-  { id: "oscuro", mode: "dark", family: "Oscuro", name: "Oscuro" },
-  { id: "claro", mode: "light", family: "Claro", name: "Claro" }
+	{ id: 'oscuro', mode: 'dark', family: 'Oscuro', name: 'Oscuro' },
+	{ id: 'claro', mode: 'light', family: 'Claro', name: 'Claro' },
 ];
 
-const BY_ID = new Map(THEMES.map((theme) => [theme.id, theme]));
-
 export function isThemeId(value: unknown): value is ThemeId {
-  return typeof value === "string" && (THEME_IDS as readonly string[]).includes(value);
+	return typeof value === 'string' && (THEME_IDS as readonly string[]).includes(value);
 }
 
-/**
- * Convierte preferencias antiguas al tema equivalente. Los identificadores
- * heredados solo se aceptan durante la migración; no son temas disponibles.
- */
 export function normalizeThemeId(value: unknown): ThemeId | null {
-  if (isThemeId(value)) return value;
-  if (typeof value !== "string") return null;
-  if (["gothic-1", "gothic-2", "gothic-3", "gothic-4", "gothic-5"].includes(value)) return "oscuro";
-  if (["lumina-1", "lumina-2", "lumina-3", "lumina-4", "lumina-5"].includes(value)) return "claro";
-  return null;
-}
-
-export function getTheme(id: ThemeId): ThemeMeta {
-  return BY_ID.get(id)!;
+	return isThemeId(value) ? value : null;
 }
 
 export function getMode(id: ThemeId): ThemeMode {
-  return id === "claro" ? "light" : "dark";
+	return id === 'claro' ? 'light' : 'dark';
 }
 
 export function counterpartTheme(id: ThemeId): ThemeId {
-  return id === "oscuro" ? "claro" : "oscuro";
+	return id === 'oscuro' ? 'claro' : 'oscuro';
 }

@@ -12,49 +12,70 @@ const AuthPage = (): React.JSX.Element => {
 	const { control, handleSubmit, onSubmit, errors, isSubmitting } = useLogin();
 
 	return (
-		<CardWrapper>
-			<form noValidate className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
-				<FormError server={errors.root?.server} />
-				<Controller
-					name='email'
-					control={control}
-					render={({ field, fieldState }) => (
-						<Field
-							label='Correo electrónico'
-							field={field}
-							isInvalid={fieldState.invalid}
-							errorMessage={fieldState.error?.message}
-							placeholder='jane@example.com'
-							type='email'
-							startContent={<Mail className='w-4 h-4' aria-hidden='true' />}
-							isRequired={true}
+		<div className='min-h-screen flex items-center justify-center p-4 bg-[linear-gradient(135deg,#F8FAFC_0%,#E6EFF5_100%)]'>
+			<div className='w-full max-w-md'>
+				<div className='flex items-center justify-center gap-3 mb-6'>
+					<div
+						className='w-14 h-14 flex items-center justify-center text-white font-bold text-lg tracking-wider rounded-[18px]'
+						style={{
+							background: 'linear-gradient(135deg, #457B9D, #2A9D8F)',
+							boxShadow: '0 12px 28px -6px rgba(42,157,143,0.55)',
+						}}
+					>
+						OEI
+					</div>
+					<div>
+						<p className='text-lg font-bold'>Sistema de Actas</p>
+						<p className='text-[11px] uppercase tracking-widest' style={{ color: '#457B9D' }}>
+							OEI · El Salvador
+						</p>
+					</div>
+				</div>
+				<CardWrapper>
+					<form noValidate className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
+						<FormError server={errors.root?.server} />
+						<Controller
+							name='email'
+							control={control}
+							render={({ field, fieldState }) => (
+								<Field
+									label='Correo electrónico'
+									field={field}
+									isInvalid={fieldState.invalid}
+									errorMessage={fieldState.error?.message}
+									placeholder='jane@example.com'
+									type='email'
+									startContent={<Mail className='w-4 h-4' aria-hidden='true' />}
+									isRequired={true}
+								/>
+							)}
 						/>
-					)}
-				/>
-				<Controller
-					name='password'
-					control={control}
-					render={({ field, fieldState }) => (
-						<Field
-							label='Contraseña'
-							field={field}
-							isInvalid={fieldState.invalid}
-							errorMessage={fieldState.error?.message}
-							placeholder='••••••••'
-							type='password'
-							startContent={<Lock className='w-4 h-4' aria-hidden='true' />}
-							endContent={<Eye className='w-4 h-4' aria-hidden='true' />}
-							isRequired={true}
+						<Controller
+							name='password'
+							control={control}
+							render={({ field, fieldState }) => (
+								<Field
+									label='Contraseña'
+									field={field}
+									isInvalid={fieldState.invalid}
+									errorMessage={fieldState.error?.message}
+									placeholder='••••••••'
+									type='password'
+									startContent={<Lock className='w-4 h-4' aria-hidden='true' />}
+									endContent={<Eye className='w-4 h-4' aria-hidden='true' />}
+									isRequired={true}
+								/>
+							)}
 						/>
-					)}
-				/>
-				<SubmitButton buttonName='Invocar Acceso' type='submit' isDisabled={isSubmitting} />
-			</form>
+						<SubmitButton buttonName='Invocar Acceso' type='submit' isDisabled={isSubmitting} />
+					</form>
 
-			<p className='mt-4 text-center text-[10px] uppercase tracking-[0.28em] text-status-error-text font-display'>
-				{1 - 5} intento(s) antes del sello inquisitorial
-			</p>
-		</CardWrapper>
+					<p className='mt-4 text-center text-[10px] uppercase tracking-[0.28em] text-status-error-text font-display'>
+						{1 - 5} intento(s) antes del sello inquisitorial
+					</p>
+				</CardWrapper>
+			</div>
+		</div>
 	);
 };
 
