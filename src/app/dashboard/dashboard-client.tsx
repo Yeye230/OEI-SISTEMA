@@ -151,7 +151,7 @@ export default function DashboardClient({ user }: { user: AppUser }): React.JSX.
             </aside>
           </section>
           <p className="eq-demo-note"><CalendarDays size={13} />Panel de demostración · Los datos y las acciones se guardan únicamente en esta sesión.</p>
-          </> : <WorkspaceSection section={activeSection} searchTerm={search} />}
+          </> : <WorkspaceSection key={activeSection} section={activeSection} searchTerm={search} />}
         </main>
       </div>
     </div>
