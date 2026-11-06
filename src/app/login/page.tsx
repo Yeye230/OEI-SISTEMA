@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,7 +20,7 @@ import { loginSchema, type LoginFormValues } from "@/core/schemas/login.schema";
 export default function LoginPage(): React.JSX.Element {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [year, setYear] = useState<number | null>(null);
+
   const [feedback, setFeedback] = useState("");
   const { mode, toggleMode, mounted } = useTheme();
 
@@ -33,10 +34,6 @@ export default function LoginPage(): React.JSX.Element {
     reValidateMode: "onChange",
     defaultValues: { email: "", password: "" }
   });
-
-  useEffect(() => {
-    setYear(new Date().getFullYear());
-  }, []);
 
   async function onSubmit(values: LoginFormValues): Promise<void> {
     setFeedback("");
@@ -84,13 +81,13 @@ export default function LoginPage(): React.JSX.Element {
       <section className="auth-card" aria-labelledby="login-title">
         <div className="auth-form-panel">
           <div className="auth-form-content">
-            <a href="/" className="auth-brand" aria-label="OEI, ir al inicio">
+            <Link href="/" className="auth-brand" aria-label="OEI, ir al inicio">
               <span className="auth-brand-mark" aria-hidden="true">OEI</span>
               <span>
                 <span className="auth-brand-name block">OEI</span>
                 <span className="auth-brand-caption block">Sistema administrativo</span>
               </span>
-            </a>
+            </Link>
 
             <p className="auth-eyebrow">Acceso institucional</p>
             <h1 id="login-title" className="auth-title">Bienvenido de nuevo</h1>
@@ -178,7 +175,7 @@ export default function LoginPage(): React.JSX.Element {
                 <ShieldCheck size={15} aria-hidden="true" />
                 Acceso reservado a personal autorizado
               </p>
-              <p className="mt-2">© {year ?? ""} OEI · Organización de Estados Iberoamericanos</p>
+              <p className="mt-2">© {new Date().getFullYear()} OEI · Organización de Estados Iberoamericanos</p>
             </div>
           </div>
         </div>
