@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useTheme } from "@/core/components/theme/theme-provider";
 import { CheckCircle2, CircleAlert, Command, Eye, Info, Palette, Search, ShieldCheck, Type } from "lucide-react";
 import { THEMES, type ThemeId } from "@/core/lib/themes";
 
@@ -12,19 +13,11 @@ const colorTokens = [
 ] as const;
 
 export default function DesignSystemPage() {
-  const [activeTheme, setActiveTheme] = useState<ThemeId>("gothic-1");
   const [search, setSearch] = useState("");
+  const { theme: activeTheme, setTheme } = useTheme();
 
-  useEffect(() => {
-    const current = document.documentElement.dataset.theme;
-    if (current && THEMES.some((theme) => theme.id === current)) setActiveTheme(current as ThemeId);
-    else document.documentElement.dataset.theme = "gothic-1";
-  }, []);
-
-  function selectTheme(theme: ThemeId) {
-    setActiveTheme(theme);
-    document.documentElement.dataset.theme = theme;
-    document.documentElement.dataset.mode = theme.startsWith("gothic") ? "dark" : "light";
+  function selectTheme(theme: ThemeId): void {
+    setTheme(theme);
   }
 
   const filteredThemes = THEMES.filter((theme) =>
