@@ -104,7 +104,7 @@ export default function DashboardClient({ user }: { user: AppUser }): React.JSX.
       <div className="eq-main">
         <header className="eq-topbar">
           <button type="button" className="eq-mobile-menu" aria-label="Abrir menú" onClick={() => setMenuOpen(true)}><Menu size={20} /></button>
-          <label className="eq-global-search"><Search size={17} /><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar por empleado, serial, código de acta..." aria-label="Buscar por empleado, serial o código de acta" />{search && <button type="button" aria-label="Limpiar búsqueda" onClick={() => setSearch("")}><X size={15} /></button>}</label>
+          <div className="eq-global-search" role="search"><Search size={17} /><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar por empleado, serial, código de acta..." aria-label="Buscar por empleado, serial o código de acta" />{search && <button type="button" aria-label="Limpiar búsqueda" onClick={() => setSearch("")}><X size={15} /></button>}</div>
           <span className="eq-live-pill"><span />LIVE</span>
           <Link href="/dashboard?estado=pendiente" className="eq-verification-pill"><Printer size={15} />Pendiente de verificación</Link>
           <Link href="/actas/nueva" className="eq-new-button"><Plus size={17} />Nueva</Link>
