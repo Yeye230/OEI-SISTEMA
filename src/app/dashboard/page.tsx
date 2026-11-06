@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { hasDemoSession } from "@/core/server/auth/demo-session";
 import type { AppUser } from "@/core/server/types";
 import DashboardClient from "./dashboard-client";
+import "./dashboard.css";
 
 const demoUser: AppUser = {
   id: "demo-user",
