@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from "react";
 import {
   Activity, Archive, CalendarDays, CheckCircle2, ClipboardList,
   Clock3, Download, FileText, Laptop, Plus, Search, ShieldCheck,
@@ -81,6 +81,13 @@ export default function WorkspaceSection({ section, searchTerm }: { section: Wor
   const [reportRange, setReportRange] = useState("Este mes");
   const [notice, setNotice] = useState("");
   const { mode, toggleMode } = useTheme();
+
+  useEffect(() => {
+    setFilter("Todos");
+    setNotice("");
+    setModal(null);
+  }, [section]);
+
   const query = searchTerm.trim().toLocaleLowerCase("es");
 
   const filteredActas = useMemo(() => actas.filter((item) => (!query || [item.id, item.person, item.asset].some((v) => v.toLocaleLowerCase("es").includes(query))) && (filter === "Todos" || item.status === filter)), [actas, query, filter]);
