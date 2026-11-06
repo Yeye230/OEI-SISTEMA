@@ -17,6 +17,7 @@ const contentSecurityPolicy = [
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  partialPrefetching: true,
   async headers() {
     const headers = [
       { key: "Content-Security-Policy", value: contentSecurityPolicy },
