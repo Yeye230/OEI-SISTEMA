@@ -175,7 +175,7 @@ export default function LoginPage(): React.JSX.Element {
                 <ShieldCheck size={15} aria-hidden="true" />
                 Acceso reservado a personal autorizado
               </p>
-              <p className="mt-2">© {new Date().getFullYear()} OEI · Organización de Estados Iberoamericanos</p>
+              <p className="mt-2">© OEI · Organización de Estados Iberoamericanos</p>
             </div>
           </div>
         </div>
