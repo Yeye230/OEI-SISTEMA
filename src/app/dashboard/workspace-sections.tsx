@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo, useState, type FormEvent } from "react";
+import { useMemo, useState, type FormEvent, type ReactNode } from "react";
 import {
-  Activity, Archive, BarChart3, CalendarDays, CheckCircle2, ClipboardList,
+  Activity, Archive, CalendarDays, CheckCircle2, ClipboardList,
   Clock3, Download, FileText, Laptop, Plus, Search, ShieldCheck,
-  Smartphone, Tablet, Users, X, FolderKanban, Settings2, Monitor
+  Tablet, Users, X, FolderKanban, Settings2, Monitor
 } from "lucide-react";
 import { useTheme } from "@/core/components/theme/theme-provider";
+import type { LucideIcon } from "lucide-react";
 
 export type WorkspaceSectionKey =
   | "Hub" | "Actas" | "Personas" | "Proyectos"
@@ -49,10 +50,10 @@ const initialActivity: ActivityItem[] = [
   { id: 4, title: "Acta verificada", detail: "OEI-2026-0186 · Dell Latitude 5440", date: "Ayer · 14:05", type: "Acta" }
 ];
 
-function SectionHeading({ eyebrow, title, description, action }: { eyebrow: string; title: string; description: string; action?: React.ReactNode }): React.JSX.Element {
+function SectionHeading({ eyebrow, title, description, action }: { eyebrow: string; title: string; description: string; action?: ReactNode }): React.JSX.Element {
   return <div className="eq-section-heading"><div><span className="eq-section-eyebrow">{eyebrow}</span><h2>{title}</h2><p>{description}</p></div>{action}</div>;
 }
-function Metric({ label, value, note, icon: Icon }: { label: string; value: string; note: string; icon: typeof Activity }): React.JSX.Element {
+function Metric({ label, value, note, icon: Icon }: { label: string; value: string; note: string; icon: LucideIcon }): React.JSX.Element {
   return <article className="eq-section-metric"><span className="eq-section-metric-icon"><Icon size={19} /></span><small>{label}</small><strong>{value}</strong><span>{note}</span></article>;
 }
 function Status({ children }: { children: string }): React.JSX.Element {
@@ -62,7 +63,7 @@ function Status({ children }: { children: string }): React.JSX.Element {
 function Empty({ label }: { label: string }): React.JSX.Element {
   return <div className="eq-section-empty"><Search size={22} /><strong>No hay resultados</strong><span>{label}</span></div>;
 }
-function CreateModal({ title, onClose, onSave, children }: { title: string; onClose: () => void; onSave: (event: FormEvent<HTMLFormElement>) => void; children: React.ReactNode }): React.JSX.Element {
+function CreateModal({ title, onClose, onSave, children }: { title: string; onClose: () => void; onSave: (event: FormEvent<HTMLFormElement>) => void; children: ReactNode }): React.JSX.Element {
   return <div className="eq-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}><form className="eq-modal" onSubmit={onSave}><div className="eq-modal-heading"><h3>{title}</h3><button type="button" onClick={onClose} aria-label="Cerrar"><X size={18} /></button></div><div className="eq-modal-fields">{children}</div><div className="eq-modal-actions"><button type="button" className="eq-secondary-button" onClick={onClose}>Cancelar</button><button type="submit" className="eq-primary-button">Guardar</button></div></form></div>;
 }
 function Field({ label, name, placeholder, required = true }: { label: string; name: string; placeholder: string; required?: boolean }): React.JSX.Element {
