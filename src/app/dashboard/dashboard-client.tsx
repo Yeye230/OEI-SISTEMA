@@ -131,7 +131,7 @@ export default function DashboardClient({ user }: { user: AppUser }): React.JSX.
         <main className="eq-content">
           <div className="eq-heading-row">
             <div>
-              <div className="eq-breadcrumb"><span><Activity size={13} />OEI El Salvador</span><i>›</i><span>Recursos Humanos</span><i>›</i><strong>Equipment Hub</strong></div>
+              <div className="eq-breadcrumb"><span><Activity size={13} />OEI El Salvador</span><i>›</i><span>Recursos Humanos</span><i>›</i><strong>{activeSection === "Hub" ? "Equipment Hub" : activeSection}</strong></div>
               <h1>{activeSection === "Hub" ? "Universal Equipment Assignment Hub" : activeSection}</h1>
               <p className="eq-subtitle">{activeSection === "Hub" ? `Jornada del ${dateLabel} · 4 actas en curso · modo demostración` : "Espacio de trabajo · modo demostración"}</p>
             </div>
