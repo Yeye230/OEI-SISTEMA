@@ -230,3 +230,16 @@
 - **Impacto:** No puede afirmarse que la implementación compile o que la protección de sesión funcione en ejecución.
 - **Solución recomendada:** Actualizar la rama local, ejecutar npm run lint, npx next typegen, npx tsc --noEmit y npm run build; después probar /dashboard con sesión ausente, válida e inválida.
 - **Verificación:** Mantener pendiente hasta disponer de las salidas reales de los comandos y las pruebas de acceso.
+
+## OEI-THEME-001 — ThemeProvider actualiza estado síncronamente dentro de un efecto
+
+- **Categoría:** Calidad / React Hooks
+- **Severidad:** Media
+- **Estado:** Corrección aplicada en feat/user; pendiente de verificación local
+- **Fecha de detección:** 2026-11-09 (America/El_Salvador)
+- **Evidencia:** La ejecución local de `npm run lint` reportó un error `react-hooks/set-state-in-effect` en `src/core/components/theme/theme-provider.tsx:104`, en la llamada `setThemeState(next)` dentro del efecto de inicialización.
+- **Problema / causa conocida:** El tema se mantenía como estado React duplicado respecto al atributo `data-theme` del documento, y el efecto sincronizaba ambos mediante una actualización síncrona de estado.
+- **Impacto:** ESLint marca un error y la sincronización redundante puede provocar un render adicional.
+- **Solución aplicada:** Se sustituyó el estado duplicado del tema por `useSyncExternalStore`, usando el atributo `data-theme` como snapshot externo y un evento propio para notificar cambios realizados por el proveedor. Se conservaron la lectura/migración de localStorage, el cambio de tema, la sincronización entre pestañas y el estado `mounted`.
+- **Alternativa:** Diferir la llamada a `setState` con un temporizador; descartada porque solo aplaza el problema y no corrige el estado duplicado.
+- **Verificación pendiente:** Ejecutar `npm run lint`, `npx next typegen`, `npx tsc --noEmit` y `npm run build`; probar tema oscuro/claro, persistencia tras recarga y sincronización entre pestañas. Esta sesión no dispone de terminal local ni de `node_modules`, por lo que no se afirma que las verificaciones hayan pasado.
