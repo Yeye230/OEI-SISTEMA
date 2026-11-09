@@ -27,6 +27,7 @@
 - **Alternativa:** Mantener controles por módulo si cada endpoint tiene pruebas y middleware explícitos.
 - **Verificación:** Matriz de pruebas para cada ruta privada (sin cookie, cookie inválida, usuario autenticado sin permisos y usuario autorizado).
 - **Nota:** No se afirma que exista un bypass confirmado; la autorización debe verificarse.
+- **Actualización 2026-11-09 (feat/user):** Se agregó `src/app/(protected)/layout.tsx`, que ejecuta `requireSession()` en servidor antes de renderizar las páginas del grupo. La ruta `/dashboard` queda protegida por esta validación además de la comprobación optimista del proxy. La incidencia permanece abierta para inventariar y verificar el resto de páginas privadas, route handlers y APIs.
 
 ## OEI-AUTH-001 — El formulario de inicio de sesión aún no autentica
 
