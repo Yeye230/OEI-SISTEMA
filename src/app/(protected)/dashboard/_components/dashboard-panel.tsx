@@ -11,7 +11,7 @@ export function DashboardPanel({
 }: DashboardPanelProps): ReactElement {
   return (
     <section
-      className={`min-w-0 rounded-card border border-hairline bg-surface p-4 shadow-card sm:p-5 ${className}`}
+      className={`min-w-0 rounded-xl border border-border bg-surface p-4 shadow-sm sm:p-5 ${className}`}
     >
       {children}
     </section>
