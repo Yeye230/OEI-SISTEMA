@@ -179,3 +179,41 @@
 - **Alternativa considerada:** Mantener un `<script>` HTML crudo; descartada porque React reportó el error mostrado en la captura.
 - **Verificación pendiente:** Reiniciar el servidor, abrir `/design-system`, comprobar que desaparece el error de script, confirmar que el tema guardado se aplica antes de la hidratación y probar migración de preferencias heredadas. Ejecutar además `npm run lint` y `npm run build`. La documentación oficial de Next.js describe `beforeInteractive` para scripts globales en el layout raíz.
 
+
+## OEI-USER-001 — El dashboard utiliza datos de demostración
+
+- **Categoría:** Integridad de datos / Funcionalidad
+- **Severidad:** Media
+- **Estado:** Pendiente de conexión con fuentes reales
+- **Fecha de detección:** 2026-11-09 (America/El_Salvador)
+- **Evidencia:** src/core/utils/demo-data.ts define estadísticas, actividad reciente y valores mensuales como arreglos estáticos. El nuevo dashboard calcula sus indicadores a partir de esas mismas colecciones.
+- **Problema / causa conocida:** Los indicadores, el mapa, el ranking, la gráfica y la actividad representan datos de ejemplo, no consultas a la base de datos ni respuestas del backend.
+- **Impacto:** Si se interpretan como información institucional real, pueden inducir a decisiones incorrectas.
+- **Solución aplicada:** El dashboard muestra una identificación visible de “Datos de demostración” y los textos de sus componentes mantienen esa aclaración.
+- **Solución pendiente:** Definir contratos y endpoints reales del backend para cada indicador; reemplazar las colecciones estáticas por datos validados del servidor.
+- **Verificación:** Comparar cada indicador con una fuente real y probar estados vacíos, errores y permisos cuando se conecte el backend.
+
+## OEI-USER-002 — Componentes visuales heredados no están alineados completamente con los tokens del sistema de diseño
+
+- **Categoría:** UI/UX / Mantenibilidad
+- **Severidad:** Media
+- **Estado:** Pendiente de refactorización visual
+- **Fecha de detección:** 2026-11-09 (America/El_Salvador)
+- **Evidencia:** Los componentes reutilizados src/components/MetricCard.tsx, MonthlyChart.tsx, DepartmentMap.tsx, TerritorialRanking.tsx y RecentActivity.tsx contienen paletas fijas, valores hexadecimales y estilos inline; CLAUDE.md establece que los colores deben proceder de los tokens semánticos.
+- **Problema / causa conocida:** Estos componentes provienen de una implementación visual anterior y no están completamente integrados con los temas oscuro y claro.
+- **Impacto:** Puede haber inconsistencias visuales entre temas y mayor coste al mantener colores y estados.
+- **Solución recomendada:** Migrar gradualmente colores y superficies a tokens semánticos, conservando el comportamiento del mapa, la selección, el ranking y los controles de periodo.
+- **Verificación:** Revisar las cinco piezas en ambos temas, contraste WCAG AA, foco de teclado y responsive.
+
+## OEI-USER-003 — Navegación del menú contiene destinos que no corresponden a las rutas actuales de autenticación
+
+- **Categoría:** Funcionalidad / Navegación
+- **Severidad:** Media
+- **Estado:** Pendiente de revisión
+- **Fecha de detección:** 2026-11-09 (America/El_Salvador)
+- **Evidencia:** src/components/Sidebar.tsx enlaza “Cerrar sesión” a /login, mientras que la ruta de acceso inspeccionada es /auth/iniciar-sesion. El enlace de dashboard apunta a /, que redirige según la sesión.
+- **Problema / causa conocida:** El menú conserva rutas de una maqueta anterior; el enlace de cerrar sesión no demuestra que se revoque la sesión del servidor.
+- **Impacto:** El usuario puede llegar a una ruta inexistente y la acción etiquetada como cerrar sesión puede no cerrar realmente la sesión.
+- **Solución recomendada:** Implementar o conectar una acción de logout que invoque el endpoint de cierre, elimine la cookie desde el servidor y redirija al inicio de sesión. Corregir los destinos del menú con rutas confirmadas.
+- **Verificación:** Comprobar que el token se revoca, la cookie se elimina y el usuario no puede volver a /dashboard tras cerrar sesión.
+
