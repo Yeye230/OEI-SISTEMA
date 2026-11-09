@@ -218,3 +218,15 @@
 - **Solución recomendada:** Implementar o conectar una acción de logout que invoque el endpoint de cierre, elimine la cookie desde el servidor y redirija al inicio de sesión. Corregir los destinos del menú con rutas confirmadas.
 - **Verificación:** Comprobar que el token se revoca, la cookie se elimina y el usuario no puede volver a /dashboard tras cerrar sesión.
 
+
+## OEI-USER-004 — Validación automatizada del dashboard pendiente en feat/user
+
+- **Categoría:** Calidad / Integración
+- **Severidad:** Media
+- **Estado:** Pendiente de ejecución
+- **Fecha de detección:** 2026-11-09 (America/El_Salvador)
+- **Evidencia:** Se añadieron las rutas y componentes del dashboard en la rama feat/user. Esta sesión permite inspeccionar y actualizar el repositorio mediante GitHub, pero no dispone de un checkout local ni de node_modules para ejecutar ESLint, TypeScript o Next.js.
+- **Problema / causa conocida:** Los cambios todavía no cuentan con resultados de lint, typecheck, build ni pruebas manuales de navegación y sesión.
+- **Impacto:** No puede afirmarse que la implementación compile o que la protección de sesión funcione en ejecución.
+- **Solución recomendada:** Actualizar la rama local, ejecutar npm run lint, npx next typegen, npx tsc --noEmit y npm run build; después probar /dashboard con sesión ausente, válida e inválida.
+- **Verificación:** Mantener pendiente hasta disponer de las salidas reales de los comandos y las pruebas de acceso.
