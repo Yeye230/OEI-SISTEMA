@@ -19,7 +19,7 @@ export default function ProtectedLayout({ children }: ProtectedLayoutProps): Rea
     <Suspense
       fallback={
         <main className="flex min-h-screen items-center justify-center bg-background text-foreground">
-          <p className="text-body-sm text-muted">Verificando sesión...</p>
+          <p className="text-sm text-muted">Verificando sesión...</p>
         </main>
       }
     >
