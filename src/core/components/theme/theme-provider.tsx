@@ -20,6 +20,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useSyncExternalStore,
   type ReactNode
 } from "react";
 
@@ -27,27 +28,23 @@ interface ThemeContextValue {
   theme: ThemeId;
   mode: ThemeMode;
   meta: ThemeMeta;
-  /** Todos los temas del sistema. */
   themes: readonly ThemeMeta[];
-  /** Temas habilitados según la lista blanca del cliente, si se usa. */
   isAllowed: (id: ThemeId) => boolean;
   setTheme: (id: ThemeId) => void;
-  /** Cambia al tema opuesto (oscuro ⇄ claro). */
   toggleMode: () => void;
-  /** false hasta que el cliente leyó el tema real; evita desajustes de hidratación. */
   mounted: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
+const THEME_CHANGE_EVENT = "oei-theme-change";
 
 interface ThemeProviderProps {
   children: ReactNode;
   defaultTheme?: ThemeId;
-  /** Lista blanca opcional de temas habilitados para el usuario. */
   allowed?: readonly ThemeId[];
 }
 
-function applyToDocument(id: ThemeId, animate: boolean) {
+function applyToDocument(id: ThemeId, animate: boolean): void {
   const root = document.documentElement;
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -58,23 +55,42 @@ function applyToDocument(id: ThemeId, animate: boolean) {
 
   root.setAttribute("data-theme", id);
   root.setAttribute("data-mode", getMode(id));
+  window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
 }
 
 export function ThemeProvider({
   children,
   defaultTheme = DEFAULT_THEME,
   allowed
-}: ThemeProviderProps) {
-  const [theme, setThemeState] = useState<ThemeId>(defaultTheme);
+}: ThemeProviderProps): ReactNode {
+  const isAllowed = useCallback(
+    (id: ThemeId): boolean => !allowed || allowed.includes(id),
+    [allowed]
+  );
+
+  const subscribe = useCallback((onStoreChange: () => void): (() => void) => {
+    window.addEventListener(THEME_CHANGE_EVENT, onStoreChange);
+
+    return () => {
+      window.removeEventListener(THEME_CHANGE_EVENT, onStoreChange);
+    };
+  }, []);
+
+  const getSnapshot = useCallback((): ThemeId => {
+    return normalizeThemeId(document.documentElement.getAttribute("data-theme")) ?? defaultTheme;
+  }, [defaultTheme]);
+
+  const getServerSnapshot = useCallback((): ThemeId => defaultTheme, [defaultTheme]);
+
+  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [mounted, setMounted] = useState(false);
-  const isAllowed = useCallback((id: ThemeId) => !allowed || allowed.includes(id), [allowed]);
 
   const setTheme = useCallback(
-    (id: ThemeId) => {
+    (id: ThemeId): void => {
       if (!isThemeId(id) || !isAllowed(id)) return;
 
       applyToDocument(id, true);
-      setThemeState(id);
+
       try {
         localStorage.setItem(THEME_STORAGE_KEY, id);
         localStorage.removeItem(LEGACY_THEME_STORAGE_KEY);
@@ -98,10 +114,12 @@ export function ThemeProvider({
     }
 
     let next = normalizeThemeId(current) ?? normalizeThemeId(stored) ?? defaultTheme;
-    if (!isAllowed(next)) next = allowed?.find(isAllowed) ?? defaultTheme;
+
+    if (!isAllowed(next)) {
+      next = allowed?.find(isAllowed) ?? defaultTheme;
+    }
 
     applyToDocument(next, false);
-    setThemeState(next);
 
     try {
       localStorage.setItem(THEME_STORAGE_KEY, next);
@@ -114,21 +132,24 @@ export function ThemeProvider({
   }, [allowed, defaultTheme, isAllowed]);
 
   useEffect(() => {
-    const onStorage = (event: StorageEvent) => {
+    const onStorage = (event: StorageEvent): void => {
       if (event.key !== THEME_STORAGE_KEY) return;
+
       const next = normalizeThemeId(event.newValue);
       if (!next || !isAllowed(next)) return;
 
       applyToDocument(next, true);
-      setThemeState(next);
     };
 
     window.addEventListener("storage", onStorage);
+
     return () => window.removeEventListener("storage", onStorage);
   }, [isAllowed]);
 
   const value = useMemo<ThemeContextValue>(() => {
-    const meta = THEMES.find((item) => item.id === theme)!;
+    const meta =
+      THEMES.find((item) => item.id === theme) ??
+      THEMES.find((item) => item.id === DEFAULT_THEME)!;
 
     return {
       theme,
@@ -147,6 +168,10 @@ export function ThemeProvider({
 
 export function useTheme(): ThemeContextValue {
   const context = useContext(ThemeContext);
-  if (!context) throw new Error("useTheme debe usarse dentro de <ThemeProvider>");
+
+  if (!context) {
+    throw new Error("useTheme debe usarse dentro de <ThemeProvider>");
+  }
+
   return context;
 }
