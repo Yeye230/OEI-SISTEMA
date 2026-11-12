@@ -19,7 +19,7 @@ export default function SectionLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#f3f6fa] text-slate-800">
+    <main className="min-h-screen overflow-x-hidden bg-background text-foreground">
       <Sidebar
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
@@ -31,16 +31,16 @@ export default function SectionLayout({
         <div className="mx-auto w-full max-w-[1800px] space-y-5 px-4 py-5 sm:px-6 xl:px-7">
           <header className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-[#102b49]">
+              <h1 className="text-2xl font-bold tracking-tight text-foreground">
                 {title}
               </h1>
-              <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
+              <p className="mt-1 text-sm text-muted">{subtitle}</p>
             </div>
           </header>
 
           {children}
 
-          <footer className="border-t border-slate-200/70 py-4 text-center text-xs text-slate-400">
+          <footer className="border-t border-border py-4 text-center text-xs text-muted">
             OEI · Gestión de Actas
           </footer>
         </div>
