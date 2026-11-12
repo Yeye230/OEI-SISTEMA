@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OEI · Gestión de Actas
 
-## Getting Started
+Aplicación web para administrar actas de entrega de equipos institucionales, inventario, personas, proyectos y seguimiento territorial.
 
-First, run the development server:
+## Requisitos
+
+- Node.js compatible con la versión definida por el proyecto.
+- npm.
+
+## Ejecución local
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Acceso de demostración
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+En entorno de desarrollo, la pantalla `/auth/iniciar-sesion` ofrece **Entrar en modo demostración**. Este acceso crea una cookie HttpOnly de demostración y permite navegar por los módulos sin conectar el backend.
 
-## Learn More
+El acceso de demostración se deshabilita cuando `NODE_ENV=production`. El formulario de acceso institucional requiere que el backend y sus endpoints estén disponibles.
 
-To learn more about Next.js, take a look at the following resources:
+## Módulos disponibles
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Dashboard:** indicadores que se actualizan con los registros locales de actas, equipos, personas y proyectos. Los gráficos territoriales existentes contienen datos de muestra.
+- **Nueva acta:** formulario para entregas de laptop, tablet y proyector.
+- **Actas registradas:** listado, búsqueda, filtro por tipo y exportación CSV.
+- **Equipos, personas y proyectos:** alta, consulta, edición, eliminación y búsqueda.
+- **Mapa territorial:** captura de ubicaciones y visualización de puntos cuando se proporcionan coordenadas válidas.
+- **Historial:** movimientos generados por las operaciones realizadas en los módulos locales.
+- **Reportes:** exportación CSV del módulo y descarga de respaldo JSON de los datos locales.
+- **Configuración:** registro local de preferencias institucionales.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Persistencia y límites de la demostración
 
-## Deploy on Vercel
+Los datos de los módulos se guardan en `localStorage` del navegador. Por lo tanto:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- No se guardan en PostgreSQL ni en otro servidor.
+- No se comparten entre usuarios, equipos o navegadores.
+- Se pueden perder al limpiar los datos del navegador.
+- No se deben introducir datos personales reales ni información institucional sensible.
+- El respaldo JSON permite conservar una copia, pero todavía no hay función de restauración.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Esta capa local está aislada para facilitar su sustitución por servicios/API cuando se autorice la integración con la base de datos.
+
+## Verificación antes de integrar o desplegar
+
+```bash
+npm run lint
+npx next typegen
+npx tsc --noEmit
+npm run build
+```
+
+Además, probar el acceso demo, navegación, CRUD de cada módulo, persistencia tras recarga, exportaciones y mapa con coordenadas. No considerar la demostración como autenticación institucional ni como sistema listo para producción hasta integrar y verificar backend, autorización, persistencia centralizada y controles de seguridad.
+
+## Temas
+
+El sistema conserva los temas institucionales `claro` y `oscuro`.
