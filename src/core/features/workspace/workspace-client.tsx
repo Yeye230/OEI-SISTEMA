@@ -109,6 +109,26 @@ function useRecords(slug: string): WorkspaceRecord[] {
   );
 }
 
+function registerHistory(action: string, module: string, detail: string, responsible = "Administrador de demostración"): void {
+  if (module === "historial") return;
+  const key = keyFor("historial");
+  let history: WorkspaceRecord[] = [];
+  try {
+    const value: unknown = JSON.parse(window.localStorage.getItem(key) ?? "[]");
+    history = Array.isArray(value) ? value as WorkspaceRecord[] : [];
+  } catch {
+    history = [];
+  }
+  const now = new Date().toISOString();
+  const item: WorkspaceRecord = {
+    id: crypto.randomUUID(), createdAt: now, updatedAt: now,
+    fecha: now.slice(0, 10), accion: action, modulo: module,
+    responsable, detalle
+  };
+  window.localStorage.setItem(key, JSON.stringify([item, ...history]));
+  snapshotCache.delete(key);
+}
+
 function saveRecords(slug: string, records: WorkspaceRecord[]): void {
   window.localStorage.setItem(keyFor(slug), JSON.stringify(records));
   notify();
