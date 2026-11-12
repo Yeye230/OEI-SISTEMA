@@ -10,7 +10,7 @@ const BACKEND_AUTH_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth`;
 const BACKEND_PROFILE_URL = `${BACKEND_AUTH_URL}/profile`;
 const BACKEND_LOGOUT_URL = `${BACKEND_AUTH_URL}/logout`;
 
-export const getSessionToken = cache(async (): Promise<string | null> => {
+const DEMO_COOKIE_NAME = "oei_demo_session";\n\nexport const getSessionToken = cache(async (): Promise<string | null> => {
   const cookieStore = await cookies();
   return cookieStore.get(SESSION_COOKIE_NAME)?.value ?? null;
 });
