@@ -19,9 +19,9 @@ import {
 } from "lucide-react";
 
 const navigation = [
-  { label: "Dashboard", icon: Home, href: "/" },
+  { label: "Dashboard", icon: Home, href: "/dashboard" },
   { label: "Nueva acta", icon: FilePlus2, href: "/actas/nueva" },
-  { label: "Actas registradas", icon: FileText, href: "/actas", badge: "5" },
+  { label: "Actas registradas", icon: FileText, href: "/actas" },
   { label: "Equipos", icon: Monitor, href: "/equipos" },
   { label: "Personas", icon: Users, href: "/personas" },
   { label: "Proyectos", icon: FolderKanban, href: "/proyectos" },
