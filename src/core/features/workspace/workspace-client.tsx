@@ -114,6 +114,24 @@ function saveRecords(slug: string, records: WorkspaceRecord[]): void {
   notify();
 }
 
+function exportBackup(): void {
+  const modules = ["actas", "equipos", "personas", "proyectos", "mapa", "historial", "reportes", "configuracion"];
+  const backup = Object.fromEntries(modules.map((module) => {
+    try {
+      const value: unknown = JSON.parse(window.localStorage.getItem(keyFor(module)) ?? "[]");
+      return [module, Array.isArray(value) ? value : []];
+    } catch {
+      return [module, []];
+    }
+  }));
+  const url = URL.createObjectURL(new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), source: "OEI demo local", data: backup }, null, 2)], { type: "application/json" }));
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = "oei-respaldo-demostracion.json";
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
 function exportCsv(filename: string, records: WorkspaceRecord[], columns: string[]): void {
   const rows = [columns, ...records.map((record) => columns.map((column) => record[column] ?? ""))];
   const csv = rows.map((row) => row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(",")).join("\r\n");
@@ -177,6 +195,7 @@ export default function WorkspaceClient({ slug }: { slug: string }) {
           <div className="flex flex-col gap-3 border-b border-border p-4 sm:flex-row sm:items-center sm:justify-between">
             <label className="relative block min-w-0 flex-1"><Search size={17} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar en los registros..." aria-label="Buscar registros" className="min-h-11 w-full rounded-xl border border-border bg-background pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" /></label>
             <button type="button" onClick={() => exportCsv(`oei-${slug}.csv`, visible, config.columns)} disabled={visible.length === 0} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-border px-4 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"><Download size={16} /> Exportar CSV</button>
+            {slug === "reportes" && <button type="button" onClick={exportBackup} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-primary px-4 text-sm font-semibold text-primary"><Download size={16} /> Respaldo completo JSON</button>}
           </div>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[680px] text-left text-sm">
