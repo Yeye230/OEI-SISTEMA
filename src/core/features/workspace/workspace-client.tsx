@@ -86,13 +86,29 @@ const emptySnapshot: WorkspaceRecord[] = [];
 const snapshotCache = new Map<string, { raw: string | null; records: WorkspaceRecord[] }>();
 const notify = (): void => window.dispatchEvent(new Event("oei-workspace-change"));
 
-function readRecords(slug: string): WorkspaceRecord[] {
+function getRecordsSnapshot(slug: string): WorkspaceRecord[] {
+  let raw: string;
+
   try {
-    const value: unknown = JSON.parse(window.localStorage.getItem(keyFor(slug)) ?? "[]");
-    return Array.isArray(value) ? value as WorkspaceRecord[] : [];
+    raw = window.localStorage.getItem(keyFor(slug)) ?? "[]";
   } catch {
-    return [];
+    return emptySnapshot;
   }
+
+  const cached = snapshotCache.get(slug);
+  if (cached?.raw === raw) return cached.records;
+
+  let records: WorkspaceRecord[] = emptySnapshot;
+
+  try {
+    const value: unknown = JSON.parse(raw);
+    if (Array.isArray(value)) records = value as WorkspaceRecord[];
+  } catch {
+    records = emptySnapshot;
+  }
+
+  snapshotCache.set(slug, { raw, records });
+  return records;
 }
 
 function useRecords(slug: string): WorkspaceRecord[] {
@@ -105,7 +121,7 @@ function useRecords(slug: string): WorkspaceRecord[] {
         window.removeEventListener("oei-workspace-change", callback);
       };
     },
-    () => readRecords(slug),
+    () => getRecordsSnapshot(slug),
     () => emptySnapshot
   );
 }
@@ -127,11 +143,13 @@ function registerHistory(action: string, module: string, detail: string, respons
     responsable, detalle
   };
   window.localStorage.setItem(key, JSON.stringify([item, ...history]));
-  snapshotCache.delete(key);
+  snapshotCache.delete("historial");
+  notify();
 }
 
 function saveRecords(slug: string, records: WorkspaceRecord[]): void {
   window.localStorage.setItem(keyFor(slug), JSON.stringify(records));
+  snapshotCache.delete(slug);
   notify();
 }
 
@@ -188,11 +206,13 @@ export default function WorkspaceClient({ slug }: { slug: string }) {
     const now = new Date().toISOString();
     const next: WorkspaceRecord = { ...(editing ?? {} as WorkspaceRecord), ...values, id: editing?.id ?? crypto.randomUUID(), createdAt: editing?.createdAt ?? now, updatedAt: now };
     saveRecords(slug, editing ? records.map((record) => record.id === editing.id ? next : record) : [next, ...records]);
+    registerHistory(editing ? "Actualización" : "Creación", config.title, `${config.singular}: ${config.fields.map((field) => values[field.name]).find(Boolean) ?? next.id}`);
     setFormOpen(false); setEditing(null); setNotice(`${config.singular[0].toUpperCase()}${config.singular.slice(1)} guardado correctamente.`);
   };
   const remove = (record: WorkspaceRecord): void => {
     if (!window.confirm(`¿Eliminar este registro de ${config.singular}?`)) return;
     saveRecords(slug, records.filter((item) => item.id !== record.id));
+    registerHistory("Eliminación", config.title, `${config.singular}: ${record[config.fields[0].name] ?? record.id}`);
     setNotice("Registro eliminado.");
   };
 

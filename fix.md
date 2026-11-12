@@ -285,3 +285,17 @@
 - **Solución aplicada:** Se sustituyó el salto de línea incrustado por el literal escapado `"\\r\\n"`, manteniendo los finales de línea CRLF del CSV.
 - **Alternativa:** Usar únicamente `"\\n"`; también es válido para CSV, pero CRLF ofrece compatibilidad amplia con hojas de cálculo.
 - **Verificación pendiente:** Actualizar la rama, dejar que Turbopack recompíle, comprobar que desaparece el error y ejecutar lint, typecheck y build. No se han ejecutado esas comprobaciones desde esta sesión.
+
+
+## OEI-WORKSPACE-003 — getSnapshot devuelve una referencia nueva en cada lectura
+
+- **Categoría:** Calidad / React / Persistencia local
+- **Severidad:** Alta
+- **Estado:** Corrección aplicada en `feat/user`; pendiente de verificación local
+- **Fecha de detección:** 2026-11-12 (America/El_Salvador)
+- **Evidencia:** La captura de `/actas` muestra `The result of getSnapshot should be cached to avoid an infinite loop` en `src/core/features/workspace/workspace-client.tsx:99`, dentro de `useRecords`. El código anterior pasaba `() => readRecords(slug)` a `useSyncExternalStore`, y `readRecords` ejecutaba `JSON.parse` en cada lectura, creando un arreglo nuevo aunque el almacenamiento no cambiara.
+- **Problema / causa raíz:** El snapshot de React no conservaba identidad entre lecturas sin cambios, lo que puede provocar renders repetidos y un bucle.
+- **Impacto:** Los módulos que usan `WorkspaceClient` pueden mostrar errores de consola, renderizados repetidos o dejar de responder.
+- **Solución aplicada:** Se implementó una caché por módulo basada en el contenido serializado de localStorage. El snapshot conserva la misma referencia mientras los datos no cambien; las escrituras invalidan la entrada correspondiente. También se conectó el registro de creación, actualización y eliminación al historial local.
+- **Alternativa:** Sustituir `useSyncExternalStore` por estado React y efectos; descartada porque el almacenamiento compartido entre módulos y pestañas requiere una suscripción externa coherente.
+- **Verificación pendiente:** Probar lectura sin cambios, altas, edición, eliminación, sincronización entre módulos y pestañas; ejecutar lint, typecheck y build. No se ejecutaron pruebas desde esta sesión.
