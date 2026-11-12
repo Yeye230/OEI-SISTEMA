@@ -90,7 +90,7 @@ export default function LocationMap(): React.JSX.Element {
         .addTo(layer);
     });
     if (valid.length > 0) {
-      const bounds = L.latLngBounds(valid.map(({ lat, lng }) => [lat, lng]));
+      const bounds = L.latLngBounds(valid.map(({ lat, lng }) => L.latLng(lat, lng)));
       map.fitBounds(bounds, { padding: [30, 30], maxZoom: 12 });
     }
   }, [records]);
