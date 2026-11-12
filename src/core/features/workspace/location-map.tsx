@@ -43,7 +43,7 @@ export default function LocationMap(): React.JSX.Element {
     let resizeObserver: ResizeObserver | undefined;
     const initialize = async (): Promise<void> => {
       if (!containerRef.current || mapRef.current) return;
-      const L = await import("leaflet");
+      const L = (await import("leaflet")).default;
       if (cancelled || !containerRef.current) return;
       const map = L.map(containerRef.current, { scrollWheelZoom: false }).setView([13.75, -88.9], 8);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
