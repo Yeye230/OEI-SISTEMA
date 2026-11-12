@@ -6,7 +6,7 @@ import SubmitButton from '@/core/components/form/submit-button';
 import { CardWrapper } from '@/core/components/ui/card-wrapper';
 import { Eye, Mail, Lock } from 'lucide-react';
 import { Controller } from 'react-hook-form';
-import { useLogin } from './use-login';
+import { useLogin } from './use-login';\nimport { useRouter } from 'next/navigation';\nimport { useState } from 'react';
 
 const AuthPage = (): React.JSX.Element => {
 	const { control, handleSubmit, onSubmit, errors, isSubmitting } = useLogin();
@@ -71,7 +71,7 @@ const AuthPage = (): React.JSX.Element => {
 					</form>
 
 					<p className='mt-4 text-center text-[10px] uppercase tracking-[0.28em] text-status-error-text font-display'>
-						{1 - 5} intento(s) antes del sello inquisitorial
+						Modo demostración: datos locales, sin conexión a base de datos
 					</p>
 				</CardWrapper>
 			</div>
