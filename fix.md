@@ -299,3 +299,17 @@
 - **Solución aplicada:** Se implementó una caché por módulo basada en el contenido serializado de localStorage. El snapshot conserva la misma referencia mientras los datos no cambien; las escrituras invalidan la entrada correspondiente. También se conectó el registro de creación, actualización y eliminación al historial local.
 - **Alternativa:** Sustituir `useSyncExternalStore` por estado React y efectos; descartada porque el almacenamiento compartido entre módulos y pestañas requiere una suscripción externa coherente.
 - **Verificación pendiente:** Probar lectura sin cambios, altas, edición, eliminación, sincronización entre módulos y pestañas; ejecutar lint, typecheck y build. No se ejecutaron pruebas desde esta sesión.
+
+
+## OEI-MAP-001 — El mapa puede ubicar coordenadas vacías en 0,0 y la CSP bloquea los mosaicos de OpenStreetMap
+
+- **Categoría:** Funcionalidad / Configuración de seguridad
+- **Severidad:** Media
+- **Estado:** Corrección aplicada en `feat/user`; pendiente de verificación en navegador
+- **Fecha de detección:** 2026-11-12 (America/El_Salvador)
+- **Evidencia:** En `location-map.tsx`, la validación convertía campos vacíos con `Number("")`, cuyo resultado es `0`, y solo comprobaba que el número fuera finito y estuviera dentro de los límites geográficos. Además, `next.config.ts` restringía `img-src` a self/data/blob y un dominio S3, mientras Leaflet carga teselas desde `https://{s}.tile.openstreetmap.org`.
+- **Problema / causa raíz:** Una ubicación sin latitud/longitud podía tratarse como coordenada válida (0,0), y la política CSP no autorizaba las imágenes de los servidores de teselas del mapa.
+- **Impacto:** Puntos incorrectos fuera de El Salvador y mapa sin teselas en navegadores que aplican la CSP.
+- **Solución aplicada:** Se exige que latitud y longitud contengan valores antes de convertirlos, se mantienen límites geográficos y se autoriza el subdominio de teselas de OpenStreetMap en `img-src`.
+- **Alternativa:** Servir teselas desde un proveedor propio o proxy; requiere infraestructura y no es necesario para la demostración actual.
+- **Verificación pendiente:** Abrir el mapa con campos vacíos, coordenadas válidas e inválidas; confirmar que solo aparecen puntos válidos y que las teselas cargan sin violaciones CSP. Revisar los términos de uso y límites del servicio de teselas antes de un despliegue institucional.

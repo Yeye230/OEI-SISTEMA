@@ -6,7 +6,7 @@ const contentSecurityPolicy = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isProd ? "" : " 'unsafe-eval'"}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://anriverax.s3.us-east-2.amazonaws.com",
+  "img-src 'self' data: blob: https://anriverax.s3.us-east-2.amazonaws.com https://*.tile.openstreetmap.org",
   "font-src 'self' data:",
   `connect-src 'self'${isProd ? "" : " http://localhost:3001 ws://localhost:3001 ws:"}`,
   "object-src 'none'",

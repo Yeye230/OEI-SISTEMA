@@ -80,7 +80,8 @@ export default function LocationMap(): React.JSX.Element {
     const valid = records.flatMap((record) => {
       const lat = Number(record.latitud);
       const lng = Number(record.longitud);
-      return Number.isFinite(lat) && Number.isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180
+      const hasCoordinates = Boolean(record.latitud?.trim()) && Boolean(record.longitud?.trim());
+      return hasCoordinates && Number.isFinite(lat) && Number.isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180
         ? [{ record, lat, lng }]
         : [];
     });
@@ -95,7 +96,7 @@ export default function LocationMap(): React.JSX.Element {
     }
   }, [records]);
 
-  const mappedCount = records.filter((record) => Number.isFinite(Number(record.latitud)) && Number.isFinite(Number(record.longitud)) && Boolean(record.latitud) && Boolean(record.longitud)).length;
+  const mappedCount = records.filter((record) => Boolean(record.latitud?.trim()) && Boolean(record.longitud?.trim()) && Number.isFinite(Number(record.latitud)) && Number.isFinite(Number(record.longitud)) && Math.abs(Number(record.latitud)) <= 90 && Math.abs(Number(record.longitud)) <= 180).length;
 
   return (
     <section className="overflow-hidden rounded-2xl border border-border bg-surface">
