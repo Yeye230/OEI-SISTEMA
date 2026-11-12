@@ -6,10 +6,27 @@ import SubmitButton from '@/core/components/form/submit-button';
 import { CardWrapper } from '@/core/components/ui/card-wrapper';
 import { Eye, Mail, Lock } from 'lucide-react';
 import { Controller } from 'react-hook-form';
-import { useLogin } from './use-login';\nimport { useRouter } from 'next/navigation';\nimport { useState } from 'react';
+import { useLogin } from './use-login';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const AuthPage = (): React.JSX.Element => {
-	const { control, handleSubmit, onSubmit, errors, isSubmitting } = useLogin();\n\tconst router = useRouter();\n\tconst [demoLoading, setDemoLoading] = useState(false);\n\tconst [demoError, setDemoError] = useState('');\n\tconst enterDemo = async (): Promise<void> => {\n\t\tsetDemoLoading(true);\n\t\tsetDemoError('');\n\t\ttry {\n\t\t\tconst response = await fetch('/api/demo/session', { method: 'POST' });\n\t\t\tif (!response.ok) throw new Error('El modo demostración solo está disponible en desarrollo.');\n\t\t\trouter.push('/dashboard');\n\t\t\trouter.refresh();\n\t\t} catch (error) {\n\t\t\tsetDemoError(error instanceof Error ? error.message : 'No se pudo iniciar la demostración.');\n\t\t} finally { setDemoLoading(false); }\n\t};
+	const { control, handleSubmit, onSubmit, errors, isSubmitting } = useLogin();
+\tconst router = useRouter();
+\tconst [demoLoading, setDemoLoading] = useState(false);
+\tconst [demoError, setDemoError] = useState('');
+\tconst enterDemo = async (): Promise<void> => {
+\t\tsetDemoLoading(true);
+\t\tsetDemoError('');
+\t\ttry {
+\t\t\tconst response = await fetch('/api/demo/session', { method: 'POST' });
+\t\t\tif (!response.ok) throw new Error('El modo demostración solo está disponible en desarrollo.');
+\t\t\trouter.push('/dashboard');
+\t\t\trouter.refresh();
+\t\t} catch (error) {
+\t\t\tsetDemoError(error instanceof Error ? error.message : 'No se pudo iniciar la demostración.');
+\t\t} finally { setDemoLoading(false); }
+\t};
 
 	return (
 		<div className='min-h-screen flex items-center justify-center p-4 bg-[linear-gradient(135deg,#F8FAFC_0%,#E6EFF5_100%)]'>
