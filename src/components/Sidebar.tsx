@@ -198,14 +198,14 @@ export default function Sidebar({
               <span>Configuración</span>
             </Link>
 
-            <Link
-              href="/login"
-              onClick={onClose}
-              className="flex min-h-12 items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-slate-200 transition-colors hover:bg-white/10 hover:text-white"
+            <button
+              type="button"
+              onClick={() => { onClose(); void signOut(); }}
+              className="flex min-h-12 w-full items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-slate-200 transition-colors hover:bg-white/10 hover:text-white"
             >
               <LogOut size={20} strokeWidth={1.8} />
               <span>Cerrar sesión</span>
-            </Link>
+            </button>
           </div>
         </nav>
 
