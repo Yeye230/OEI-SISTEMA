@@ -257,3 +257,17 @@
 - **Solución aplicada:** Crear operaciones locales de alta, edición, eliminación, búsqueda y exportación; registrar movimientos de demostración; añadir el acceso de demostración en desarrollo y mantener la integración real de autenticación/BD separada.
 - **Riesgos residuales:** No usar esta persistencia como registro oficial ni almacenar datos personales reales o información sensible. No habilitar el modo de demostración en producción. Revisar la seguridad de los endpoints de autenticación existentes antes de una publicación.
 - **Verificación pendiente:** Ejecutar `npm run lint`, `npx next typegen`, `npx tsc --noEmit` y `npm run build`; probar el flujo completo de cada módulo, almacenamiento tras recarga, exportaciones, mapa con coordenadas y sesión demo en desarrollo. No se ejecutaron esas verificaciones desde esta sesión.
+
+
+## OEI-AUTH-002 — El proxy no reconoce la cookie de sesión de demostración
+
+- **Categoría:** Funcionalidad / Autenticación de demostración
+- **Severidad:** Alta para la prueba funcional local
+- **Estado:** Corrección aplicada en `feat/user`; pendiente de verificación local
+- **Fecha de detección:** 2026-11-12 (America/El_Salvador)
+- **Evidencia:** `src/app/api/demo/session/route.ts` establece la cookie HttpOnly `oei_demo_session=local-demo` en desarrollo y `src/core/server/auth/session.ts` la reconoce en `verifySession()` y `requireSession()`. Sin embargo, `src/proxy.ts` solo consultaba `SESSION_COOKIE_NAME` y protegía `/dashboard` usando exclusivamente esa cookie institucional.
+- **Problema / causa raíz:** El flujo de demostración crea una sesión válida para el layout protegido, pero el proxy no reconoce esa cookie y redirige la navegación hacia el login antes de que el dashboard pueda renderizarse.
+- **Impacto:** El botón «Entrar en modo demostración» puede parecer que no hace nada o devolver al usuario a la pantalla de acceso.
+- **Solución aplicada:** El proxy ahora reconoce `oei_demo_session=local-demo` únicamente cuando `NODE_ENV !== "production"`. La cookie demo se considera para las redirecciones y el acceso a rutas protegidas; la validación definitiva sigue en `requireSession()`.
+- **Alternativa:** Quitar la protección del proxy para `/dashboard`; descartada porque debilitaría la navegación protegida.
+- **Verificación pendiente:** Actualizar `feat/user`, reiniciar el servidor de desarrollo y probar acceso demo, recarga de `/dashboard`, acceso anónimo y comportamiento en producción. No se ejecutaron pruebas ni build desde esta sesión.

@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 import { SESSION_COOKIE_NAME } from './core/server/auth/session-config';
 
 const AUTH_SIGNIN_ROUTE = "/auth/iniciar-sesion";
+const DEMO_COOKIE_NAME = "oei_demo_session";
 const PROTECTED_ROUTES = ["/dashboard"];
 const PUBLIC_AUTH_ROUTES = ["/", "/auth", "/auth/iniciar-sesion"];
 
@@ -17,26 +18,29 @@ const isKnownPath = (pathname: string): boolean =>
 export function proxy(request: NextRequest): NextResponse {
   const pathname = request.nextUrl.pathname;
   const sessionToken = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+  const hasDemoSession =
+    process.env.NODE_ENV !== "production" &&
+    request.cookies.get(DEMO_COOKIE_NAME)?.value === "local-demo";
+  const hasSession = Boolean(sessionToken || hasDemoSession);
 
   if (pathname === "/") {
-    return NextResponse.redirect(new URL(sessionToken ? "/dashboard" : AUTH_SIGNIN_ROUTE, request.url));
+    return NextResponse.redirect(new URL(hasSession ? "/dashboard" : AUTH_SIGNIN_ROUTE, request.url));
   }
 
-  // A cookie only signals a possible session; server pages and backend APIs
-  // must still verify the session and authorization before returning data.
-  if (isPublicAuthPath(pathname) && sessionToken) {
+  // La cookie demo solo es válida en desarrollo; las páginas privadas verifican la sesión en servidor.
+  if (isPublicAuthPath(pathname) && hasSession) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   if (!isKnownPath(pathname)) {
-    return NextResponse.redirect(new URL(sessionToken ? "/dashboard" : AUTH_SIGNIN_ROUTE, request.url));
+    return NextResponse.redirect(new URL(hasSession ? "/dashboard" : AUTH_SIGNIN_ROUTE, request.url));
   }
 
   if (!isProtectedPath(pathname)) {
     return NextResponse.next();
   }
 
-  if (sessionToken) {
+  if (hasSession) {
     return NextResponse.next();
   }
 
