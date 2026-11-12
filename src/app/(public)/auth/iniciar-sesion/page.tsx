@@ -12,21 +12,21 @@ import { useState } from 'react';
 
 const AuthPage = (): React.JSX.Element => {
 	const { control, handleSubmit, onSubmit, errors, isSubmitting } = useLogin();
-\tconst router = useRouter();
-\tconst [demoLoading, setDemoLoading] = useState(false);
-\tconst [demoError, setDemoError] = useState('');
-\tconst enterDemo = async (): Promise<void> => {
-\t\tsetDemoLoading(true);
-\t\tsetDemoError('');
-\t\ttry {
-\t\t\tconst response = await fetch('/api/demo/session', { method: 'POST' });
-\t\t\tif (!response.ok) throw new Error('El modo demostración solo está disponible en desarrollo.');
-\t\t\trouter.push('/dashboard');
-\t\t\trouter.refresh();
-\t\t} catch (error) {
-\t\t\tsetDemoError(error instanceof Error ? error.message : 'No se pudo iniciar la demostración.');
-\t\t} finally { setDemoLoading(false); }
-\t};
+	const router = useRouter();
+	const [demoLoading, setDemoLoading] = useState(false);
+	const [demoError, setDemoError] = useState('');
+	const enterDemo = async (): Promise<void> => {
+		setDemoLoading(true);
+		setDemoError('');
+		try {
+			const response = await fetch('/api/demo/session', { method: 'POST' });
+			if (!response.ok) throw new Error('El modo demostración solo está disponible en desarrollo.');
+			router.push('/dashboard');
+			router.refresh();
+		} catch (error) {
+			setDemoError(error instanceof Error ? error.message : 'No se pudo iniciar la demostración.');
+		} finally { setDemoLoading(false); }
+	};
 
 	return (
 		<div className='min-h-screen flex items-center justify-center p-4 bg-[linear-gradient(135deg,#F8FAFC_0%,#E6EFF5_100%)]'>
@@ -86,6 +86,12 @@ const AuthPage = (): React.JSX.Element => {
 						/>
 						<SubmitButton buttonName='Invocar Acceso' type='submit' isDisabled={isSubmitting} />
 					</form>
+					<div className='mt-4 border-t border-border pt-4'>
+						<button type='button' onClick={enterDemo} disabled={demoLoading} className='w-full min-h-11 rounded-xl border border-border bg-surface text-sm font-semibold text-foreground hover:bg-surface-muted disabled:opacity-60'>
+							{demoLoading ? 'Preparando demostración...' : 'Entrar en modo demostración'}
+						</button>
+						{demoError && <p role='alert' className='mt-2 text-sm text-status-error-text'>{demoError}</p>}
+					</div>
 
 					<p className='mt-4 text-center text-[10px] uppercase tracking-[0.28em] text-status-error-text font-display'>
 						Modo demostración: datos locales, sin conexión a base de datos
