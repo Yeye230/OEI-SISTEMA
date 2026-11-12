@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 import SectionLayout from "@/components/SectionLayout";
-import WorkspaceClient from "@/core/features/workspace/workspace-client";\nimport LocationMap from "@/core/features/workspace/location-map";
+import WorkspaceClient from "@/core/features/workspace/workspace-client";
+import LocationMap from "@/core/features/workspace/location-map";
 
 const sectionDetails: Record<string, { title: string; description: string }> = {
   equipos: { title: "Equipos", description: "Controla el inventario institucional y el estado de cada equipo." },
