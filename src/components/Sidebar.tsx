@@ -37,7 +37,13 @@ export default function Sidebar({
   open: boolean;
   onClose: () => void;
 }) {
-  const pathname = usePathname();\n  const router = useRouter();\n  const signOut = async (): Promise<void> => {\n    await fetch("/api/demo/session", { method: "DELETE" });\n    router.push("/auth/iniciar-sesion");\n    router.refresh();\n  };
+  const pathname = usePathname();
+  const router = useRouter();
+  const signOut = async (): Promise<void> => {
+    await fetch("/api/demo/session", { method: "DELETE" });
+    router.push("/auth/iniciar-sesion");
+    router.refresh();
+  };
 
   const activeHref = navigation
     .filter(
