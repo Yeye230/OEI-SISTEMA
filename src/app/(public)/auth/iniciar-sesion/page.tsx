@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const AuthPage = (): React.JSX.Element => {
-	const { control, handleSubmit, onSubmit, errors, isSubmitting } = useLogin();
+	const { control, handleSubmit, onSubmit, errors } = useLogin();
 	const router = useRouter();
 	const [demoLoading, setDemoLoading] = useState(false);
 	const [demoError, setDemoError] = useState('');
