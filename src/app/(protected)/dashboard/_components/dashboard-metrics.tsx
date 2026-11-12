@@ -2,7 +2,7 @@
 
 import type { ReactElement } from "react";
 import { useSyncExternalStore } from "react";
-import { Activity, FileCheck2, MapPinned, Monitor, Users, FolderKanban } from "lucide-react";
+import { FileCheck2, Monitor, Users, FolderKanban } from "lucide-react";
 import MetricCard from "@/components/MetricCard";
 
 type Counts = { actas: number; equipos: number; personas: number; proyectos: number };
