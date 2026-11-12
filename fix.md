@@ -243,3 +243,17 @@
 - **Solución aplicada:** Se sustituyó el estado duplicado del tema por `useSyncExternalStore`, usando el atributo `data-theme` como snapshot externo y un evento propio para notificar cambios realizados por el proveedor. Se conservaron la lectura/migración de localStorage, el cambio de tema, la sincronización entre pestañas y el estado `mounted`.
 - **Alternativa:** Diferir la llamada a `setState` con un temporizador; descartada porque solo aplaza el problema y no corrige el estado duplicado.
 - **Verificación pendiente:** Ejecutar `npm run lint`, `npx next typegen`, `npx tsc --noEmit` y `npm run build`; probar tema oscuro/claro, persistencia tras recarga y sincronización entre pestañas. Esta sesión no dispone de terminal local ni de `node_modules`, por lo que no se afirma que las verificaciones hayan pasado.
+
+
+## OEI-WORKSPACE-001 — Módulos de gestión implementados en modo local; integración y validación pendientes
+
+- **Categoría:** Funcionalidad / Persistencia / Integración
+- **Severidad:** Media para demostración; alta si se pretende usar como sistema institucional productivo
+- **Estado:** Implementación aplicada en `feat/user`; pendiente de validación local y aceptación funcional
+- **Fecha de actualización:** 2026-11-12 (America/El_Salvador)
+- **Evidencia:** Se incorporaron vistas de gestión para equipos, personas, proyectos, ubicaciones, historial, reportes y configuración mediante una interfaz reutilizable; formulario de nueva acta para laptop, tablet y proyector; listado de actas con búsqueda, filtro y exportación CSV; mapa Leaflet que representa ubicaciones que tengan latitud y longitud; indicadores del dashboard que leen los conteos locales. Los registros se almacenan en `localStorage` bajo claves versionadas `oei-demo:*:v1`.
+- **Problema / limitación conocida:** Estos registros existen únicamente en el navegador que los crea. No se sincronizan entre usuarios ni dispositivos, no llegan a PostgreSQL y pueden perderse al borrar los datos del navegador. El mapa solo puede colocar puntos si se capturan coordenadas válidas. El respaldo completo permite exportar un JSON local, pero todavía no implementa restauración.
+- **Autenticación de demostración:** Se agregó una sesión local mediante cookie HttpOnly y endpoint `/api/demo/session`, habilitada exclusivamente cuando `NODE_ENV` no es `production`. El acceso institucional real sigue dependiendo del backend y no se considera implementado por esta demostración.
+- **Solución aplicada:** Crear operaciones locales de alta, edición, eliminación, búsqueda y exportación; registrar movimientos de demostración; añadir el acceso de demostración en desarrollo y mantener la integración real de autenticación/BD separada.
+- **Riesgos residuales:** No usar esta persistencia como registro oficial ni almacenar datos personales reales o información sensible. No habilitar el modo de demostración en producción. Revisar la seguridad de los endpoints de autenticación existentes antes de una publicación.
+- **Verificación pendiente:** Ejecutar `npm run lint`, `npx next typegen`, `npx tsc --noEmit` y `npm run build`; probar el flujo completo de cada módulo, almacenamiento tras recarga, exportaciones, mapa con coordenadas y sesión demo en desarrollo. No se ejecutaron esas verificaciones desde esta sesión.
