@@ -82,7 +82,8 @@ const configs: Record<string, ModuleConfig> = {
 };
 
 const keyFor = (slug: string): string => `oei-demo:${slug}:v1`;
-const emptySnapshot: WorkspaceRecord[] = [];\nconst snapshotCache = new Map<string, { raw: string | null; records: WorkspaceRecord[] }>();
+const emptySnapshot: WorkspaceRecord[] = [];
+const snapshotCache = new Map<string, { raw: string | null; records: WorkspaceRecord[] }>();
 const notify = (): void => window.dispatchEvent(new Event("oei-workspace-change"));
 
 function readRecords(slug: string): WorkspaceRecord[] {
@@ -154,7 +155,8 @@ function exportBackup(): void {
 
 function exportCsv(filename: string, records: WorkspaceRecord[], columns: string[]): void {
   const rows = [columns, ...records.map((record) => columns.map((column) => record[column] ?? ""))];
-  const csv = rows.map((row) => row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(",")).join("\r\n");
+  const csv = rows.map((row) => row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(",")).join("\r
+");
   const url = URL.createObjectURL(new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8" }));
   const anchor = document.createElement("a");
   anchor.href = url;
