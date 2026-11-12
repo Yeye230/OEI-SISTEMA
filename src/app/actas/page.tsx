@@ -6,7 +6,7 @@ import { Download, FilePlus2, FileText, Search } from "lucide-react";
 
 type Acta = { id: string; createdAt: string; updatedAt: string; numero: string; tipo: string; responsable: string; proyecto: string; fecha: string; codigo: string };
 const storageKey = "oei-demo:actas:v1";
-const empty: Acta[] = [];
+const empty: Acta[] = [];\nlet cachedRaw: string | null | undefined;\nlet cachedRecords: Acta[] = empty;
 const read = (): Acta[] => {
   try { const value: unknown = JSON.parse(window.localStorage.getItem(storageKey) ?? "[]"); return Array.isArray(value) ? value as Acta[] : []; }
   catch { return []; }
