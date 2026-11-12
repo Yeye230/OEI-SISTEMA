@@ -82,7 +82,7 @@ const configs: Record<string, ModuleConfig> = {
 };
 
 const keyFor = (slug: string): string => `oei-demo:${slug}:v1`;
-const emptySnapshot: WorkspaceRecord[] = [];
+const emptySnapshot: WorkspaceRecord[] = [];\nconst snapshotCache = new Map<string, { raw: string | null; records: WorkspaceRecord[] }>();
 const notify = (): void => window.dispatchEvent(new Event("oei-workspace-change"));
 
 function readRecords(slug: string): WorkspaceRecord[] {
