@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import SectionLayout from "@/components/SectionLayout";
-import WorkspaceClient from "@/core/features/workspace/workspace-client";
+import WorkspaceClient from "@/core/features/workspace/workspace-client";\nimport LocationMap from "@/core/features/workspace/location-map";
 
 const sectionDetails: Record<string, { title: string; description: string }> = {
   equipos: { title: "Equipos", description: "Controla el inventario institucional y el estado de cada equipo." },
@@ -20,5 +20,5 @@ export default async function SectionPage({ params }: SectionPageProps): Promise
   if (!details) {
     return <main className="min-h-screen bg-background p-10 text-foreground"><h1 className="text-2xl font-bold">Página no encontrada</h1></main>;
   }
-  return <SectionLayout title={details.title} subtitle={details.description}><WorkspaceClient slug={section} /></SectionLayout>;
+  return <SectionLayout title={details.title} subtitle={details.description}>{section === "mapa" && <LocationMap />}<WorkspaceClient slug={section} /></SectionLayout>;
 }
