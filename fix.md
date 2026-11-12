@@ -271,3 +271,17 @@
 - **Solución aplicada:** El proxy ahora reconoce `oei_demo_session=local-demo` únicamente cuando `NODE_ENV !== "production"`. La cookie demo se considera para las redirecciones y el acceso a rutas protegidas; la validación definitiva sigue en `requireSession()`.
 - **Alternativa:** Quitar la protección del proxy para `/dashboard`; descartada porque debilitaría la navegación protegida.
 - **Verificación pendiente:** Actualizar `feat/user`, reiniciar el servidor de desarrollo y probar acceso demo, recarga de `/dashboard`, acceso anónimo y comportamiento en producción. No se ejecutaron pruebas ni build desde esta sesión.
+
+
+## OEI-WORKSPACE-002 — Error de sintaxis en la exportación CSV impide compilar el dashboard
+
+- **Categoría:** Calidad / Compilación
+- **Severidad:** Alta
+- **Estado:** Corrección aplicada en `feat/user`; pendiente de verificación local
+- **Fecha de detección:** 2026-11-12 (America/El_Salvador)
+- **Evidencia:** La captura del navegador muestra `Unterminated string constant` en `src/core/features/workspace/workspace-client.tsx:159:1`. La inspección del archivo confirma que el separador de filas CSV contiene un salto de línea literal dentro de una cadena entre comillas.
+- **Problema / causa raíz:** El literal destinado a separar filas quedó dividido físicamente en dos líneas, por lo que el parser de TypeScript no puede cerrar la cadena.
+- **Impacto:** Next.js no puede compilar el componente compartido por los módulos y el dashboard muestra la pantalla de error.
+- **Solución aplicada:** Se sustituyó el salto de línea incrustado por el literal escapado `"\\r\\n"`, manteniendo los finales de línea CRLF del CSV.
+- **Alternativa:** Usar únicamente `"\\n"`; también es válido para CSV, pero CRLF ofrece compatibilidad amplia con hojas de cálculo.
+- **Verificación pendiente:** Actualizar la rama, dejar que Turbopack recompíle, comprobar que desaparece el error y ejecutar lint, typecheck y build. No se han ejecutado esas comprobaciones desde esta sesión.

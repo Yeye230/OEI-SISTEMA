@@ -155,8 +155,7 @@ function exportBackup(): void {
 
 function exportCsv(filename: string, records: WorkspaceRecord[], columns: string[]): void {
   const rows = [columns, ...records.map((record) => columns.map((column) => record[column] ?? ""))];
-  const csv = rows.map((row) => row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(",")).join("\r
-");
+  const csv = rows.map((row) => row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(",")).join("\r\n");
   const url = URL.createObjectURL(new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8" }));
   const anchor = document.createElement("a");
   anchor.href = url;
