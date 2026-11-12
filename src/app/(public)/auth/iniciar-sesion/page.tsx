@@ -9,7 +9,7 @@ import { Controller } from 'react-hook-form';
 import { useLogin } from './use-login';\nimport { useRouter } from 'next/navigation';\nimport { useState } from 'react';
 
 const AuthPage = (): React.JSX.Element => {
-	const { control, handleSubmit, onSubmit, errors, isSubmitting } = useLogin();
+	const { control, handleSubmit, onSubmit, errors, isSubmitting } = useLogin();\n\tconst router = useRouter();\n\tconst [demoLoading, setDemoLoading] = useState(false);\n\tconst [demoError, setDemoError] = useState('');\n\tconst enterDemo = async (): Promise<void> => {\n\t\tsetDemoLoading(true);\n\t\tsetDemoError('');\n\t\ttry {\n\t\t\tconst response = await fetch('/api/demo/session', { method: 'POST' });\n\t\t\tif (!response.ok) throw new Error('El modo demostración solo está disponible en desarrollo.');\n\t\t\trouter.push('/dashboard');\n\t\t\trouter.refresh();\n\t\t} catch (error) {\n\t\t\tsetDemoError(error instanceof Error ? error.message : 'No se pudo iniciar la demostración.');\n\t\t} finally { setDemoLoading(false); }\n\t};
 
 	return (
 		<div className='min-h-screen flex items-center justify-center p-4 bg-[linear-gradient(135deg,#F8FAFC_0%,#E6EFF5_100%)]'>
