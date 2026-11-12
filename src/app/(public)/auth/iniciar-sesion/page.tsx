@@ -84,7 +84,7 @@ const AuthPage = (): React.JSX.Element => {
 								/>
 							)}
 						/>
-						<SubmitButton buttonName='Invocar Acceso' type='submit' isDisabled={isSubmitting} />
+						<SubmitButton buttonName='Acceso institucional (requiere backend)' type='submit' isDisabled={true} />
 					</form>
 					<div className='mt-4 border-t border-border pt-4'>
 						<button type='button' onClick={enterDemo} disabled={demoLoading} className='w-full min-h-11 rounded-xl border border-border bg-surface text-sm font-semibold text-foreground hover:bg-surface-muted disabled:opacity-60'>
