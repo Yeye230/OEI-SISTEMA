@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   BarChart3,
   FilePlus2,
@@ -37,7 +37,7 @@ export default function Sidebar({
   open: boolean;
   onClose: () => void;
 }) {
-  const pathname = usePathname();
+  const pathname = usePathname();\n  const router = useRouter();\n  const signOut = async (): Promise<void> => {\n    await fetch("/api/demo/session", { method: "DELETE" });\n    router.push("/auth/iniciar-sesion");\n    router.refresh();\n  };
 
   const activeHref = navigation
     .filter(
