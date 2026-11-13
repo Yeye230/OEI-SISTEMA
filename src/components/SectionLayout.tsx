@@ -1,50 +1,18 @@
+import type { ReactElement, ReactNode } from "react";
 
-"use client";
+type Props = { title: string; subtitle: string; children: ReactNode };
 
-import { useState, type ReactNode } from "react";
-import Sidebar from "@/components/Sidebar";
-import Topbar from "@/components/Topbar";
-
-type SectionLayoutProps = {
-  title: string;
-  subtitle: string;
-  children: ReactNode;
-};
-
-export default function SectionLayout({
-  title,
-  subtitle,
-  children,
-}: SectionLayoutProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
+export default function SectionLayout({ title, subtitle, children }: Props): ReactElement {
   return (
-    <main className="min-h-screen overflow-x-hidden bg-background text-foreground">
-      <Sidebar
-        open={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
-
-      <div className="min-h-screen min-w-0 lg:pl-64">
-        <Topbar onMenu={() => setSidebarOpen(true)} />
-
-        <div className="mx-auto w-full max-w-[1800px] space-y-5 px-4 py-5 sm:px-6 xl:px-7">
-          <header className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                {title}
-              </h1>
-              <p className="mt-1 text-sm text-muted">{subtitle}</p>
-            </div>
-          </header>
-
-          {children}
-
-          <footer className="border-t border-border py-4 text-center text-xs text-muted">
-            OEI · Gestión de Actas
-          </footer>
+    <section className="eq-module-page">
+      <header className="eq-heading-row">
+        <div>
+          <div className="eq-breadcrumb"><span>OEI El Salvador</span><i>›</i><strong>{title}</strong></div>
+          <h1>{title}</h1>
+          <p className="eq-subtitle">{subtitle}</p>
         </div>
-      </div>
-    </main>
+      </header>
+      {children}
+    </section>
   );
 }
