@@ -327,3 +327,16 @@
 - **Solución aplicada:** Se recuperó la identidad visual Equipment Hub, se integró el usuario autenticado mediante `requireSession()`, se conectaron los accesos a las rutas existentes, se añadió el acceso de creación de actas y el selector nube para alternar entre Oscuro y Claro usando el ThemeProvider vigente. Se mantuvo la persistencia de tema existente y no se reemplazaron los módulos funcionales actuales.
 - **Alternativa:** Copiar sin adaptación la pantalla y el proveedor de temas antiguos; descartada por incompatibilidad con la autenticación y los dos temas actuales.
 - **Verificación pendiente:** Actualizar la rama `feat/user`, abrir `/dashboard` en ambos temas, probar navegación, búsqueda, persistencia de tema, menú móvil y cierre de sesión. Ejecutar lint, typecheck y build. No se ejecutaron pruebas desde esta sesión.
+
+## OEI-UI-001 — Layout compartido de módulos y estilos Equipment Hub
+
+- **Categoría:** UI/UX / Navegación / Integración
+- **Severidad:** Media
+- **Estado:** Implementación aplicada en `feat/user`; pendiente de verificación local
+- **Fecha:** 2026-11-13 (America/El_Salvador)
+- **Evidencia:** `src/app/(protected)/layout.tsx` monta `ProtectedAppShell` alrededor de las rutas protegidas. `src/components/SectionLayout.tsx` ahora solo presenta el encabezado del módulo y su contenido; `src/app/actas/actas-client.tsx` y `src/core/features/workspace/acta-form-client.tsx` usan ese contenedor sin crear otro sidebar/topbar. La navegación del shell utiliza `next/link` y `router.push`.
+- **Problema / causa:** Los módulos recreaban la navegación y sus encabezados con estructuras visuales distintas; el formulario de nueva acta utilizaba navegación de documento completo.
+- **Impacto:** Cambios de aspecto entre módulos y recarga completa al guardar el formulario.
+- **Solución aplicada:** Se incorporó un shell único con sidebar, topbar, búsqueda, tema, perfil y navegación; se simplificó `SectionLayout`; se cambió el retorno del formulario a `router.push`. Durante la revisión se detectó que el CSS Equipment Hub original había sido sustituido por estilos de módulo únicamente; se restauraron los estilos del dashboard y se conservaron las reglas de contenido compartido en `src/app/dashboard/dashboard.css`.
+- **Alternativa:** Mantener un layout separado por página; descartada porque duplica navegación y facilita inconsistencias.
+- **Verificación pendiente:** Actualizar `feat/user`; probar navegación entre todos los módulos, persistencia del shell, búsqueda, menú móvil, ambos temas y envío del formulario sin recarga completa. Ejecutar `npm run lint`, `npx next typegen`, `npx tsc --noEmit` y `npm run build`. Esta sesión no dispone de terminal local ni ejecutó esas pruebas.
