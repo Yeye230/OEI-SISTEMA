@@ -340,3 +340,17 @@
 - **Solución aplicada:** Se incorporó un shell único con sidebar, topbar, búsqueda, tema, perfil y navegación; se simplificó `SectionLayout`; se cambió el retorno del formulario a `router.push`. Durante la revisión se detectó que el CSS Equipment Hub original había sido sustituido por estilos de módulo únicamente; se restauraron los estilos del dashboard y se conservaron las reglas de contenido compartido en `src/app/dashboard/dashboard.css`.
 - **Alternativa:** Mantener un layout separado por página; descartada porque duplica navegación y facilita inconsistencias.
 - **Verificación pendiente:** Actualizar `feat/user`; probar navegación entre todos los módulos, persistencia del shell, búsqueda, menú móvil, ambos temas y envío del formulario sin recarga completa. Ejecutar `npm run lint`, `npx next typegen`, `npx tsc --noEmit` y `npm run build`. Esta sesión no dispone de terminal local ni ejecutó esas pruebas.
+
+
+## OEI-BUILD-001 — El shell protegido no resuelve la importación del CSS del dashboard
+
+- **Categoría:** Build / Integración
+- **Severidad:** Alta
+- **Estado:** Corrección aplicada en `feat/user`; pendiente de verificación local
+- **Fecha de detección:** 2026-11-13 (America/El_Salvador)
+- **Evidencia:** La salida de `npm run dev` compartida por el usuario muestra `Module not found: Can't resolve '../../app/dashboard/dashboard.css'` en `src/components/ProtectedAppShell.tsx:13`, lo que provoca HTTP 500 en `/dashboard`. El archivo CSS existe en `src/app/dashboard/dashboard.css`.
+- **Problema / causa raíz:** La ruta relativa desde `src/components/ProtectedAppShell.tsx` subía un nivel de más; además, los estilos globales del shell se estaban importando desde un Client Component.
+- **Impacto:** Next.js no puede compilar el layout protegido y ninguna ruta que lo utiliza puede mostrarse.
+- **Solución aplicada:** Se retiró la importación CSS del Client Component y se centralizó en el layout raíz con la ruta `./dashboard/dashboard.css`, junto a los estilos globales de la aplicación.
+- **Alternativa:** Corregir la ruta relativa dentro de `ProtectedAppShell.tsx`; se prefiere el layout raíz porque el CSS contiene estilos globales compartidos por todas las rutas protegidas.
+- **Verificación pendiente:** Actualizar `feat/user`, reiniciar `npm run dev` y abrir `/dashboard`; después probar rutas de módulos, ejecutar lint, typecheck y build. No se ejecutaron estas pruebas desde esta sesión.
