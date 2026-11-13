@@ -315,18 +315,6 @@
 - **Verificación pendiente:** Abrir el mapa con campos vacíos, coordenadas válidas e inválidas; confirmar que solo aparecen puntos válidos y que las teselas cargan sin violaciones CSP. Revisar los términos de uso y límites del servicio de teselas antes de un despliegue institucional.
 
 
-- **Categoría:** UI/UX / Navegación / Integración
-- **Severidad:** Media
-- **Estado:** Corrección aplicada en `feat/user`; pendiente de verificación local
-- **Fecha de detección:** 2026-11-13 (America/El_Salvador)
-- **Evidencia:** `src/app/(protected)/dashboard/page.tsx` renderizaba el dashboard genérico compuesto por Sidebar, Topbar y métricas. La versión anterior de Equipment Hub estaba en `feat/user-module`, pero dependía de rutas heredadas (`/inventario`, `/ajustes`) y de una Server Action de sesión que no existe en la rama actual.
-- **Problema / causa raíz:** La pantalla principal perdió el diseño Equipment Hub y los accesos no correspondían a las rutas reales del sistema actual.
-- **Impacto:** Experiencia visual inconsistente y navegación que podía conducir a rutas inexistentes.
-- **Solución aplicada:** Se recuperó la identidad visual Equipment Hub, se integró el usuario autenticado mediante `requireSession()`, se conectaron los accesos a las rutas existentes, se añadió el acceso de creación de actas y el selector nube para alternar entre Oscuro y Claro usando el ThemeProvider vigente. Se mantuvo la persistencia de tema existente y no se reemplazaron los módulos funcionales actuales.
-- **Alternativa:** Copiar sin adaptación la pantalla y el proveedor de temas antiguos; descartada por incompatibilidad con la autenticación y los dos temas actuales.
-- **Verificación pendiente:** Actualizar la rama `feat/user`, abrir `/dashboard` en ambos temas, probar navegación a cada módulo, búsqueda, cambio/persistencia de tema, menú móvil y cierre de sesión. Ejecutar lint, typecheck y build. No se ejecutaron pruebas desde esta sesión.
-
-
 ## OEI-DASH-001 — Dashboard principal sustituido por una vista genérica y navegación heredada
 
 - **Categoría:** UI/UX / Navegación / Integración
