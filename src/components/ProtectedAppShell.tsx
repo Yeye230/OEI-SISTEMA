@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import type { AppUser } from "@/core/server/types";
 import { useTheme } from "@/core/components/theme/theme-provider";
-import "../../app/dashboard/dashboard.css";
 
 type Props = { user: AppUser; children: ReactNode };
 const navigation = [
