@@ -3,6 +3,7 @@ import type { ReactElement } from "react";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./themes.css";
 import "./globals.css";
+import "./dashboard/dashboard.css";
 import { ThemeInitScript } from "@/core/components/theme/theme-init-script";
 import { ThemeProvider } from "@/core/components/theme/theme-provider";
 
