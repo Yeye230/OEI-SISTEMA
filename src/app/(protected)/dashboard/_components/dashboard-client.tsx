@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import type { AppUser } from "@/core/server/types";
 import { useTheme } from "@/core/components/theme/theme-provider";
-import "./dashboard.css";
+import "../../../dashboard/dashboard.css";
 
 type DashboardClientProps = { user: AppUser };
 
