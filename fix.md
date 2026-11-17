@@ -368,3 +368,17 @@
 - **Solución aplicada:** Se sustituyó el texto libre por un identificador interno controlado; se agregó clasificación al formulario, filtros/edición/exportación por proyecto y resumen en dashboard. El proyecto no se incluye en los datos que se imprimen en el futuro documento Word.
 - **Límite actual:** La persistencia sigue en `localStorage` por navegador. No se modificó esquema PostgreSQL ni existe sincronización multiusuario. Los registros históricos sin proyecto asignado no se pueden clasificar automáticamente con certeza y permanecen sin clasificar.
 - **Verificación pendiente:** Actualizar la rama `feat/user`; crear una acta de Docentes y otra de Directores; comprobar filtros, edición, exportación CSV y contadores del dashboard después de guardar y recargar. Ejecutar `npm run lint`, `npx next typegen`, `npx tsc --noEmit` y `npm run build`. Esta sesión no dispone de checkout local ni terminal para ejecutar esas pruebas.
+
+
+## OEI-AUTH-003 — Lectura de cookies del layout protegido fuera de Suspense
+
+- **Categoría:** Compatibilidad Next.js / Autenticación
+- **Severidad:** Alta para las rutas protegidas con Cache Components
+- **Estado:** Corrección aplicada en `feat/user`; pendiente de verificación local
+- **Fecha de detección:** 2026-11-17 (America/El_Salvador)
+- **Evidencia:** La captura compartida por el usuario muestra `blocking-prerender-runtime` al renderizar `/actas/nueva`. En el código, `src/app/(protected)/layout.tsx` esperaba `requireSession()` directamente en el layout; esa función llama a `cookies()` desde `src/core/server/auth/session.ts`. La configuración `next.config.ts` mantiene `cacheComponents: true`.
+- **Problema / causa raíz:** La lectura de una API de petición (`cookies()`) se ejecutaba en el árbol de renderizado protegido sin un límite `Suspense`. Con Cache Components, Next.js requiere que el subárbol que depende de datos de petición quede dentro de `Suspense` para separar el contenido dinámico del shell prerenderizable.
+- **Impacto:** El prerenderizado de rutas protegidas como `/actas/nueva` puede bloquearse y mostrar el error de runtime.
+- **Solución aplicada:** Se convirtió `ProtectedLayout` en un componente síncrono que coloca `AuthenticatedLayout` dentro de `Suspense`. La lectura de sesión continúa en servidor dentro de `AuthenticatedLayout`; `requireSession()` y sus redirecciones no se eliminaron ni se trasladaron al cliente. Se añadió un fallback de carga accesible.
+- **Alternativa descartada:** Desactivar `cacheComponents` o forzar toda la ruta a renderizado dinámico; no es necesario para esta lectura localizada y sacrificaría el prerenderizado parcial.
+- **Verificación pendiente:** En el checkout local actualizado de `feat/user`, reiniciar `npm run dev`; probar acceso demo a `/dashboard` y `/actas/nueva`, acceso anónimo (debe redirigir al inicio de sesión), y sesión institucional si el backend está disponible. Ejecutar `npm run lint`, `npx next typegen`, `npx tsc --noEmit` y `npm run build`. No se ejecutaron estas pruebas desde esta sesión.
