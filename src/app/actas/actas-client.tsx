@@ -29,8 +29,8 @@ const useActas = (): Acta[] => useSyncExternalStore((callback) => {
 function exportCsv(records: Acta[]): void {
   const header = ["numero", "tipo", "responsable", "proyecto_interno", "fecha", "codigo", "serie", "observaciones"];
   const csv = [header, ...records.map((record) => [record.numero, record.tipo, record.responsable, projectName(record), record.fecha, record.codigo, record.serie ?? "", record.observaciones ?? ""])]
-    .map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(",")).join("\\r\\n");
-  const url = URL.createObjectURL(new Blob(["\\uFEFF", csv], { type: "text/csv;charset=utf-8" }));
+    .map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(",")).join("\r\n");
+  const url = URL.createObjectURL(new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8" }));
   const anchor = document.createElement("a"); anchor.href = url; anchor.download = "oei-actas.csv"; anchor.click(); URL.revokeObjectURL(url);
 }
 function writeRecords(records: Acta[]): void { window.localStorage.setItem(storageKey, JSON.stringify(records)); cachedRaw = null; window.dispatchEvent(new Event("oei-workspace-change")); }
