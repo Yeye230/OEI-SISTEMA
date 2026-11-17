@@ -382,3 +382,16 @@
 - **Solución aplicada:** Se convirtió `ProtectedLayout` en un componente síncrono que coloca `AuthenticatedLayout` dentro de `Suspense`. La lectura de sesión continúa en servidor dentro de `AuthenticatedLayout`; `requireSession()` y sus redirecciones no se eliminaron ni se trasladaron al cliente. Se añadió un fallback de carga accesible.
 - **Alternativa descartada:** Desactivar `cacheComponents` o forzar toda la ruta a renderizado dinámico; no es necesario para esta lectura localizada y sacrificaría el prerenderizado parcial.
 - **Verificación pendiente:** En el checkout local actualizado de `feat/user`, reiniciar `npm run dev`; probar acceso demo a `/dashboard` y `/actas/nueva`, acceso anónimo (debe redirigir al inicio de sesión), y sesión institucional si el backend está disponible. Ejecutar `npm run lint`, `npx next typegen`, `npx tsc --noEmit` y `npm run build`. No se ejecutaron estas pruebas desde esta sesión.
+
+## OEI-ACTA-001 — El formulario de actas no capturaba el detalle del equipo ni sus accesorios
+
+- **Categoría:** Funcionalidad / Datos / Formularios
+- **Severidad:** Media
+- **Estado:** Corrección aplicada en `feat/user`; pendiente de verificación local
+- **Fecha:** 2026-11-17 (America/El_Salvador)
+- **Evidencia:** En `src/core/features/workspace/acta-form-client.tsx`, el formulario solo capturaba tipo de equipo, código, número de serie, responsable, fecha y observaciones. No existían controles para marca, modelo, mouse, módem, SIM Barra, audífonos, cargador de laptop, mochila ni accesorios adicionales.
+- **Problema / causa:** El formulario no recopilaba todos los datos requeridos para documentar la entrega de equipo.
+- **Impacto:** Los registros de actas quedaban incompletos para elaborar el detalle de entrega y el documento institucional posterior.
+- **Solución aplicada:** Se añadieron los campos Equipo, Marca, Modelo, N.º Serial, Mouse, Módem, SIM Barra, Audífonos, Cargador de laptop, Mochila, Accesorios adicionales, Persona destinataria y Fecha de entrega. Los accesorios de tipo Sí/No inician en No. Se conservaron el código de inventario, proyecto interno y observaciones. También se amplió la edición y exportación CSV para incluir los nuevos datos.
+- **Límite:** Los datos continúan guardándose en `localStorage`; no se conectó la base de datos ni se generó el Word oficial.
+- **Verificación pendiente:** Actualizar `feat/user`, reiniciar `npm run dev`, crear un acta y comprobar que todos los campos se guardan, aparecen al editar y se incluyen en CSV. Ejecutar lint, typecheck y build. No se ejecutaron pruebas desde esta sesión.
