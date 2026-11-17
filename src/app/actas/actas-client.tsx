@@ -40,7 +40,7 @@ function addHistory(action: string, acta: Acta): void {
     const parsed: unknown = JSON.parse(window.localStorage.getItem(key) ?? "[]");
     const history = Array.isArray(parsed) ? parsed as Array<Record<string, string>> : [];
     const now = new Date().toISOString();
-    history.unshift({ id: crypto.randomUUID(), createdAt: now, updatedAt: now, fecha: now.slice(0, 10), accion: action, modulo: "Actas", responsable: acta.responsable, proyectoId: acta.proyectoId ?? "", detalle: `Acta ${acta.numero} · ${acta.tipo}` });
+    history.unshift({ id: crypto.randomUUID(), createdAt: now, updatedAt: now, fecha: now.slice(0, 10), accion: action, modulo: "Actas", responsable: acta.responsable, proyectoId: acta.proyectoId ?? "", proyecto: projectName(acta), detalle: `Acta ${acta.numero} · ${acta.tipo}` });
     window.localStorage.setItem(key, JSON.stringify(history));
     window.dispatchEvent(new Event("oei-workspace-change"));
   } catch { /* El historial no debe impedir administrar un acta. */ }
