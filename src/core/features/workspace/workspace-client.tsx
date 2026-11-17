@@ -61,8 +61,8 @@ const configs: Record<string, ModuleConfig> = {
     title: "Historial", description: "Revisa los movimientos registrados durante el uso de esta demostración.", singular: "movimiento",
     fields: [
       { name: "fecha", label: "Fecha", type: "date", required: true }, { name: "accion", label: "Acción", required: true },
-      { name: "modulo", label: "Módulo" }, { name: "responsable", label: "Responsable" }, { name: "detalle", label: "Detalle" }
-    ], columns: ["fecha", "accion", "modulo", "responsable", "detalle"]
+      { name: "modulo", label: "Módulo" }, { name: "proyecto", label: "Proyecto" }, { name: "responsable", label: "Responsable" }, { name: "detalle", label: "Detalle" }
+    ], columns: ["fecha", "accion", "modulo", "proyecto", "responsable", "detalle"]
   },
   reportes: {
     title: "Reportes", description: "Genera una descarga CSV de los registros guardados localmente.", singular: "reporte",
