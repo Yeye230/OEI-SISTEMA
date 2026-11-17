@@ -27,7 +27,7 @@ export default function ActaFormClient(): ReactElement {
     try {
       const parsed: unknown = JSON.parse(window.localStorage.getItem(historyKey) ?? "[]");
       const history = Array.isArray(parsed) ? parsed as Array<Record<string, string>> : [];
-      history.unshift({ id: crypto.randomUUID(), createdAt: now, updatedAt: now, fecha: now.slice(0, 10), accion: "Creación", modulo: "Actas", responsable: record.responsable, proyectoId: record.proyectoId, detalle: `Acta ${record.numero} · ${record.tipo}` });
+      history.unshift({ id: crypto.randomUUID(), createdAt: now, updatedAt: now, fecha: now.slice(0, 10), accion: "Creación", modulo: "Actas", responsable: record.responsable, proyectoId: record.proyectoId, proyecto: record.proyectoId === "docentes" ? "Docentes" : "Directores", detalle: `Acta ${record.numero} · ${record.tipo}` });
       window.localStorage.setItem(historyKey, JSON.stringify(history));
     } catch { /* El registro del acta no depende del historial. */ }
     window.dispatchEvent(new Event("oei-workspace-change"));
