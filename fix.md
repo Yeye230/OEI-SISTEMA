@@ -354,3 +354,17 @@
 - **Solución aplicada:** Se retiró la importación CSS del Client Component y se centralizó en el layout raíz con la ruta `./dashboard/dashboard.css`, junto a los estilos globales de la aplicación.
 - **Alternativa:** Corregir la ruta relativa dentro de `ProtectedAppShell.tsx`; se prefiere el layout raíz porque el CSS contiene estilos globales compartidos por todas las rutas protegidas.
 - **Verificación pendiente:** Actualizar `feat/user`, reiniciar `npm run dev` y abrir `/dashboard`; después probar rutas de módulos, ejecutar lint, typecheck y build. No se ejecutaron estas pruebas desde esta sesión.
+
+
+## OEI-PROJECT-001 — Clasificación de actas por proyecto en modo demostración
+
+- **Categoría:** Funcionalidad / Datos / Reportes
+- **Severidad:** Media
+- **Estado:** Implementación aplicada en `feat/user`; pendiente de verificación local
+- **Fecha:** 2026-11-17 (America/El_Salvador)
+- **Evidencia:** Se añadió el campo interno `proyectoId` al alta de actas, con valores controlados `docentes` y `directores`; el listado filtra por proyecto y tipo de equipo, muestra la clasificación interna y exporta el conjunto filtrado. El dashboard consulta los registros locales para mostrar conteos separados y accesos a Actas. Los registros antiguos sin una categoría reconocible se conservan como «Sin clasificar».
+- **Problema / causa:** El campo anterior `proyecto` era texto libre y no permitía separar de forma fiable los registros de Docentes y Directores.
+- **Impacto:** No era posible obtener conteos ni listados confiables por proyecto, ni evitar que cada usuario escribiera variantes distintas.
+- **Solución aplicada:** Se sustituyó el texto libre por un identificador interno controlado; se agregó clasificación al formulario, filtros/edición/exportación por proyecto y resumen en dashboard. El proyecto no se incluye en los datos que se imprimen en el futuro documento Word.
+- **Límite actual:** La persistencia sigue en `localStorage` por navegador. No se modificó esquema PostgreSQL ni existe sincronización multiusuario. Los registros históricos sin proyecto asignado no se pueden clasificar automáticamente con certeza y permanecen sin clasificar.
+- **Verificación pendiente:** Actualizar la rama `feat/user`; crear una acta de Docentes y otra de Directores; comprobar filtros, edición, exportación CSV y contadores del dashboard después de guardar y recargar. Ejecutar `npm run lint`, `npx next typegen`, `npx tsc --noEmit` y `npm run build`. Esta sesión no dispone de checkout local ni terminal para ejecutar esas pruebas.
