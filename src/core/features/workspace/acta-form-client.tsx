@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Save } from "lucide-react";
 
-type ActaRecord = { id: string; createdAt: string; updatedAt: string; numero: string; tipo: string; responsable: string; proyecto: string; fecha: string; codigo: string; serie: string; observaciones: string };
+type ProjectId = "docentes" | "directores";
+type ActaRecord = { id: string; createdAt: string; updatedAt: string; numero: string; tipo: string; responsable: string; proyectoId: ProjectId; fecha: string; codigo: string; serie: string; observaciones: string };
 const storageKey = "oei-demo:actas:v1";
 
 export default function ActaFormClient(): ReactElement {
@@ -17,10 +18,18 @@ export default function ActaFormClient(): ReactElement {
     const values = Object.fromEntries(data.entries());
     const records: ActaRecord[] = (() => { try { const parsed: unknown = JSON.parse(window.localStorage.getItem(storageKey) ?? "[]"); return Array.isArray(parsed) ? parsed as ActaRecord[] : []; } catch { return []; } })();
     const now = new Date().toISOString();
-    const record: ActaRecord = { id: crypto.randomUUID(), createdAt: now, updatedAt: now, numero: String(values.numero ?? "").trim(), tipo: String(values.tipo ?? ""), responsable: String(values.responsable ?? "").trim(), proyecto: String(values.proyecto ?? "").trim(), fecha: String(values.fecha ?? ""), codigo: String(values.codigo ?? "").trim(), serie: String(values.serie ?? "").trim(), observaciones: String(values.observaciones ?? "").trim() };
-    if (!record.numero || !record.responsable || !record.fecha) { setMessage("Completa el número, responsable y fecha."); return; }
+    const record: ActaRecord = { id: crypto.randomUUID(), createdAt: now, updatedAt: now, numero: String(values.numero ?? "").trim(), tipo: String(values.tipo ?? ""), responsable: String(values.responsable ?? "").trim(), proyectoId: String(values.proyectoId ?? "") as ProjectId, fecha: String(values.fecha ?? ""), codigo: String(values.codigo ?? "").trim(), serie: String(values.serie ?? "").trim(), observaciones: String(values.observaciones ?? "").trim() };
+    if (!record.numero || !record.responsable || !record.fecha || !["docentes", "directores"].includes(record.proyectoId)) { setMessage("Completa todos los campos obligatorios, incluido el proyecto."); return; }
     if (records.some((item) => item.numero.toLowerCase() === record.numero.toLowerCase())) { setMessage("Ya existe un acta con ese número."); return; }
     window.localStorage.setItem(storageKey, JSON.stringify([record, ...records]));
+    window.dispatchEvent(new Event("oei-workspace-change"));
+    const historyKey = "oei-demo:historial:v1";
+    try {
+      const parsed: unknown = JSON.parse(window.localStorage.getItem(historyKey) ?? "[]");
+      const history = Array.isArray(parsed) ? parsed as Array<Record<string, string>> : [];
+      history.unshift({ id: crypto.randomUUID(), createdAt: now, updatedAt: now, fecha: now.slice(0, 10), accion: "Creación", modulo: "Actas", responsable: record.responsable, proyectoId: record.proyectoId, detalle: `Acta ${record.numero} · ${record.tipo}` });
+      window.localStorage.setItem(historyKey, JSON.stringify(history));
+    } catch { /* El registro del acta no depende del historial. */ }
     window.dispatchEvent(new Event("oei-workspace-change"));
     router.push("/actas");
   };
@@ -31,9 +40,9 @@ export default function ActaFormClient(): ReactElement {
       <form onSubmit={submit} className="space-y-6 rounded-2xl border border-border bg-surface p-5 shadow-sm sm:p-7">
         <section><h2 className="text-lg font-semibold">Datos del acta</h2><div className="mt-4 grid gap-4 sm:grid-cols-2">
           <label><span className="mb-1.5 block text-sm font-medium">Número de acta *</span><input name="numero" required className="min-h-11 w-full rounded-xl border border-border bg-background px-3 text-sm" /></label>
+          <label><span className="mb-1.5 block text-sm font-medium">Proyecto interno *</span><select name="proyectoId" required defaultValue="" className="min-h-11 w-full rounded-xl border border-border bg-background px-3 text-sm"><option value="" disabled>Seleccionar proyecto...</option><option value="docentes">Docentes</option><option value="directores">Directores</option></select><span className="mt-1 block text-xs text-muted">Este dato solo organiza las actas dentro del sistema; no aparecerá en el Word oficial.</span></label>
           <label><span className="mb-1.5 block text-sm font-medium">Tipo de equipo *</span><select name="tipo" required className="min-h-11 w-full rounded-xl border border-border bg-background px-3 text-sm"><option value="">Seleccionar...</option><option>Laptop</option><option>Tablet</option><option>Proyector</option></select></label>
-          <label><span className="mb-1.5 block text-sm font-medium">Fecha de entrega *</span><input name="fecha" type="date" required className="min-h-11 w-full rounded-xl border border-border bg-background px-3 text-sm" /></label>
-          <label><span className="mb-1.5 block text-sm font-medium">Proyecto</span><input name="proyecto" className="min-h-11 w-full rounded-xl border border-border bg-background px-3 text-sm" /></label>
+          <label><span className="mb-1.5 block text-sm font-medium">Fecha de entrega *</span><input name="fecha" type="date" required defaultValue={new Date().toISOString().slice(0, 10)} className="min-h-11 w-full rounded-xl border border-border bg-background px-3 text-sm" /></label>
         </div></section>
         <section className="border-t border-border pt-5"><h2 className="text-lg font-semibold">Equipo entregado</h2><div className="mt-4 grid gap-4 sm:grid-cols-2">
           <label><span className="mb-1.5 block text-sm font-medium">Código de inventario</span><input name="codigo" className="min-h-11 w-full rounded-xl border border-border bg-background px-3 text-sm" /></label>
@@ -46,7 +55,7 @@ export default function ActaFormClient(): ReactElement {
         {message && <p role="alert" className="rounded-xl bg-danger-soft p-3 text-sm">{message}</p>}
         <div className="flex flex-col-reverse gap-2 border-t border-border pt-5 sm:flex-row sm:justify-end"><Link href="/actas" className="inline-flex min-h-11 items-center justify-center rounded-xl border border-border px-5 text-sm font-semibold">Cancelar</Link><button type="submit" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground"><Save size={16} /> Guardar acta</button></div>
       </form>
-      <p className="text-xs text-muted">Esta acta de demostración se almacena en el navegador. No genera un documento institucional firmado ni se envía al servidor.</p>
+      <p className="text-xs text-muted">Esta versión de demostración guarda los registros en este navegador. La generación del Word oficial y la conexión a la base de datos se integrarán en sus siguientes etapas.</p>
     </div>
   </section>;
 }
