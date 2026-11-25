@@ -395,3 +395,14 @@
 - **Solución aplicada:** Se añadieron los campos Equipo, Marca, Modelo, N.º Serial, Mouse, Módem, SIM Barra, Audífonos, Cargador de laptop, Mochila, Accesorios adicionales, Persona destinataria y Fecha de entrega. Los accesorios de tipo Sí/No inician en No. Se conservaron el código de inventario, proyecto interno y observaciones. También se amplió la edición y exportación CSV para incluir los nuevos datos.
 - **Límite:** Los datos continúan guardándose en `localStorage`; no se conectó la base de datos ni se generó el Word oficial.
 - **Verificación pendiente:** Actualizar `feat/user`, reiniciar `npm run dev`, crear un acta y comprobar que todos los campos se guardan, aparecen al editar y se incluyen en CSV. Ejecutar lint, typecheck y build. No se ejecutaron pruebas desde esta sesión.
+
+## OEI-UI-AUTH-001 — La pantalla de inicio de sesión muestra texto de demostración y jerarquía visual poco clara
+
+- **Categoría:** UI/UX / Accesibilidad / Autenticación
+- **Severidad:** Baja
+- **Estado:** Mejora visual aplicada en `feat/user`; pendiente de verificación en navegador
+- **Fecha:** 2026-11-25 (America/El_Salvador)
+- **Evidencia:** La captura compartida muestra el botón `Entrar en modo demostración`, el texto `Modo demostración: datos locales, sin conexión a base de datos` y el botón principal `Acceso institucional (requiere backend)`. El contenido no presentaba un encabezado explícito `Iniciar sesión`.
+- **Problema:** El lenguaje de demostración no corresponde a la experiencia institucional deseada y compite visualmente con el formulario.
+- **Solución aplicada:** Se conservó la identidad superior OEI y el componente `CardWrapper`; se incorporó jerarquía de título y descripción, se sustituyó el copy principal por `Iniciar sesión`, se retiraron el acceso y los textos de demostración, y se añadió una explicación breve de que el acceso se habilitará al completar la conexión institucional. El botón permanece deshabilitado para no enviar credenciales a un backend aún no integrado.
+- **Verificación pendiente:** Actualizar `feat/user`, abrir `/auth/iniciar-sesion` en escritorio y móvil, comprobar los dos temas, foco/teclado, errores de validación y que el botón permanezca deshabilitado hasta integrar el backend. Ejecutar lint y typecheck. No se ejecutaron pruebas visuales ni automatizadas desde esta sesión.
