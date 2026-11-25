@@ -419,3 +419,15 @@
 - **Solución aplicada:** Se reemplazaron los mensajes por «Ingresa un correo electrónico válido» y «La contraseña debe tener al menos ... caracteres»; se actualizó el nombre del proyecto en `CLAUDE.md`, se retiraron referencias narrativas y nombres de marca anteriores de la documentación, se neutralizó el comentario de estilos y se actualizó el README para describir el acceso institucional pendiente de integración.
 - **Compatibilidad conservada:** Se mantuvieron los identificadores técnicos antiguos de temas en el script de migración para reconocer preferencias guardadas por usuarios previos; no son textos visibles y retirarlos podría hacer que se pierdan esas preferencias.
 - **Verificación pendiente:** Buscar nuevamente términos heredados en el código/documentación de `feat/user`; actualizar la rama local; comprobar mensajes de validación en el formulario con correo inválido y contraseña corta; ejecutar lint y typecheck. No se ejecutaron pruebas locales desde esta sesión.
+
+## OEI-CSS-001 — Selector responsive inválido en estilos del dashboard
+
+- **Categoría:** UI / Compatibilidad CSS
+- **Severidad:** Media
+- **Estado:** Corrección aplicada en `feat/user`; pendiente de verificación local
+- **Fecha:** 2026-11-25 (America/El_Salvador)
+- **Evidencia:** La salida de `npm run dev` muestra un error de parsing en `src/app/dashboard/dashboard.css:240`: `grid-cols-3 is not recognized as a valid pseudo-class`. El selector contenía dos barras invertidas antes de los dos puntos de `.sm\\:grid-cols-3`.
+- **Problema / causa:** El escape duplicado hace que el parser CSS interprete el carácter `:` como inicio de una pseudoclase, en lugar de parte del nombre de clase de Tailwind.
+- **Impacto:** Next.js emite advertencias de parsing CSS al compilar el layout raíz y los estilos responsive asociados pueden no aplicarse correctamente.
+- **Solución aplicada:** Se redujo el escape a una sola barra invertida: `.sm\:grid-cols-3`.
+- **Verificación pendiente:** Actualizar `feat/user`, reiniciar `npm run dev`, confirmar que desaparece la advertencia de parsing en la línea 240 y revisar el layout responsive en un ancho inferior a 760 px. Ejecutar lint y build. No se ejecutaron pruebas locales desde esta sesión.
