@@ -2,9 +2,9 @@ export const triggerClassName: string =
   "mt-1.5 flex h-12 w-full items-center rounded-2xl border border-border bg-background px-4 text-sm text-foreground transition-all focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/15";
 
 /*
- * - placeholder: text-muted. Antes parchment/25 = 1.96:1.
- * - estado inválido: utilidad glow-invalid (globals.css) en vez de repetir
- *   el hex #A63446 y su sombra en dos variantes.
+ * - placeholder: text-muted para mantener contraste legible.
+ * - estado inválido: utilidad glow-invalid (globals.css) para reutilizar
+ *   el mismo tratamiento visual en todas las variantes.
  */
 export const inputClassName: string =
   "w-full h-12 rounded-md bg-background border border-border focus:outline-none focus-visible:outline-none focus:ring-0 focus:border-primary focus:shadow-glow text-sm text-foreground data-[focused=true]:ring-0 data-[invalid=true]:border-status-error-border data-[invalid=true]:glow-invalid data-[invalid=true]:focus:border-status-error-border data-[invalid=true]:focus:glow-invalid data-[invalid=true]:focus:ring-0 transition-all";
