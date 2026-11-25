@@ -413,7 +413,7 @@
 - **Severidad:** Baja
 - **Estado:** Corrección aplicada en `feat/user`; pendiente de verificación local
 - **Fecha:** 2026-11-25 (America/El_Salvador)
-- **Evidencia:** `src/core/lib/validation/index.ts` mostraba los mensajes «El sigilo del correo permanece en la sombra» y «El conjuro debe portar al menos ... caracteres». `CLAUDE.md` identificaba el proyecto como `umbralGrimorio (Gothica Bibliotheca)`, contenía referencias de marca heredadas y describía nombres de temas anteriores. `src/core/utils/const.ts` conservaba una referencia de comentario a `parchment`. `README.md` describía un botón de demostración que ya no aparece en el login.
+- **Evidencia:** `src/core/lib/validation/index.ts` mostraba mensajes de validación con metáforas de fantasía. `CLAUDE.md` identificaba el proyecto con una marca anterior y contenía referencias de identidad y temas heredados. `src/core/utils/const.ts` conservaba una referencia de comentario a una paleta anterior. `README.md` describía un botón de demostración que ya no aparece en el login.
 - **Problema / causa:** Quedaron textos y documentación heredados de una identidad anterior, mezclados con la identidad institucional actual.
 - **Impacto:** Mensajes de validación poco profesionales, confusión de marca y documentación que no representa la experiencia vigente.
 - **Solución aplicada:** Se reemplazaron los mensajes por «Ingresa un correo electrónico válido» y «La contraseña debe tener al menos ... caracteres»; se actualizó el nombre del proyecto en `CLAUDE.md`, se retiraron referencias narrativas y nombres de marca anteriores de la documentación, se neutralizó el comentario de estilos y se actualizó el README para describir el acceso institucional pendiente de integración.
