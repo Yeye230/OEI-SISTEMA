@@ -1,4 +1,4 @@
-# CLAUDE.md — umbralGrimorio (Gothica Bibliotheca)
+# CLAUDE.md — OEI Control
 
 Reglas compartidas entre el Project de claude.ai y Claude Code. Si una regla cambia, se cambia aquí primero.
 
@@ -39,7 +39,7 @@ src/
 - `src/app/themes.css` define dos temas seleccionables: `oscuro` y `claro`, con tokens semánticos compartidos: `--background`, `--foreground`, `--surface`, `--surface-muted`, `--surface-elevated`, `--border`, `--primary`, `--primary-hover`, `--primary-foreground`, `--accent` y tokens de estado.
 - `src/app/globals.css` expone esas variables como utilidades vía `@theme inline`. No se crean tokens en otro archivo.
 - Solo existen los temas `oscuro` y `claro`; ambos comparten los mismos nombres de tokens y cada uno define sus valores.
-- Las rutas públicas y privadas respetan el tema seleccionado. Las preferencias antiguas `gothic-*` y `lumina-*` se migran a `oscuro` y `claro` respectivamente.
+- Las rutas públicas y privadas respetan el tema seleccionado. Las preferencias de temas anteriores se migran a `oscuro` y `claro` respectivamente.
 
 ### Colores permitidos
 
@@ -53,8 +53,6 @@ Prohibido: hex en `.tsx/.ts` (salvo shaders/escenas 3D), `style={{ color/backgro
 | `card`, `card-foreground` | `surface`, `foreground` |
 | `input` | `border` |
 | `destructive` | `status-error` / `status-error-text` |
-| `parchment` | `foreground` |
-| `gold`, `gold-bright`, `gilded` | `accent` / `glow` |
 | `link` | `primary` |
 
 ### Tipografía
@@ -114,4 +112,4 @@ Prohibido: hex en `.tsx/.ts` (salvo shaders/escenas 3D), `style={{ color/backgro
 4. `src/app/globals11.css` sin uso y `form/reset-password/email-verification/use-email-verification.ts` vacío.
 5. `{1 - 5}` hardcodeado en `iniciar-sesion/page.tsx` (muestra "-4").
 6. 2 errores de lint (`set-state-in-effect` en `theme-provider.tsx` y `token-grid.tsx`).
-7. Marca inconsistente: metadata "Lumen Codex" vs "Gothica Bibliotheca"; README por defecto de create-next-app.
+7. Revisar que la identidad, los textos y la metadata correspondan a OEI Control.
