@@ -16,11 +16,9 @@ npm run dev
 
 Abrir [http://localhost:3000](http://localhost:3000).
 
-## Acceso de demostración
+## Acceso institucional
 
-En entorno de desarrollo, la pantalla `/auth/iniciar-sesion` ofrece **Entrar en modo demostración**. Este acceso crea una cookie HttpOnly de demostración y permite navegar por los módulos sin conectar el backend.
-
-El acceso de demostración se deshabilita cuando `NODE_ENV=production`. El formulario de acceso institucional requiere que el backend y sus endpoints estén disponibles.
+La pantalla `/auth/iniciar-sesion` presenta el formulario institucional. El envío permanece deshabilitado hasta integrar y verificar los endpoints de autenticación del backend. No se deben introducir credenciales reales mientras esa integración esté pendiente.
 
 ## Módulos disponibles
 
