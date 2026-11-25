@@ -406,3 +406,16 @@
 - **Problema:** El lenguaje de demostración no corresponde a la experiencia institucional deseada y compite visualmente con el formulario.
 - **Solución aplicada:** Se conservó la identidad superior OEI y el componente `CardWrapper`; se incorporó jerarquía de título y descripción, se sustituyó el copy principal por `Iniciar sesión`, se retiraron el acceso y los textos de demostración, y se añadió una explicación breve de que el acceso se habilitará al completar la conexión institucional. El botón permanece deshabilitado para no enviar credenciales a un backend aún no integrado.
 - **Verificación pendiente:** Actualizar `feat/user`, abrir `/auth/iniciar-sesion` en escritorio y móvil, comprobar los dos temas, foco/teclado, errores de validación y que el botón permanezca deshabilitado hasta integrar el backend. Ejecutar lint y typecheck. No se ejecutaron pruebas visuales ni automatizadas desde esta sesión.
+
+## OEI-COPY-001 — Mensajes y documentación conservaban lenguaje de fantasía ajeno a OEI Control
+
+- **Categoría:** UX / Contenido / Documentación
+- **Severidad:** Baja
+- **Estado:** Corrección aplicada en `feat/user`; pendiente de verificación local
+- **Fecha:** 2026-11-25 (America/El_Salvador)
+- **Evidencia:** `src/core/lib/validation/index.ts` mostraba los mensajes «El sigilo del correo permanece en la sombra» y «El conjuro debe portar al menos ... caracteres». `CLAUDE.md` identificaba el proyecto como `umbralGrimorio (Gothica Bibliotheca)`, contenía referencias de marca heredadas y describía nombres de temas anteriores. `src/core/utils/const.ts` conservaba una referencia de comentario a `parchment`. `README.md` describía un botón de demostración que ya no aparece en el login.
+- **Problema / causa:** Quedaron textos y documentación heredados de una identidad anterior, mezclados con la identidad institucional actual.
+- **Impacto:** Mensajes de validación poco profesionales, confusión de marca y documentación que no representa la experiencia vigente.
+- **Solución aplicada:** Se reemplazaron los mensajes por «Ingresa un correo electrónico válido» y «La contraseña debe tener al menos ... caracteres»; se actualizó el nombre del proyecto en `CLAUDE.md`, se retiraron referencias narrativas y nombres de marca anteriores de la documentación, se neutralizó el comentario de estilos y se actualizó el README para describir el acceso institucional pendiente de integración.
+- **Compatibilidad conservada:** Se mantuvieron los identificadores técnicos antiguos de temas en el script de migración para reconocer preferencias guardadas por usuarios previos; no son textos visibles y retirarlos podría hacer que se pierdan esas preferencias.
+- **Verificación pendiente:** Buscar nuevamente términos heredados en el código/documentación de `feat/user`; actualizar la rama local; comprobar mensajes de validación en el formulario con correo inválido y contraseña corta; ejecutar lint y typecheck. No se ejecutaron pruebas locales desde esta sesión.
