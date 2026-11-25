@@ -9,7 +9,7 @@ import { Controller } from "react-hook-form";
 import { useLogin } from "./use-login";
 
 const AuthPage = (): React.JSX.Element => {
-  const { control, handleSubmit, onSubmit, errors, isSubmitting } = useLogin();
+  const { control, handleSubmit, onSubmit, errors } = useLogin();
 
   return (
     <main className="auth-shell">
@@ -87,7 +87,7 @@ const AuthPage = (): React.JSX.Element => {
               <SubmitButton
                 buttonName="Iniciar sesión"
                 type="submit"
-                isDisabled={true || isSubmitting}
+                isDisabled={true}
               />
               <p className="text-center text-xs leading-5 text-muted">
                 El acceso estará disponible cuando se complete la conexión con el servicio
